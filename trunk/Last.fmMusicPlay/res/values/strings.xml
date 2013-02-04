@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="menu_logout">Logout</string>
+    <string name="menu_reload">Reload</string>
+    <string name="app_name">Last.fm Music Play</string>
+    <string name="menu_settings">Settings</string>
+    <string name="btn_connect_account">Connect account</string>
+    <string name="loading">Loading...</string>
+    <string name="btn_positive">Yes</string>
+    <string name="btn_negative">No</string>
+    <string name="dlg_msg">Allow access to Last.fm and Vk.com</string>
+    <string name="content_description">bitmap</string>
+    <string name="artist_by">by </string>
+    <string name="album_from">from </string>
+    <string name="duration_blank">--:--</string>
+
+    <color name="bg_activity">#dedede</color>
+    <color name="bg_activity_start">#cfcfcf</color>
+    <color name="bg_nowplaying_info">#f0f0f0</color>
+    <color name="text_color">#f0f0f0</color>
+    <color name="bg_controls">#222222</color>
+
+    <string-array name="main_pages_name">
+        <item>Library</item>
+        <item>Now Playing</item>
+        <item>Playlist</item>
+    </string-array>
+    <string-array name="lastfm_pages_name">
+        <item>Tracks</item>
+        <item>Loved Tracks</item>
+        <item>Artists</item>
+        <item>Albums</item>
+    </string-array>
+    <string-array name="lastfm_artist_pages_name">
+        <item>Top tracks</item>
+        <item>Top Albums</item>
+    </string-array>
+    <string-array name="library_sections">
+        <item>Last.fm</item>
+        <item>Vk.com</item>
+        <item>Local</item>
+    </string-array>
+
+</resources>
