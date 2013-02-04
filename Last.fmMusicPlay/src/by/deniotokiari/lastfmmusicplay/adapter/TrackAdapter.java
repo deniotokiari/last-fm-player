@@ -17,7 +17,7 @@ public class TrackAdapter extends AbstractCursorAdapter {
 	@Override
 	public void bindView(View view, Context context, Cursor cursor) {
 		TextView textView1 = (TextView) view.findViewById(android.R.id.text1);
-		TextView textView2 = (TextView) view.findViewById(android.R.id.te);
+		TextView textView2 = (TextView) view.findViewById(android.R.id.text2);
 		TextView textView3 = (TextView) view.findViewById(android.R.id.hint);
 		textView1.setText(cursor.getString(TrackContract.INDEX_ARTIST));
 		textView2.setText(cursor.getString(TrackContract.INDEX_TITLE));
@@ -29,4 +29,4 @@ public class TrackAdapter extends AbstractCursorAdapter {
 		return View.inflate(context, R.layout.adapter_text, null);
 	}
 
-}xt2
+}
