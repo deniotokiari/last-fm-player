@@ -36,8 +36,6 @@ abstract public class AbstractListFragment extends ListFragment implements
 	protected boolean isEndOfData;
 	protected boolean isError;
 
-	protected int itemsPerPage;
-
 	private AbstractCursorAdapter mAdapter;
 	private View mFooterView;
 	private BroadcastReceiver mReceiver;
@@ -58,14 +56,13 @@ abstract public class AbstractListFragment extends ListFragment implements
 	
 	abstract protected AbstractCursorAdapter adapter();
 
-	public AbstractListFragment(String[] jsonKeys, int itemsPerPage, Uri uri, String selection,
-			String[] selectionArgs, String sortOrder) {
+	public AbstractListFragment(String[] jsonKeys, Uri uri, String selection, String[] selectionArgs,
+			String sortOrder) {
 		this.jsonKeys = jsonKeys;
 		this.uri = uri;
 		this.selection = selection;
 		this.selectionArgs = selectionArgs;
 		this.sortOrder = sortOrder;
-		this.itemsPerPage = itemsPerPage;
 	}
 
 	@Override
@@ -83,7 +80,6 @@ abstract public class AbstractListFragment extends ListFragment implements
 		mAdapter = adapter();
 		getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 		this.getLoaderManager().initLoader(LOADER_ID++, null, this);
-		setOnScrollListener();
 	}
 
 	@Override
@@ -121,6 +117,7 @@ abstract public class AbstractListFragment extends ListFragment implements
 		};
 		LocalBroadcastManager.getInstance(this.getActivity()).registerReceiver(
 				mReceiver, mFilter);
+		setOnScrollListener();
 	}
 
 	@Override
@@ -128,6 +125,7 @@ abstract public class AbstractListFragment extends ListFragment implements
 		super.onPause();
 		LocalBroadcastManager.getInstance(this.getActivity())
 				.unregisterReceiver(mReceiver);
+		getListView().setOnScrollListener(null);
 	}
 
 	@Override
@@ -164,6 +162,8 @@ abstract public class AbstractListFragment extends ListFragment implements
 	public void onLoaderReset(Loader<Cursor> loader) {
 		mAdapter.swapCursor(null);
 	}
+	
+	
 
 	private void setOnScrollListener() {
 		getListView().setOnScrollListener(new OnScrollListener() {

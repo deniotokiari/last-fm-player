@@ -9,7 +9,7 @@ abstract public class AbstractLastfmListFragment extends AbstractListFragment {
 
 	public AbstractLastfmListFragment(String[] jsonKeys, int itemsPerPage,
 			Uri uri, String selection, String[] selectionArgs, String sortOrder) {
-		super(jsonKeys, itemsPerPage, uri, selection, selectionArgs, sortOrder);
+		super(jsonKeys, uri, selection, selectionArgs, sortOrder);
 		ITEMS_PER_PAGE = itemsPerPage;
 	}
 

@@ -33,13 +33,15 @@
         <item>Albums</item>
     </string-array>
     <string-array name="lastfm_artist_pages_name">
-        <item>Top tracks</item>
+        <item>Top Tracks</item>
         <item>Top Albums</item>
     </string-array>
     <string-array name="library_sections">
         <item>Last.fm</item>
         <item>Vk.com</item>
         <item>Local</item>
+        <item>Tags</item>
+        <item>Playlists</item>
     </string-array>
 
 </resources>
