@@ -2,6 +2,8 @@ package by.deniotokiari.lastfmmusicplay.fragment.lastfm.page;
 
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.ListView;
@@ -42,10 +44,15 @@ public class LibraryAlbumsFragment extends AbstractLastfmListFragment {
 		Cursor cursor =(Cursor) getListView().getItemAtPosition(position);
 		String artist = cursor.getString(AlbumContract.INDEX_ARTIST);
 		String album = cursor.getString(AlbumContract.INDEX_NAME);
-		String album_art = cursor.getString(AlbumContract.INDEX_IMAGE);
-		AlbumTracksFragment.setArgs(artist, album, album_art);
+		String album_art_url = cursor.getString(AlbumContract.INDEX_IMAGE);
+		Bundle bundle = new Bundle();
+		bundle.putString(AlbumTracksFragment.EXTRA_KEY_ALBUM, album);
+		bundle.putString(AlbumTracksFragment.EXTRA_KEY_ARTIST, artist);
+		bundle.putString(AlbumTracksFragment.EXTRA_KEY_URL, album_art_url);
 		FragmentTransaction transaction = getParentFragment().getFragmentManager().beginTransaction();
-		transaction.replace(R.id.content, new AlbumTracksFragment());
+		Fragment fragment = new AlbumTracksFragment();
+		fragment.setArguments(bundle);
+		transaction.replace(R.id.content, fragment);
 		transaction.addToBackStack(null);
 		transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
 		transaction.commit();

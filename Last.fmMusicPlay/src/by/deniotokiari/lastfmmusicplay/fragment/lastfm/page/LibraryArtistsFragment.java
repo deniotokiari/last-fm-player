@@ -45,7 +45,7 @@ public class LibraryArtistsFragment extends AbstractLastfmListFragment {
 		Cursor cursor =(Cursor) getListView().getItemAtPosition(position);
 		String artist = cursor.getString(ArtistContract.INDEX_NAME);
 		Bundle args = new Bundle();
-		args.putString("artist", artist);
+		args.putString(ArtistPagerFragment.KEY_ARTIST, artist);
 		FragmentTransaction transaction = getParentFragment().getFragmentManager().beginTransaction();
 		Fragment fragment = new ArtistPagerFragment();
 		fragment.setArguments(args);

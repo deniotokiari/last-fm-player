@@ -2,6 +2,7 @@ package by.deniotokiari.lastfmmusicplay.service;
 
 import java.util.List;
 
+import by.deniotokiari.lastfmmusicplay.content.AbstractProvider;
 import by.deniotokiari.lastfmmusicplay.content.Callback;
 import by.deniotokiari.lastfmmusicplay.content.ContentRequestBuilder;
 import by.deniotokiari.lastfmmusicplay.content.json.CommonListJsonAsyncTask;
@@ -40,7 +41,7 @@ public class GetDataService extends Service implements Callback<List<String>> {
 				Uri uri = Uri.parse((String) objects[0]);
 				for (String string : t) {
 					ContentValues values = new ContentValues();
-					values.put("data", string);
+					values.put(AbstractProvider.KEY_DATA, string);
 					getContentResolver().insert(uri, values);
 				}
 				getContentResolver().notifyChange(uri, null);

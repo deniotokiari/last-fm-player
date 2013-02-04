@@ -96,12 +96,11 @@ abstract public class AbstractListFragment extends ListFragment implements
 		mReceiver = new BroadcastReceiver() {
 
 			@Override
-			public void onReceive(Context arg0, Intent intent) {
+			public void onReceive(Context context, Intent intent) {
 				String action = intent.getAction();
 				if (action.equals(GetDataService.ACTION_ON_ERROR + id)) {
 					String message = intent.getStringExtra(GetDataService.EXTRA_KEY_MESSAGE);
 					if (message != null && message.equals(GetDataService.ERROR_MSG)) {
-						Log.d("LOG", "INVOKED " + id);
 						isEndOfData = true;
 						setListAdapter(mAdapter);
 						getListView().setVisibility(View.INVISIBLE);
@@ -132,13 +131,13 @@ abstract public class AbstractListFragment extends ListFragment implements
 	}
 
 	@Override
-	public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {
+	public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
 		return new CursorLoader(this.getActivity(), uri, null, selection,
 				selectionArgs, sortOrder);
 	}
 
 	@Override
-	public void onLoadFinished(Loader<Cursor> arg0, Cursor cursor) {
+	public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
 		itemsCount = cursor.getCount();
 		offset = changeOffset(itemsCount);
 		if (getListAdapter() == null && cursor.getCount() != 0) {
@@ -162,7 +161,7 @@ abstract public class AbstractListFragment extends ListFragment implements
 	}
 
 	@Override
-	public void onLoaderReset(Loader<Cursor> arg0) {
+	public void onLoaderReset(Loader<Cursor> loader) {
 		mAdapter.swapCursor(null);
 	}
 
@@ -215,7 +214,7 @@ abstract public class AbstractListFragment extends ListFragment implements
 		return offset;
 	}
 
-	private void load() {
+	protected void load() {
 		isLoading = true;
 		showFooter();
 		ContentRequestBuilder builder = new ContentRequestBuilder();
