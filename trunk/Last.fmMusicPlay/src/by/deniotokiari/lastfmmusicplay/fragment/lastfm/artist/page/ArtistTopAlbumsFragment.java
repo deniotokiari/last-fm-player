@@ -3,8 +3,8 @@ package by.deniotokiari.lastfmmusicplay.fragment.lastfm.artist.page;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import by.deniotokiari.lastfmmusicplay.R;
@@ -21,7 +21,7 @@ public class ArtistTopAlbumsFragment extends AbstractLastfmListFragment {
 	private static final int itemsPerPage = 50;
 	private static final Uri uri = AlbumContract.URI_ARTIST_TOP_ALBUMS;
 	private static final String[] jsonKeys = { Album.ROOT_ARTIST_TOP_ALBUMS, Album.ITEM };
-	private static final String sortOrder = AlbumContract.Columns.RANK + " DESC";
+	private static final String sortOrder = null;//AlbumContract.Columns.RANK + " DESC";
 	private static final String selection = AlbumContract.Columns.ARTIST + " = ?";
 	private static String[] selectionArgs;
 	private static String artist;
@@ -32,7 +32,6 @@ public class ArtistTopAlbumsFragment extends AbstractLastfmListFragment {
 
 	@Override
 	protected String url() {
-		Log.d("LOG", LastFmAPI.artistGetTopAlbums(artist, itemsPerPage, getOffset() + 1));
 		return LastFmAPI.artistGetTopAlbums(artist, itemsPerPage, getOffset() + 1);
 	}
 
@@ -65,8 +64,10 @@ public class ArtistTopAlbumsFragment extends AbstractLastfmListFragment {
 		bundle.putString(AlbumTracksFragment.EXTRA_KEY_ALBUM, album);
 		bundle.putString(AlbumTracksFragment.EXTRA_KEY_ARTIST, artist);
 		bundle.putString(AlbumTracksFragment.EXTRA_KEY_URL, album_art_url);
+		Fragment fragment = new AlbumTracksFragment();
+		fragment.setArguments(bundle);
 		FragmentTransaction transaction = getParentFragment().getFragmentManager().beginTransaction();
-		transaction.replace(R.id.content, new AlbumTracksFragment());
+		transaction.replace(R.id.content, fragment);
 		transaction.addToBackStack(null);
 		transaction.commit();
 	}
