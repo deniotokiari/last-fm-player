@@ -2,6 +2,7 @@ package by.deniotokiari.lastfmmusicplay.db;
 
 import by.deniotokiari.lastfmmusicplay.content.contract.AlbumContract;
 import by.deniotokiari.lastfmmusicplay.content.contract.ArtistContract;
+import by.deniotokiari.lastfmmusicplay.content.contract.TagContract;
 import by.deniotokiari.lastfmmusicplay.content.contract.TrackContract;
 import android.content.ContentValues;
 import android.content.Context;
@@ -34,6 +35,7 @@ public class DBHelper extends SQLiteOpenHelper {
 			db.execSQL(ArtistContract.CREATE_TABLE);
 			db.execSQL(AlbumContract.createTable(AlbumContract.TABLE_NAME_LIBRARY_ALBUMS));
 			db.execSQL(AlbumContract.createTable(AlbumContract.TABLE_NAME_ARTIST_TOP_ALBUMS));
+			db.execSQL(TagContract.CREATE_TABLE);
 			db.setTransactionSuccessful();
 		} finally {
 			db.endTransaction();
@@ -55,6 +57,7 @@ public class DBHelper extends SQLiteOpenHelper {
 			db.execSQL(ArtistContract.DROP_TABLE);
 			db.execSQL(AlbumContract.dropTable(AlbumContract.TABLE_NAME_LIBRARY_ALBUMS));
 			db.execSQL(AlbumContract.dropTable(AlbumContract.TABLE_NAME_ARTIST_TOP_ALBUMS));
+			db.execSQL(TagContract.DROP_TABLE);
 			db.setTransactionSuccessful();
 		} finally {
 			db.endTransaction();

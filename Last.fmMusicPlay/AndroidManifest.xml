@@ -49,10 +49,13 @@
             android:name="by.deniotokiari.lastfmmusicplay.content.provider.ArtistsProvider"
             android:authorities="by.deniotokiari.lastfmmusicplay.provider.ArtistsProvider"
             android:exported="false" />
-        
-           <provider
+        <provider
             android:name="by.deniotokiari.lastfmmusicplay.content.provider.AlbumsProvider"
             android:authorities="by.deniotokiari.lastfmmusicplay.provider.AlbumsProvider"
+            android:exported="false" />
+        <provider
+            android:name="by.deniotokiari.lastfmmusicplay.content.provider.TagsProvider"
+            android:authorities="by.deniotokiari.lastfmmusicplay.provider.TagsProvider"
             android:exported="false" />
     </application>
 
