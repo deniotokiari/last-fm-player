@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="by.deniotokiari.lastfmmusicplay"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="17" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:name="by.deniotokiari.lastfmmusicplay.ContextApplication"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="by.deniotokiari.lastfmmusicplay.MainActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="by.deniotokiari.lastfmmusicplay.StartActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="by.deniotokiari.lastfmmusicplay.LastfmAuthActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="by.deniotokiari.lastfmmusicplay.VkAuthActivity"
+            android:label="@string/app_name" >
+        </activity>
+
+        <service android:name="by.deniotokiari.lastfmmusicplay.service.GetDataService" />
+
+        <provider
+            android:name="by.deniotokiari.lastfmmusicplay.content.provider.TracksProvider"
+            android:authorities="by.deniotokiari.lastfmmusicplay.provider.TracksProvider"
+            android:exported="false" />
+        <provider
+            android:name="by.deniotokiari.lastfmmusicplay.content.provider.ArtistsProvider"
+            android:authorities="by.deniotokiari.lastfmmusicplay.provider.ArtistsProvider"
+            android:exported="false" />
+        
+           <provider
+            android:name="by.deniotokiari.lastfmmusicplay.content.provider.AlbumsProvider"
+            android:authorities="by.deniotokiari.lastfmmusicplay.provider.AlbumsProvider"
+            android:exported="false" />
+    </application>
+
+</manifest>
