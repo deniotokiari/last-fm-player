@@ -46,6 +46,10 @@ public class LastFmAPI {
 				template("tag.gettoptracks"), Uri.encode(tag),
 				String.valueOf(limit), String.valueOf(page));
 	}
+	
+	public static String tagGetTopTags() {
+		return String.format("%s", template("tag.getTopTags"));
+	}
 
 	// Library
 	public static String libraryGetArtists(String user, int limit, int page) {

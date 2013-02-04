@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import by.deniotokiari.lastfmmusicplay.R;
 import by.deniotokiari.lastfmmusicplay.adapter.AbstractCursorAdapter;
-import by.deniotokiari.lastfmmusicplay.adapter.AlbumTracksAdapter;
+import by.deniotokiari.lastfmmusicplay.adapter.TrackAdapter;
 import by.deniotokiari.lastfmmusicplay.api.LastFmAPI;
 import by.deniotokiari.lastfmmusicplay.content.contract.TrackContract;
 import by.deniotokiari.lastfmmusicplay.content.images.ImageLoader;
@@ -76,14 +76,14 @@ public class AlbumTracksFragment extends AbstractLastfmListFragment {
 	protected int changeOffset(int itemsCount) {
 		if (itemsCount > 0) {
 			setEndOfData(true);
-			return 1;
+			return 0;
 		}
-		return 1;
+		return 0;
 	}
 
 	@Override
 	protected AbstractCursorAdapter adapter() {
-		return new AlbumTracksAdapter(getActivity());
+		return new TrackAdapter(getActivity());
 	}
 
 }
