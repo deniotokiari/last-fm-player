@@ -11,6 +11,8 @@ abstract public class AbstractProvider extends ContentProvider {
 
 	private DBHelper mDbHelper;
 
+	public static final String KEY_DATA = "data";
+	
 	abstract public ContentValues getContentValues(ContentValues values, Uri uri);
 
 	abstract public String tableName(Uri uri);

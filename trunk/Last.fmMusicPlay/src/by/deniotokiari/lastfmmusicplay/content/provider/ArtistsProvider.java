@@ -11,7 +11,7 @@ public class ArtistsProvider extends AbstractProvider {
 	@Override
 	public ContentValues getContentValues(ContentValues values, Uri uri) {
 		ContentValues contentValues = new ContentValues();
-		Artist artist = new Artist(values.getAsString("data"));
+		Artist artist = new Artist(values.getAsString(KEY_DATA));
 		contentValues.put(ArtistContract.Columns.NAME, artist.getName());
 		contentValues.put(ArtistContract.Columns.RANK, artist.getRank());
 		contentValues.put(ArtistContract.Columns.IMAGE, artist.getImage());

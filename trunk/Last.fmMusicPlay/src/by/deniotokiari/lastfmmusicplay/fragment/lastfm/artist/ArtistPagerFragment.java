@@ -11,6 +11,8 @@ import by.deniotokiari.lastfmmusicplay.fragment.lastfm.artist.page.ArtistTopTrac
 
 public class ArtistPagerFragment extends AbstractPagerFragment {
 	
+	public static final String KEY_ARTIST = "artist";
+	
 	@Override
 	protected String[] pagesName() {
 		String[] strings = getResources().getStringArray(R.array.lastfm_artist_pages_name);
@@ -19,7 +21,7 @@ public class ArtistPagerFragment extends AbstractPagerFragment {
 
 	@Override
 	protected List<Fragment> pages() {
-		String artist = getArguments().getString("artist");
+		String artist = getArguments().getString(KEY_ARTIST);
 		ArtistTopTracksFragment.setArtist(artist);
 		ArtistTopAlbumsFragment.setArtist(artist);
 		List<Fragment> list = new ArrayList<Fragment>();

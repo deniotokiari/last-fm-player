@@ -11,7 +11,7 @@ public class TracksProvider extends AbstractProvider {
 	@Override
 	public ContentValues getContentValues(ContentValues values, Uri uri) {
 		ContentValues contentValues = new ContentValues();
-		Track track = new Track(values.getAsString("data"));
+		Track track = new Track(values.getAsString(KEY_DATA));
 		contentValues.put(TrackContract.Columns.TITLE, track.getTitle());
 		contentValues.put(TrackContract.Columns.ARTIST, track.getArtist());
 		contentValues.put(TrackContract.Columns.ALBUM, track.getAlbum());

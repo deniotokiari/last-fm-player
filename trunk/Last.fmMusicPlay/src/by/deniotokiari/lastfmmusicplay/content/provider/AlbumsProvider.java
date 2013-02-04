@@ -11,7 +11,7 @@ public class AlbumsProvider extends AbstractProvider {
 	@Override
 	public ContentValues getContentValues(ContentValues values, Uri uri) {
 		ContentValues contentValues = new ContentValues();
-		Album album = new Album(values.getAsString("data"));
+		Album album = new Album(values.getAsString(KEY_DATA));
 		contentValues.put(AlbumContract.Columns.NAME, album.getName());
 		contentValues.put(AlbumContract.Columns.ARTIST, album.getArtist());
 		contentValues.put(AlbumContract.Columns.RANK, album.getRank());
