@@ -10,6 +10,7 @@ import by.deniotokiari.lastfmmusicplay.ContextHolder;
 
 public class VkAuthHelper {
 
+	private static final String KEY_ACCESS_TOKEN = "access_token";
 	private static final Context CONTEXT = ContextHolder.getInstance()
 			.getContext();
 	public static final String VK_SHARED_PREFS = "vk_session";
@@ -60,12 +61,12 @@ public class VkAuthHelper {
 
 	public static boolean processUrl(String url) {
 		if (isRedirect(url)) {
-			Uri parseUrl = Uri.parse(url);
-			final String session = parseUrl.getFragment();
+			Uri parseUrl = Uri.parse(url.replace("#", "?"));
+			final String session = parseUrl.getQueryParameter(KEY_ACCESS_TOKEN);
 			if (session == null) {
 				return false;
 			}
-			saveSession(session.split("=")[1].split("&")[0]);
+			saveSession(session);
 			return true;
 		}
 		return false;
