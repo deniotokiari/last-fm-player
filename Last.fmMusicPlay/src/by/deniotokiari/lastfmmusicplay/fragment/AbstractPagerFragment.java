@@ -15,29 +15,28 @@ import android.view.ViewGroup;
 
 abstract public class AbstractPagerFragment extends Fragment {
 
-	private String[] PAGES_NAME;
-	private List<Fragment> mPages;
+	private String[] mPagesName;
+	private List<PageInfo> mPages;
 	private ContentPagerAdapter mAdapter;
 	private ViewPager mViewPager;
 
 	protected abstract String[] pagesName();
 
-	protected abstract List<Fragment> pages();
+	protected abstract List<PageInfo> pages();
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.view_pager_fragment, container,
-				false);
+		return inflater.inflate(R.layout.view_pager_fragment, container, false);
 	}
 
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
+		mPagesName = pagesName();
 		mPages = pages();
-		PAGES_NAME = pagesName();
-		mAdapter = new ContentPagerAdapter(getChildFragmentManager(),
-				PAGES_NAME, mPages);
+		mAdapter = new ContentPagerAdapter(getActivity(),
+				getChildFragmentManager(), mPagesName, mPages);
 		mViewPager = (ViewPager) view.findViewById(R.id.viewPager);
 		mViewPager.setAdapter(mAdapter);
 		mViewPager.setOffscreenPageLimit(mPages.size());

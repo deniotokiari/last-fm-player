@@ -7,7 +7,7 @@ import by.deniotokiari.lastfmmusicplay.api.LastFmAPI;
 import by.deniotokiari.lastfmmusicplay.api.LastfmAuthHelper;
 import by.deniotokiari.lastfmmusicplay.content.contract.TrackContract;
 import by.deniotokiari.lastfmmusicplay.content.json.lastfm.Track;
-import by.deniotokiari.lastfmmusicplay.fragment.lastfm.AbstractLastfmListFragment;
+import by.deniotokiari.lastfmmusicplay.fragment.AbstractLastfmListFragment;
 
 public class LovedTracksFragment extends AbstractLastfmListFragment {
 

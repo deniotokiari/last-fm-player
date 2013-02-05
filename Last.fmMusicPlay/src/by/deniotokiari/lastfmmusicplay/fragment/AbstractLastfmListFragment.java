@@ -1,7 +1,6 @@
-package by.deniotokiari.lastfmmusicplay.fragment.lastfm;
+package by.deniotokiari.lastfmmusicplay.fragment;
 
 import android.net.Uri;
-import by.deniotokiari.lastfmmusicplay.fragment.AbstractListFragment;
 
 abstract public class AbstractLastfmListFragment extends AbstractListFragment {
 

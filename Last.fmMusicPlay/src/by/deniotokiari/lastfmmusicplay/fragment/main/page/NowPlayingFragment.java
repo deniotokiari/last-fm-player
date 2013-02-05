@@ -11,6 +11,10 @@ public class NowPlayingFragment extends Fragment {
 
 	public static final int PAGE_NUM = 1;
 	
+	public NowPlayingFragment() {
+		
+	}
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
