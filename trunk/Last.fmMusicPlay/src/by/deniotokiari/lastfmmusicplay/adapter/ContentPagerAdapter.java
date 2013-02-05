@@ -2,35 +2,43 @@ package by.deniotokiari.lastfmmusicplay.adapter;
 
 import java.util.List;
 
+import by.deniotokiari.lastfmmusicplay.fragment.PageInfo;
+
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 public class ContentPagerAdapter extends FragmentPagerAdapter {
 
-	private String[] pagesName;
-	private List<Fragment> pages;
+	private String[] mPagesName;
+	private List<PageInfo> mPages;
+	private Context mContext;
 
-	public ContentPagerAdapter(FragmentManager manager, String[] pagesName,
-			List<Fragment> pages) {
+	public ContentPagerAdapter(Context context, FragmentManager manager,
+			String[] pagesName, List<PageInfo> pages) {
 		super(manager);
-		this.pagesName = pagesName;
-		this.pages = pages;
+		mPagesName = pagesName;
+		mPages = pages;
+		mContext = context;
 	}
 
 	@Override
 	public Fragment getItem(int position) {
-		return pages.get(position);
+		PageInfo pageInfo = mPages.get(position);
+		Fragment fragment = Fragment.instantiate(mContext, pageInfo.getClss().getName(),
+				pageInfo.getArgs());
+		return fragment;
 	}
 
 	@Override
 	public int getCount() {
-		return pages.size();
+		return mPages.size();
 	}
 
 	@Override
 	public CharSequence getPageTitle(int position) {
-		return pagesName[position];
+		return mPagesName[position];
 	}
 
 }
