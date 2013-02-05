@@ -14,6 +14,10 @@ import android.widget.ListView;
 public class LibraryFragment extends ListFragment {
 
 	public static final int PAGE_NUM = 0;
+	
+	public LibraryFragment() {
+		
+	}
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {

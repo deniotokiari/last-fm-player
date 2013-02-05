@@ -15,6 +15,7 @@ import by.deniotokiari.lastfmmusicplay.api.LastFmAPI;
 import by.deniotokiari.lastfmmusicplay.content.contract.TrackContract;
 import by.deniotokiari.lastfmmusicplay.content.images.ImageLoader;
 import by.deniotokiari.lastfmmusicplay.content.json.lastfm.Track;
+import by.deniotokiari.lastfmmusicplay.fragment.AbstractLastfmListFragment;
 
 public class AlbumTracksFragment extends AbstractLastfmListFragment {
 

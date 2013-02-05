@@ -80,6 +80,7 @@ abstract public class AbstractListFragment extends ListFragment implements
 		mAdapter = adapter();
 		getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 		this.getLoaderManager().initLoader(LOADER_ID++, null, this);
+		setOnScrollListener();
 	}
 
 	@Override
@@ -117,7 +118,6 @@ abstract public class AbstractListFragment extends ListFragment implements
 		};
 		LocalBroadcastManager.getInstance(this.getActivity()).registerReceiver(
 				mReceiver, mFilter);
-		setOnScrollListener();
 	}
 
 	@Override
@@ -125,7 +125,6 @@ abstract public class AbstractListFragment extends ListFragment implements
 		super.onPause();
 		LocalBroadcastManager.getInstance(this.getActivity())
 				.unregisterReceiver(mReceiver);
-		getListView().setOnScrollListener(null);
 	}
 
 	@Override
