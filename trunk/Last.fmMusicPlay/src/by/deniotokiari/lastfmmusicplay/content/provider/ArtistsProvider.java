@@ -15,12 +15,18 @@ public class ArtistsProvider extends AbstractProvider {
 		contentValues.put(ArtistContract.Columns.NAME, artist.getName());
 		contentValues.put(ArtistContract.Columns.RANK, artist.getRank());
 		contentValues.put(ArtistContract.Columns.IMAGE, artist.getImage());
+		contentValues.put(ArtistContract.Columns.TAG, artist.getTag());
 		return contentValues;
 	}
 
 	@Override
 	public String tableName(Uri uri) {
-		return ArtistContract.TABLE_NAME;
+		if (uri.equals(ArtistContract.URI_ARTISTS)) {
+			return ArtistContract.TABLE_NAME;
+		} else if (uri.equals(ArtistContract.URI_TAG_ARTISTS)) {
+			return ArtistContract.TABLE_TAG_NAME;
+		}
+		return null;
 	}
 
 }

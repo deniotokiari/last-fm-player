@@ -13,6 +13,7 @@ import by.deniotokiari.lastfmmusicplay.content.CommonAsyncTask;
 public class CommonListJsonAsyncTask extends CommonAsyncTask<List<String>> {
 
 	private String[] mKeys;
+	private static final String EXTRA_ATTRIBUTES = "@attr";
 
 	public CommonListJsonAsyncTask(Callback<List<String>> callback,
 			String[] keys, String... params) {
@@ -29,7 +30,7 @@ public class CommonListJsonAsyncTask extends CommonAsyncTask<List<String>> {
 		JSONObject jsonObject = new JSONObject(source);
 		jsonObject = jsonObject.optJSONObject(mKeys[0]);
 		JSONArray array;
-		// for album tracks ()
+		// for album tracks
 		if (mKeys.length > 2) {
 			if (jsonObject != null) {
 				jsonObject = jsonObject.optJSONObject(mKeys[1]);
@@ -49,8 +50,12 @@ public class CommonListJsonAsyncTask extends CommonAsyncTask<List<String>> {
 				if (array.length() == 0) {
 					return null;
 				}
+				JSONObject attr = jsonObject.optJSONObject(EXTRA_ATTRIBUTES);
 				for (int i = 0; i < array.length(); i++) {
 					JSONObject obj = array.optJSONObject(i);
+					if (attr != null) {
+						obj.put("attr", attr);
+					}
 					list.add(obj.toString());
 				}
 				return list;

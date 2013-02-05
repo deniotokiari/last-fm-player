@@ -17,6 +17,7 @@ public class TracksProvider extends AbstractProvider {
 		contentValues.put(TrackContract.Columns.ALBUM, track.getAlbum());
 		contentValues.put(TrackContract.Columns.ALBUM_ART, track.getAlbumArt());
 		contentValues.put(TrackContract.Columns.RANK, track.getRank());
+		contentValues.put(TrackContract.Columns.TAG, track.getTag());
 		return contentValues;
 	}
 
@@ -30,6 +31,8 @@ public class TracksProvider extends AbstractProvider {
 			return TrackContract.TABLE_NAME_ARTIST_TOP_TRACKS;
 		} else if (uri.equals(TrackContract.URI_ALBUM_TRACKS)) {
 			return TrackContract.TABLE_NAME_ALBUM_TRACKS;
+		} else if (uri.equals(TrackContract.URI_TAG_TRACKS)) {
+			return TrackContract.TABLE_NAME_TAG_TRACKS;
 		} else {
 			return null;
 		}

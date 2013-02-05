@@ -10,8 +10,11 @@ public class AlbumContract {
 			+ "/library_albums");
 	public static final Uri URI_ARTIST_TOP_ALBUMS = Uri.parse("content://" + AUTHORITY
 			+ "/artist_top_albums");
+	public static final Uri URI_TAG_TOP_ALBUMS = Uri.parse("content://" + AUTHORITY
+			+ "/tag_top_albums");
 	public static final String TABLE_NAME_LIBRARY_ALBUMS = "LIBRARY_ALBUMS";
 	public static final String TABLE_NAME_ARTIST_TOP_ALBUMS = "ARTIST_TOP_ALBUMS";
+	public static final String TABLE_NAME_TAG_TOP_ALBUMS = "TAG_TOP_ALBUMS";
 
 	public static final class Columns implements BaseColumns {
 
@@ -20,6 +23,7 @@ public class AlbumContract {
 		public static final String ARTIST = "ARTIST";
 		public static final String RANK = "RANK";
 		public static final String IMAGE = "IMAGE";
+		public static final String TAG = "TAG";
 
 	}
 
@@ -28,12 +32,15 @@ public class AlbumContract {
 	public static final int INDEX_ARTIST = 2;
 	public static final int INDEX_RANK = 3;
 	public static final int INDEX_IMAGE = 4;
+	public static final int INDEX_TAG = 5;
 
 	private static String createTableTemplate = "CREATE TABLE %s ("
 			+ Columns.ALBUM_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
 			+ Columns.NAME + " VARCHAR NOT NULL, " + Columns.ARTIST
 			+ " VARCHAR, " + Columns.RANK + " INTEGER NOT NULL, "
-			+ Columns.IMAGE + " VARCHAR" + ")";
+			+ Columns.IMAGE + " VARCHAR, "
+			+ Columns.TAG + " VARCHAR"
+			+ ")";
 	private static String dropTableTemplate = "DROP TABLE IF EXISTS %s";
 
 	public static String createTable(String tableName) {

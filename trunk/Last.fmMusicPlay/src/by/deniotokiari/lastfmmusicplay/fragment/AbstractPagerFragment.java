@@ -39,7 +39,7 @@ abstract public class AbstractPagerFragment extends Fragment {
 				getChildFragmentManager(), mPagesName, mPages);
 		mViewPager = (ViewPager) view.findViewById(R.id.viewPager);
 		mViewPager.setAdapter(mAdapter);
-		mViewPager.setOffscreenPageLimit(mPages.size());
+		mViewPager.setOffscreenPageLimit(3);
 		PagerTabStrip pagerTabStrip = (PagerTabStrip) getActivity()
 				.findViewById(R.id.pagerTabStrip);
 		// TODO color imp

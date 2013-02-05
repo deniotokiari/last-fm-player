@@ -50,6 +50,18 @@ public class LastFmAPI {
 	public static String tagGetTopTags() {
 		return String.format("%s", template("tag.getTopTags"));
 	}
+	
+	public static String tagGetTopArtists(String tag, int limit, int page) {
+		return String.format("%s&tag=%s&limit=%s&page=%s",
+				template("tag.getTopArtists"), Uri.encode(tag),
+				String.valueOf(limit), String.valueOf(page));
+	}
+	
+	public static String tagGetTopAlbums(String tag, int limit, int page) {
+		return String.format("%s&tag=%s&limit=%s&page=%s",
+				template("tag.getTopAlbums"), Uri.encode(tag),
+				String.valueOf(limit), String.valueOf(page));
+	}
 
 	// Library
 	public static String libraryGetArtists(String user, int limit, int page) {
