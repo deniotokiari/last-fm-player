@@ -16,6 +16,7 @@ public class AlbumsProvider extends AbstractProvider {
 		contentValues.put(AlbumContract.Columns.ARTIST, album.getArtist());
 		contentValues.put(AlbumContract.Columns.RANK, album.getRank());
 		contentValues.put(AlbumContract.Columns.IMAGE, album.getImage());
+		contentValues.put(AlbumContract.Columns.TAG, album.getTag());
 		return contentValues;
 	}
 
@@ -25,6 +26,8 @@ public class AlbumsProvider extends AbstractProvider {
 			return AlbumContract.TABLE_NAME_LIBRARY_ALBUMS;
 		} else if (uri.equals(AlbumContract.URI_ARTIST_TOP_ALBUMS)) {
 			return AlbumContract.TABLE_NAME_ARTIST_TOP_ALBUMS;
+		} else if (uri.equals(AlbumContract.URI_TAG_TOP_ALBUMS)) {
+			return AlbumContract.TABLE_NAME_TAG_TOP_ALBUMS;
 		} else {
 			return null;
 		}

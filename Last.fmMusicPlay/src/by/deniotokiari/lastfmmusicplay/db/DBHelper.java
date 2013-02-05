@@ -14,7 +14,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DBHelper extends SQLiteOpenHelper {
 
 	private static final String DATABASE_NAME = "store.db";
-	private static final int DATABASE_VERSION = 45;
+	private static final int DATABASE_VERSION = 1;
 
 	public DBHelper(Context context, CursorFactory cursorFactory) {
 		super(context, DATABASE_NAME, cursorFactory, DATABASE_VERSION);
@@ -32,10 +32,16 @@ public class DBHelper extends SQLiteOpenHelper {
 					.createTable(TrackContract.TABLE_NAME_ARTIST_TOP_TRACKS));
 			db.execSQL(TrackContract
 					.createTable(TrackContract.TABLE_NAME_ALBUM_TRACKS));
-			db.execSQL(ArtistContract.CREATE_TABLE);
-			db.execSQL(AlbumContract.createTable(AlbumContract.TABLE_NAME_LIBRARY_ALBUMS));
-			db.execSQL(AlbumContract.createTable(AlbumContract.TABLE_NAME_ARTIST_TOP_ALBUMS));
+			db.execSQL(ArtistContract.createTable(ArtistContract.TABLE_NAME));
+			db.execSQL(ArtistContract.createTable(ArtistContract.TABLE_TAG_NAME));
+			db.execSQL(AlbumContract
+					.createTable(AlbumContract.TABLE_NAME_LIBRARY_ALBUMS));
+			db.execSQL(AlbumContract
+					.createTable(AlbumContract.TABLE_NAME_ARTIST_TOP_ALBUMS));
 			db.execSQL(TagContract.CREATE_TABLE);
+			db.execSQL(TrackContract
+					.createTable(TrackContract.TABLE_NAME_TAG_TRACKS));
+			db.execSQL(AlbumContract.createTable(AlbumContract.TABLE_NAME_TAG_TOP_ALBUMS));
 			db.setTransactionSuccessful();
 		} finally {
 			db.endTransaction();
@@ -54,10 +60,16 @@ public class DBHelper extends SQLiteOpenHelper {
 					.dropTable(TrackContract.TABLE_NAME_ARTIST_TOP_TRACKS));
 			db.execSQL(TrackContract
 					.dropTable(TrackContract.TABLE_NAME_ALBUM_TRACKS));
-			db.execSQL(ArtistContract.DROP_TABLE);
-			db.execSQL(AlbumContract.dropTable(AlbumContract.TABLE_NAME_LIBRARY_ALBUMS));
-			db.execSQL(AlbumContract.dropTable(AlbumContract.TABLE_NAME_ARTIST_TOP_ALBUMS));
+			db.execSQL(ArtistContract.dropTable(ArtistContract.TABLE_NAME));
+			db.execSQL(ArtistContract.dropTable(ArtistContract.TABLE_TAG_NAME));
+			db.execSQL(AlbumContract
+					.dropTable(AlbumContract.TABLE_NAME_LIBRARY_ALBUMS));
+			db.execSQL(AlbumContract
+					.dropTable(AlbumContract.TABLE_NAME_ARTIST_TOP_ALBUMS));
 			db.execSQL(TagContract.DROP_TABLE);
+			db.execSQL(TrackContract
+					.dropTable(TrackContract.TABLE_NAME_TAG_TRACKS));
+			db.execSQL(AlbumContract.dropTable(AlbumContract.TABLE_NAME_TAG_TOP_ALBUMS));
 			db.setTransactionSuccessful();
 		} finally {
 			db.endTransaction();

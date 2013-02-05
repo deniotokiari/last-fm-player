@@ -4,33 +4,45 @@ import by.deniotokiari.lastfmmusicplay.content.json.CommonJson;
 
 public class Artist extends CommonJson {
 
+	public static final String EXTRA_ATTRIBUTES = "attr";
+	
 	public static final String ROOT = "artists";
 	public static final String ITEM = "artist";
-	
+	public static final String ROOT_TAG_ARTISTS = "topartists";
+
 	public static final String KEY_NAME = "name";
 	public static final String KEY_RANK = "playcount";
 	public static final String KEY_ROOT_IMAGE = "image";
 	public static final String KEY_IMAGE = "#text";
-	
+	public static final String KEY_ROOT_TAG_RANK = "@attr";
+	public static final String KEY_TAG_RANK = "rank";
+	public static final String KEY_TAG = "tag";
+
 	private String name;
-	private String rank;
-	
+
 	public Artist(String source) {
 		super(source);
 		name = getString(KEY_NAME);
-		rank = getString(KEY_RANK);
 	}
-	
+
 	public String getName() {
 		return name;
 	}
-	
+
 	public String getRank() {
-		return rank;
+		String rank = getString(KEY_ROOT_TAG_RANK, KEY_TAG_RANK);
+		if (rank.trim().length() > 0) {
+			return rank;
+		}
+		return getString(KEY_RANK);
 	}
-	
+
 	public String getImage() {
 		return getArrayItem(KEY_ROOT_IMAGE, KEY_IMAGE, 2);
 	}
 	
+	public String getTag() {
+		return getString(EXTRA_ATTRIBUTES, KEY_TAG);
+	}
+
 }
