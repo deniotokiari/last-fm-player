@@ -84,6 +84,7 @@ public class ArtistTopAlbumsFragment extends AbstractLastfmListFragment {
 		FragmentTransaction transaction = getParentFragment()
 				.getFragmentManager().beginTransaction();
 		transaction.replace(R.id.content, fragment);
+		transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
 		transaction.addToBackStack(null);
 		transaction.commit();
 	}
