@@ -2,9 +2,9 @@ package by.deniotokiari.lastfmmusicplay.content.provider.lastfm;
 
 import android.content.ContentValues;
 import android.net.Uri;
-import by.deniotokiari.lastfmmusicplay.content.AbstractProvider;
 import by.deniotokiari.lastfmmusicplay.content.contract.lastfm.TagContract;
 import by.deniotokiari.lastfmmusicplay.content.json.lastfm.Tag;
+import by.deniotokiari.lastfmmusicplay.content.provider.AbstractProvider;
 
 public class TagsProvider extends AbstractProvider {
 
