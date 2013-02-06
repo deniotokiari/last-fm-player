@@ -1,4 +1,4 @@
-package by.deniotokiari.lastfmmusicplay.content.contract;
+package by.deniotokiari.lastfmmusicplay.content.contract.lastfm;
 
 import android.net.Uri;
 import android.provider.BaseColumns;
