@@ -1,7 +1,7 @@
 package by.deniotokiari.lastfmmusicplay.adapter;
 
 import by.deniotokiari.lastfmmusicplay.R;
-import by.deniotokiari.lastfmmusicplay.content.contract.AlbumContract;
+import by.deniotokiari.lastfmmusicplay.content.contract.lastfm.AlbumContract;
 import by.deniotokiari.lastfmmusicplay.content.images.ImageLoader;
 import android.content.Context;
 import android.database.Cursor;

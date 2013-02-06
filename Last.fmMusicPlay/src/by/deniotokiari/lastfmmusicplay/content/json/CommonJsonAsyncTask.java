@@ -29,6 +29,17 @@ public class CommonJsonAsyncTask extends CommonAsyncTask<List<String>> {
 		}
 		List<String> list = new ArrayList<String>();
 		JSONObject jsonObject = new JSONObject(source);
+		// for vk
+		if (mKeys.length == 1) {
+			JSONArray array = jsonObject.optJSONArray(mKeys[0]);
+			if (array != null) {
+				for (int i = 0; i < array.length(); i++) {
+					JSONObject obj = array.optJSONObject(i);
+					list.add(obj.toString());
+				}
+				return list;
+			}
+		}
 		// for playlist track
 		if (mKeys.length == 3) {
 			JSONArray array = jsonObject.optJSONArray(mKeys[0]);

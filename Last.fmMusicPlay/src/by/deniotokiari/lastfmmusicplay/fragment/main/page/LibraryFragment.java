@@ -5,6 +5,7 @@ import by.deniotokiari.lastfmmusicplay.adapter.LibraryAdapter;
 import by.deniotokiari.lastfmmusicplay.fragment.lastfm.LastfmPagerFragment;
 import by.deniotokiari.lastfmmusicplay.fragment.playlist.PlaylistFragment;
 import by.deniotokiari.lastfmmusicplay.fragment.tag.TagsFragment;
+import by.deniotokiari.lastfmmusicplay.fragment.vk.VkPagerFragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -32,6 +33,9 @@ public class LibraryFragment extends ListFragment {
 		switch (position) {
 		case 0:
 			replaceFragment(new LastfmPagerFragment());
+			break;
+		case 1:
+			replaceFragment(new VkPagerFragment());
 			break;
 		case 3:
 			replaceFragment(new TagsFragment());

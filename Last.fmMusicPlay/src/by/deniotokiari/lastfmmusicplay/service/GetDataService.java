@@ -2,10 +2,10 @@ package by.deniotokiari.lastfmmusicplay.service;
 
 import java.util.List;
 
-import by.deniotokiari.lastfmmusicplay.content.AbstractProvider;
 import by.deniotokiari.lastfmmusicplay.content.Callback;
 import by.deniotokiari.lastfmmusicplay.content.ContentRequestBuilder;
-import by.deniotokiari.lastfmmusicplay.content.json.CommonListJsonAsyncTask;
+import by.deniotokiari.lastfmmusicplay.content.json.CommonJsonAsyncTask;
+import by.deniotokiari.lastfmmusicplay.content.provider.AbstractProvider;
 import android.app.Service;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -32,6 +32,10 @@ public class GetDataService extends Service implements Callback<List<String>> {
 		final String id = (String) objects[1];
 		if (t == null) {
 			this.onError(new Throwable(ERROR_MSG), id);
+			return;
+		}
+		if (t.size() == 0) {
+			this.onError(new Throwable(), id);
 			return;
 		}
 		new Thread(new Runnable() {
@@ -78,7 +82,7 @@ public class GetDataService extends Service implements Callback<List<String>> {
 		String url = builder.getUrl();
 		String uri = builder.getUri();
 		String id = builder.getId();
-		new CommonListJsonAsyncTask(this, keys, url, uri, id).start();
+		new CommonJsonAsyncTask(this, keys, url, uri, id).start();
 	}
 
 }

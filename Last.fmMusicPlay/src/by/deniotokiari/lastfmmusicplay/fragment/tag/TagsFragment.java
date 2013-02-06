@@ -11,7 +11,7 @@ import by.deniotokiari.lastfmmusicplay.R;
 import by.deniotokiari.lastfmmusicplay.adapter.AbstractCursorAdapter;
 import by.deniotokiari.lastfmmusicplay.adapter.TagAdapter;
 import by.deniotokiari.lastfmmusicplay.api.LastFmAPI;
-import by.deniotokiari.lastfmmusicplay.content.contract.TagContract;
+import by.deniotokiari.lastfmmusicplay.content.contract.lastfm.TagContract;
 import by.deniotokiari.lastfmmusicplay.content.json.lastfm.Tag;
 import by.deniotokiari.lastfmmusicplay.fragment.AbstractListFragment;
 
