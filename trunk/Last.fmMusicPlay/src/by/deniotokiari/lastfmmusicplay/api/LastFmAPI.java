@@ -40,23 +40,28 @@ public class LastFmAPI {
 				String.valueOf(limit), String.valueOf(page));
 	}
 
+	public static String userGetPlaylists(String user) {
+		return String.format("%s&user=%s", template("user.getPlaylists"),
+				Uri.encode(user));
+	}
+
 	// Tag
 	public static String tagGetTopTracks(String tag, int limit, int page) {
 		return String.format("%s&tag=%s&limit=%s&page=%s",
 				template("tag.gettoptracks"), Uri.encode(tag),
 				String.valueOf(limit), String.valueOf(page));
 	}
-	
+
 	public static String tagGetTopTags() {
 		return String.format("%s", template("tag.getTopTags"));
 	}
-	
+
 	public static String tagGetTopArtists(String tag, int limit, int page) {
 		return String.format("%s&tag=%s&limit=%s&page=%s",
 				template("tag.getTopArtists"), Uri.encode(tag),
 				String.valueOf(limit), String.valueOf(page));
 	}
-	
+
 	public static String tagGetTopAlbums(String tag, int limit, int page) {
 		return String.format("%s&tag=%s&limit=%s&page=%s",
 				template("tag.getTopAlbums"), Uri.encode(tag),
@@ -101,6 +106,13 @@ public class LastFmAPI {
 		return String.format("%s&artist=%s&album=%s&autocorrect1",
 				template("album.getInfo"), Uri.encode(artist),
 				Uri.encode(album));
+	}
+
+	// Other
+	public static String playlistFetch(String id) {
+		return String
+				.format("http://lastfm-api-ext.appspot.com/2.0/?method=playlist.fetch&playlistURL=lastfm://playlist/%s&api_key=%s&outtype=json",
+						id, API_KEY);
 	}
 
 	// Auth

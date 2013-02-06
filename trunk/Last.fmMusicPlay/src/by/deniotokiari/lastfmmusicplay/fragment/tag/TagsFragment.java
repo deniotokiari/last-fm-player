@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.ListView;
 import by.deniotokiari.lastfmmusicplay.R;
 import by.deniotokiari.lastfmmusicplay.adapter.AbstractCursorAdapter;
-import by.deniotokiari.lastfmmusicplay.adapter.TagsAdapter;
+import by.deniotokiari.lastfmmusicplay.adapter.TagAdapter;
 import by.deniotokiari.lastfmmusicplay.api.LastFmAPI;
 import by.deniotokiari.lastfmmusicplay.content.contract.TagContract;
 import by.deniotokiari.lastfmmusicplay.content.json.lastfm.Tag;
@@ -43,7 +43,7 @@ public class TagsFragment extends AbstractListFragment {
 
 	@Override
 	protected AbstractCursorAdapter adapter() {
-		return new TagsAdapter(getActivity());
+		return new TagAdapter(getActivity());
 	}
 	
 	@Override

@@ -57,6 +57,14 @@
             android:name="by.deniotokiari.lastfmmusicplay.content.provider.TagsProvider"
             android:authorities="by.deniotokiari.lastfmmusicplay.provider.TagsProvider"
             android:exported="false" />
+        <provider
+            android:name="by.deniotokiari.lastfmmusicplay.content.provider.PlaylistsProvider"
+            android:authorities="by.deniotokiari.lastfmmusicplay.provider.PlaylistsProvider"
+            android:exported="false" />
+        <provider
+            android:name="by.deniotokiari.lastfmmusicplay.content.provider.PlaylistTracksProvider"
+            android:authorities="by.deniotokiari.lastfmmusicplay.provider.PlaylistTracksProvider"
+            android:exported="false" />
     </application>
 
 </manifest>
