@@ -2,9 +2,9 @@ package by.deniotokiari.lastfmmusicplay.content.provider.lastfm;
 
 import android.content.ContentValues;
 import android.net.Uri;
-import by.deniotokiari.lastfmmusicplay.content.AbstractProvider;
 import by.deniotokiari.lastfmmusicplay.content.contract.lastfm.AlbumContract;
 import by.deniotokiari.lastfmmusicplay.content.json.lastfm.Album;
+import by.deniotokiari.lastfmmusicplay.content.provider.AbstractProvider;
 
 public class AlbumsProvider extends AbstractProvider {
 
