@@ -10,17 +10,18 @@ import org.json.JSONObject;
 import by.deniotokiari.lastfmmusicplay.content.Callback;
 import by.deniotokiari.lastfmmusicplay.content.CommonAsyncTask;
 
-public class CommonListJsonAsyncTask extends CommonAsyncTask<List<String>> {
+public class LastfmListJsonAsyncTask extends CommonAsyncTask<List<String>> {
 
 	private String[] mKeys;
 	private static final String EXTRA_ATTRIBUTES = "@attr";
 
-	public CommonListJsonAsyncTask(Callback<List<String>> callback,
+	public LastfmListJsonAsyncTask(Callback<List<String>> callback,
 			String[] keys, String... params) {
 		super(callback, params);
 		mKeys = keys;
 	}
 
+	// TODO need refactor
 	@Override
 	protected List<String> process(String source) throws JSONException {
 		if (source == null || source.length() == 0) {
@@ -30,15 +31,15 @@ public class CommonListJsonAsyncTask extends CommonAsyncTask<List<String>> {
 		JSONObject jsonObject = new JSONObject(source);
 		// for playlist track
 		if (mKeys.length == 3) {
-				JSONArray array = jsonObject.optJSONArray(mKeys[0]);
-				if (array != null) {
-					for (int i = 0; i < array.length(); i++) {
-						JSONObject obj = array.optJSONObject(i);
-						obj.put(mKeys[1], mKeys[2]);
-						list.add(obj.toString());
-					}
-					return list;
+			JSONArray array = jsonObject.optJSONArray(mKeys[0]);
+			if (array != null) {
+				for (int i = 0; i < array.length(); i++) {
+					JSONObject obj = array.optJSONObject(i);
+					obj.put(mKeys[1], mKeys[2]);
+					list.add(obj.toString());
 				}
+				return list;
+			}
 		}
 		jsonObject = jsonObject.optJSONObject(mKeys[0]);
 		JSONArray array;
@@ -56,6 +57,7 @@ public class CommonListJsonAsyncTask extends CommonAsyncTask<List<String>> {
 					return list;
 				}
 			}
+			// for other
 		} else {
 			array = jsonObject.optJSONArray(mKeys[1]);
 			if (array != null) {
