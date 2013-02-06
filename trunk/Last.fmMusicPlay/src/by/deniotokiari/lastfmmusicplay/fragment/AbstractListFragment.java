@@ -11,6 +11,8 @@ import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -26,7 +28,7 @@ abstract public class AbstractListFragment extends ListFragment implements
 		LoaderManager.LoaderCallbacks<Cursor> {
 
 	private String id;
-	
+
 	public static int FOOTER_RES = R.layout.view_footer;
 	private static int LOADER_ID = 0;
 	private int itemsCount;
@@ -40,6 +42,7 @@ abstract public class AbstractListFragment extends ListFragment implements
 	private View mFooterView;
 	private BroadcastReceiver mReceiver;
 	private IntentFilter mFilter;
+	private Handler mHandler;
 
 	/** Sql args to query **/
 	private Uri uri;
@@ -53,11 +56,11 @@ abstract public class AbstractListFragment extends ListFragment implements
 	abstract protected String url();
 
 	abstract protected int changeOffset(int itemsCount);
-	
+
 	abstract protected AbstractCursorAdapter adapter();
 
-	public AbstractListFragment(String[] jsonKeys, Uri uri, String selection, String[] selectionArgs,
-			String sortOrder) {
+	public AbstractListFragment(String[] jsonKeys, Uri uri, String selection,
+			String[] selectionArgs, String sortOrder) {
 		this.jsonKeys = jsonKeys;
 		this.uri = uri;
 		this.selection = selection;
@@ -90,27 +93,41 @@ abstract public class AbstractListFragment extends ListFragment implements
 		mFilter = new IntentFilter();
 		mFilter.addAction(GetDataService.ACTION_ON_ERROR + id);
 		mFilter.addAction(GetDataService.ACTION_ON_SUCCESS + id);
+		mHandler = new Handler() {
+
+			@Override
+			public void handleMessage(Message msg) {
+				hideFooter();
+			}
+
+		};
 		mReceiver = new BroadcastReceiver() {
 
 			@Override
 			public void onReceive(Context context, Intent intent) {
 				String action = intent.getAction();
 				if (action.equals(GetDataService.ACTION_ON_ERROR + id)) {
-					String message = intent.getStringExtra(GetDataService.EXTRA_KEY_MESSAGE);
-					if (message != null && message.equals(GetDataService.ERROR_MSG)) {
+					String message = intent
+							.getStringExtra(GetDataService.EXTRA_KEY_MESSAGE);
+					if (message != null
+							&& message.equals(GetDataService.ERROR_MSG)) {
 						isEndOfData = true;
 						setListAdapter(mAdapter);
 						getListView().setVisibility(View.INVISIBLE);
 					}
-					if (!isError) {
+					if (isError) {
 						// TODO dlg error imp and isEndOfData
+						setEndOfData(true);
 					}
-					hideFooter();
+					// hideFooter();
+					mHandler.sendEmptyMessage(0);
 					isLoading = false;
 					isError = true;
+					Log.d("LOG", "INVOKED ERROR #" + id);
 				} else if (action.equals(GetDataService.ACTION_ON_SUCCESS + id)) {
-					hideFooter();
-					Log.d("LOG", "INVOKED" + id);
+					// hideFooter();
+					mHandler.sendEmptyMessage(0);
+					Log.d("LOG", "INVOKED SUCCESS #" + id);
 					isLoading = false;
 				}
 			}
@@ -152,7 +169,7 @@ abstract public class AbstractListFragment extends ListFragment implements
 			try {
 				getListView().removeFooterView(mFooterView);
 			} catch (Exception e) {
-				
+
 			}
 		}
 	}
@@ -161,8 +178,6 @@ abstract public class AbstractListFragment extends ListFragment implements
 	public void onLoaderReset(Loader<Cursor> loader) {
 		mAdapter.swapCursor(null);
 	}
-	
-	
 
 	private void setOnScrollListener() {
 		getListView().setOnScrollListener(new OnScrollListener() {
@@ -208,7 +223,7 @@ abstract public class AbstractListFragment extends ListFragment implements
 	protected void setEndOfData(boolean flag) {
 		isEndOfData = flag;
 	}
-	
+
 	protected int getOffset() {
 		return offset;
 	}

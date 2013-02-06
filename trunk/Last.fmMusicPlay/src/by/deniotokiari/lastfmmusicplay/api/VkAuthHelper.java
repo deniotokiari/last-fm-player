@@ -15,7 +15,7 @@ public class VkAuthHelper {
 			.getContext();
 	public static final String VK_SHARED_PREFS = "vk_session";
 	public static final String APP_ID = "3336066";
-	public static final String SCOPE = "audio,offline";
+	public static final String SCOPE = "audio,wall,friends,offline";
 	public static final String REDIRECT_URL = "http://oauth.vk.com/blank.html";
 	public static final String AUTORIZATION_URL = "http://oauth.vk.com/authorize?client_id="
 			+ APP_ID

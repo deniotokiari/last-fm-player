@@ -12,7 +12,7 @@ import by.deniotokiari.lastfmmusicplay.adapter.AbstractCursorAdapter;
 import by.deniotokiari.lastfmmusicplay.adapter.PlaylistAdapter;
 import by.deniotokiari.lastfmmusicplay.api.LastFmAPI;
 import by.deniotokiari.lastfmmusicplay.api.LastfmAuthHelper;
-import by.deniotokiari.lastfmmusicplay.content.contract.PlaylistContract;
+import by.deniotokiari.lastfmmusicplay.content.contract.lastfm.PlaylistContract;
 import by.deniotokiari.lastfmmusicplay.content.json.lastfm.Playlist;
 import by.deniotokiari.lastfmmusicplay.fragment.AbstractLastfmListFragment;
 

@@ -1,11 +1,12 @@
 package by.deniotokiari.lastfmmusicplay.db;
 
-import by.deniotokiari.lastfmmusicplay.content.contract.AlbumContract;
-import by.deniotokiari.lastfmmusicplay.content.contract.ArtistContract;
-import by.deniotokiari.lastfmmusicplay.content.contract.PlaylistContract;
 import by.deniotokiari.lastfmmusicplay.content.contract.PlaylistTrackContract;
-import by.deniotokiari.lastfmmusicplay.content.contract.TagContract;
-import by.deniotokiari.lastfmmusicplay.content.contract.TrackContract;
+import by.deniotokiari.lastfmmusicplay.content.contract.lastfm.AlbumContract;
+import by.deniotokiari.lastfmmusicplay.content.contract.lastfm.ArtistContract;
+import by.deniotokiari.lastfmmusicplay.content.contract.lastfm.PlaylistContract;
+import by.deniotokiari.lastfmmusicplay.content.contract.lastfm.TagContract;
+import by.deniotokiari.lastfmmusicplay.content.contract.lastfm.TrackContract;
+import by.deniotokiari.lastfmmusicplay.content.contract.vk.UserTrackContract;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -46,6 +47,7 @@ public class DBHelper extends SQLiteOpenHelper {
 			db.execSQL(AlbumContract.createTable(AlbumContract.TABLE_NAME_TAG_TOP_ALBUMS));
 			db.execSQL(PlaylistContract.CREATE_TABLE);
 			db.execSQL(PlaylistTrackContract.CREATE_TABLE);
+			db.execSQL(UserTrackContract.CREATE_TABLE);
 			db.setTransactionSuccessful();
 		} finally {
 			db.endTransaction();
@@ -76,6 +78,7 @@ public class DBHelper extends SQLiteOpenHelper {
 			db.execSQL(AlbumContract.dropTable(AlbumContract.TABLE_NAME_TAG_TOP_ALBUMS));
 			db.execSQL(PlaylistContract.DROP_TABLE);
 			db.execSQL(PlaylistTrackContract.DROP_TABLE);
+			db.execSQL(UserTrackContract.DROP_TABLE);
 			db.setTransactionSuccessful();
 		} finally {
 			db.endTransaction();
