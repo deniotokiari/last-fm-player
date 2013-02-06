@@ -10,12 +10,12 @@ import org.json.JSONObject;
 import by.deniotokiari.lastfmmusicplay.content.Callback;
 import by.deniotokiari.lastfmmusicplay.content.CommonAsyncTask;
 
-public class LastfmListJsonAsyncTask extends CommonAsyncTask<List<String>> {
+public class CommonJsonAsyncTask extends CommonAsyncTask<List<String>> {
 
 	private String[] mKeys;
 	private static final String EXTRA_ATTRIBUTES = "@attr";
 
-	public LastfmListJsonAsyncTask(Callback<List<String>> callback,
+	public CommonJsonAsyncTask(Callback<List<String>> callback,
 			String[] keys, String... params) {
 		super(callback, params);
 		mKeys = keys;
