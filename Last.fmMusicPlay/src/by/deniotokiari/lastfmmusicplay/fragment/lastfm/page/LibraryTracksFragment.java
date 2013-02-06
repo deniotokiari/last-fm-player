@@ -14,7 +14,7 @@ public class LibraryTracksFragment extends AbstractLastfmListFragment {
 	private static final String[] jsonKeys = { Track.ROOT_LIBRARY_TRACKS,
 			Track.ITEM };
 	private static final int itemsPerPage = 20;
-	private static final Uri uri = TrackContract.URI_ALBUM_TRACKS;
+	private static final Uri uri = TrackContract.URI_LIBRARY_TRACKS;
 	private static final String sortOrder = TrackContract.Columns.RANK
 			+ " DESC";
 

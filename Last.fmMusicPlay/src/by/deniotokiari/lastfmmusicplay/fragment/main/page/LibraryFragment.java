@@ -3,6 +3,7 @@ package by.deniotokiari.lastfmmusicplay.fragment.main.page;
 import by.deniotokiari.lastfmmusicplay.R;
 import by.deniotokiari.lastfmmusicplay.adapter.LibraryAdapter;
 import by.deniotokiari.lastfmmusicplay.fragment.lastfm.LastfmPagerFragment;
+import by.deniotokiari.lastfmmusicplay.fragment.playlist.PlaylistFragment;
 import by.deniotokiari.lastfmmusicplay.fragment.tag.TagsFragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -35,6 +36,8 @@ public class LibraryFragment extends ListFragment {
 		case 3:
 			replaceFragment(new TagsFragment());
 			break;
+		case 4:
+			replaceFragment(new PlaylistFragment());
 		}
 	}
 

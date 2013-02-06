@@ -22,7 +22,7 @@
     <color name="bg_controls">#222222</color>
 
     <string-array name="main_pages_name">
-        <item>Library</item>
+        <item>Menu</item>
         <item>Now Playing</item>
         <item>Playlist</item>
     </string-array>
@@ -42,6 +42,11 @@
         <item>Local</item>
         <item>Tags</item>
         <item>Playlists</item>
+    </string-array>
+    <string-array name="lastfm_tags_pages_name">
+        <item>Top Tracks</item>
+        <item>Top Artists</item>
+        <item>Top Albums</item>
     </string-array>
 
 </resources>

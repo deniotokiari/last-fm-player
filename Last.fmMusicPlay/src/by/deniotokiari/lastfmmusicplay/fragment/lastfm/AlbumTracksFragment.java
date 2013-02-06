@@ -35,7 +35,7 @@ public class AlbumTracksFragment extends AbstractLastfmListFragment {
 			+ " = ?";
 	private static final Uri uri = TrackContract.URI_ALBUM_TRACKS;
 	private static final String sortOrder = null;//TrackContract.Columns.RANK + " ASC";
-	private static final String[] jsonKeys = { Track.ROOT_ALBUM_TRACKS,
+	private static String[] jsonKeys = { Track.ROOT_ALBUM_TRACKS,
 			Track.ITEM_ROOT_ALBUM_TRACKS, Track.ITEM, null, null };
 
 	public AlbumTracksFragment() {

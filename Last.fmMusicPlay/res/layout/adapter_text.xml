@@ -2,7 +2,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="64dip"
-    android:paddingLeft="4dip" >
+    android:paddingBottom="2dip"
+    android:paddingLeft="4dip"
+    android:paddingTop="4dip" >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -10,10 +12,8 @@
         android:layout_toLeftOf="@android:id/hint"
         android:gravity="center_vertical"
         android:orientation="vertical"
-        android:paddingBottom="2dip"
         android:paddingLeft="4dip"
-        android:paddingRight="8dip"
-        android:paddingTop="4dip" >
+        android:paddingRight="8dip" >
 
         <TextView
             android:id="@android:id/text2"
