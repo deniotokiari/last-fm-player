@@ -2,7 +2,7 @@ package by.deniotokiari.lastfmmusicplay.content.json.vk;
 
 import by.deniotokiari.lastfmmusicplay.content.json.CommonJson;
 
-public class Track extends CommonJson {
+public class UserTrack extends CommonJson {
 
 	public static final String ROOT = "response";
 
@@ -12,7 +12,7 @@ public class Track extends CommonJson {
 	private String artist;
 	private String title;
 
-	public Track(String source) {
+	public UserTrack(String source) {
 		super(source);
 		artist = getString(KEY_ARTIST);
 		title = getString(KEY_TITLE);
