@@ -42,28 +42,36 @@
         <service android:name="by.deniotokiari.lastfmmusicplay.service.GetDataService" />
 
         <provider
-            android:name="by.deniotokiari.lastfmmusicplay.content.provider.TracksProvider"
+            android:name="by.deniotokiari.lastfmmusicplay.content.provider.lastfm.TracksProvider"
             android:authorities="by.deniotokiari.lastfmmusicplay.provider.TracksProvider"
             android:exported="false" />
         <provider
-            android:name="by.deniotokiari.lastfmmusicplay.content.provider.ArtistsProvider"
+            android:name="by.deniotokiari.lastfmmusicplay.content.provider.lastfm.ArtistsProvider"
             android:authorities="by.deniotokiari.lastfmmusicplay.provider.ArtistsProvider"
             android:exported="false" />
         <provider
-            android:name="by.deniotokiari.lastfmmusicplay.content.provider.AlbumsProvider"
+            android:name="by.deniotokiari.lastfmmusicplay.content.provider.lastfm.AlbumsProvider"
             android:authorities="by.deniotokiari.lastfmmusicplay.provider.AlbumsProvider"
             android:exported="false" />
         <provider
-            android:name="by.deniotokiari.lastfmmusicplay.content.provider.TagsProvider"
+            android:name="by.deniotokiari.lastfmmusicplay.content.provider.lastfm.TagsProvider"
             android:authorities="by.deniotokiari.lastfmmusicplay.provider.TagsProvider"
             android:exported="false" />
         <provider
-            android:name="by.deniotokiari.lastfmmusicplay.content.provider.PlaylistsProvider"
+            android:name="by.deniotokiari.lastfmmusicplay.content.provider.lastfm.PlaylistsProvider"
             android:authorities="by.deniotokiari.lastfmmusicplay.provider.PlaylistsProvider"
             android:exported="false" />
         <provider
             android:name="by.deniotokiari.lastfmmusicplay.content.provider.PlaylistTracksProvider"
             android:authorities="by.deniotokiari.lastfmmusicplay.provider.PlaylistTracksProvider"
+            android:exported="false" />
+        <provider
+            android:name="by.deniotokiari.lastfmmusicplay.content.provider.vk.UserTracksProvider"
+            android:authorities="by.deniotokiari.lastfmmusicplay.provider.UserTracksProvider"
+            android:exported="false" />
+           <provider
+            android:name="by.deniotokiari.lastfmmusicplay.content.provider.vk.WallTracksProvider"
+            android:authorities="by.deniotokiari.lastfmmusicplay.provider.WallTracksProvider"
             android:exported="false" />
     </application>
 
