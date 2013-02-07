@@ -48,5 +48,9 @@
         <item>Top Artists</item>
         <item>Top Albums</item>
     </string-array>
+    <string-array name="vk_pages_name">
+        <item>Tracks</item>
+        <item>Wall</item>
+    </string-array>
 
 </resources>
