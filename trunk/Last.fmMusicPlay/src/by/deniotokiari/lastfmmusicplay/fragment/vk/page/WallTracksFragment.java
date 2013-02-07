@@ -4,23 +4,24 @@ import android.net.Uri;
 import by.deniotokiari.lastfmmusicplay.adapter.AbstractCursorAdapter;
 import by.deniotokiari.lastfmmusicplay.adapter.TrackAdapter;
 import by.deniotokiari.lastfmmusicplay.api.VkAPI;
-import by.deniotokiari.lastfmmusicplay.content.contract.vk.UserTrackContract;
-import by.deniotokiari.lastfmmusicplay.content.json.vk.UserTrack;
+import by.deniotokiari.lastfmmusicplay.content.contract.vk.WallTrackContract;
+import by.deniotokiari.lastfmmusicplay.content.json.vk.WallTrack;
 import by.deniotokiari.lastfmmusicplay.fragment.AbstractListFragment;
 
-public class UserTracksFragment extends AbstractListFragment {
-	
-	private static final Uri uri = UserTrackContract.URI_USER_TRACKS;
-	private static final String[] jsonKeys = { UserTrack.ROOT };
-	private static int count = 20;
+public class WallTracksFragment extends AbstractListFragment {
 
-	public UserTracksFragment() {
+	private static final Uri uri = WallTrackContract.URI_WALL_TRACKS;
+	private static final String[] jsonKeys = { WallTrack.ROOT,
+			WallTrack.ROOT_ITEMS, WallTrack.KEY_TYPE, "audio" };
+	private static int count = 100;
+
+	public WallTracksFragment() {
 		super(jsonKeys, uri, null, null, null);
 	}
 
 	@Override
 	protected String url() {
-		return VkAPI.audioGet(count, getOffset());
+		return VkAPI.wallGet(count, getOffset());
 	}
 
 	@Override
@@ -28,12 +29,12 @@ public class UserTracksFragment extends AbstractListFragment {
 		if (itemsCount < 0) {
 			return 0;
 		}
-		return getOffset() + itemsCount;
+		return getOffset() + count + 1;
 	}
 
 	@Override
 	protected AbstractCursorAdapter adapter() {
 		return new TrackAdapter(getActivity());
 	}
- 
+
 }

@@ -42,7 +42,14 @@ abstract public class AbstractListFragment extends ListFragment implements
 	private View mFooterView;
 	private BroadcastReceiver mReceiver;
 	private IntentFilter mFilter;
-	private Handler mHandler;
+	private Handler mHandler = new Handler() {
+
+		@Override
+		public void handleMessage(Message msg) {
+			hideFooter();
+		}
+
+	};
 
 	/** Sql args to query **/
 	private Uri uri;
@@ -93,14 +100,6 @@ abstract public class AbstractListFragment extends ListFragment implements
 		mFilter = new IntentFilter();
 		mFilter.addAction(GetDataService.ACTION_ON_ERROR + id);
 		mFilter.addAction(GetDataService.ACTION_ON_SUCCESS + id);
-		mHandler = new Handler() {
-
-			@Override
-			public void handleMessage(Message msg) {
-				hideFooter();
-			}
-
-		};
 		mReceiver = new BroadcastReceiver() {
 
 			@Override

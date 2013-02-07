@@ -7,6 +7,7 @@ import by.deniotokiari.lastfmmusicplay.R;
 import by.deniotokiari.lastfmmusicplay.fragment.AbstractPagerFragment;
 import by.deniotokiari.lastfmmusicplay.fragment.PageInfo;
 import by.deniotokiari.lastfmmusicplay.fragment.vk.page.UserTracksFragment;
+import by.deniotokiari.lastfmmusicplay.fragment.vk.page.WallTracksFragment;
 
 public class VkPagerFragment extends AbstractPagerFragment {
 
@@ -20,6 +21,7 @@ public class VkPagerFragment extends AbstractPagerFragment {
 	protected List<PageInfo> pages() {
 		List<PageInfo> list = new ArrayList<PageInfo>();
 		list.add(new PageInfo(UserTracksFragment.class, null));
+		list.add(new PageInfo(WallTracksFragment.class, null));
 		return list;
 	}
 

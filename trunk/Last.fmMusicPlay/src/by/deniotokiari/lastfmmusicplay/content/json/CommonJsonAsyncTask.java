@@ -14,9 +14,10 @@ public class CommonJsonAsyncTask extends CommonAsyncTask<List<String>> {
 
 	private String[] mKeys;
 	private static final String EXTRA_ATTRIBUTES = "@attr";
+	private static final String ROOT_VK = "response";
 
-	public CommonJsonAsyncTask(Callback<List<String>> callback,
-			String[] keys, String... params) {
+	public CommonJsonAsyncTask(Callback<List<String>> callback, String[] keys,
+			String... params) {
 		super(callback, params);
 		mKeys = keys;
 	}
@@ -30,12 +31,28 @@ public class CommonJsonAsyncTask extends CommonAsyncTask<List<String>> {
 		List<String> list = new ArrayList<String>();
 		JSONObject jsonObject = new JSONObject(source);
 		// for vk
-		if (mKeys.length == 1) {
+		if (mKeys[0].equals(ROOT_VK)) {
 			JSONArray array = jsonObject.optJSONArray(mKeys[0]);
 			if (array != null) {
 				for (int i = 0; i < array.length(); i++) {
 					JSONObject obj = array.optJSONObject(i);
-					list.add(obj.toString());
+					if (obj != null) {
+						if (mKeys.length == 1) {
+							list.add(obj.toString());
+						} else {
+							JSONArray jsonArray = obj.optJSONArray(mKeys[1]);
+							if (jsonArray != null) {
+								for (int j = 0; j < jsonArray.length(); j++) {
+									JSONObject object = jsonArray
+											.optJSONObject(j);
+									if (object.optString(mKeys[2]).equals(
+											mKeys[3])) {
+										list.add(object.toString());
+									}
+								}
+							}
+						}
+					}
 				}
 				return list;
 			}
