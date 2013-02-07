@@ -7,6 +7,7 @@ import by.deniotokiari.lastfmmusicplay.content.contract.lastfm.PlaylistContract;
 import by.deniotokiari.lastfmmusicplay.content.contract.lastfm.TagContract;
 import by.deniotokiari.lastfmmusicplay.content.contract.lastfm.TrackContract;
 import by.deniotokiari.lastfmmusicplay.content.contract.vk.UserTrackContract;
+import by.deniotokiari.lastfmmusicplay.content.contract.vk.WallTrackContract;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -36,7 +37,8 @@ public class DBHelper extends SQLiteOpenHelper {
 			db.execSQL(TrackContract
 					.createTable(TrackContract.TABLE_NAME_ALBUM_TRACKS));
 			db.execSQL(ArtistContract.createTable(ArtistContract.TABLE_NAME));
-			db.execSQL(ArtistContract.createTable(ArtistContract.TABLE_TAG_NAME));
+			db.execSQL(ArtistContract
+					.createTable(ArtistContract.TABLE_TAG_NAME));
 			db.execSQL(AlbumContract
 					.createTable(AlbumContract.TABLE_NAME_LIBRARY_ALBUMS));
 			db.execSQL(AlbumContract
@@ -44,10 +46,13 @@ public class DBHelper extends SQLiteOpenHelper {
 			db.execSQL(TagContract.CREATE_TABLE);
 			db.execSQL(TrackContract
 					.createTable(TrackContract.TABLE_NAME_TAG_TRACKS));
-			db.execSQL(AlbumContract.createTable(AlbumContract.TABLE_NAME_TAG_TOP_ALBUMS));
+			db.execSQL(AlbumContract
+					.createTable(AlbumContract.TABLE_NAME_TAG_TOP_ALBUMS));
 			db.execSQL(PlaylistContract.CREATE_TABLE);
 			db.execSQL(PlaylistTrackContract.CREATE_TABLE);
 			db.execSQL(UserTrackContract.CREATE_TABLE);
+			db.execSQL(WallTrackContract
+					.createTable(WallTrackContract.TABLE_NAME_WALL_TRACKS));
 			db.setTransactionSuccessful();
 		} finally {
 			db.endTransaction();
@@ -75,10 +80,13 @@ public class DBHelper extends SQLiteOpenHelper {
 			db.execSQL(TagContract.DROP_TABLE);
 			db.execSQL(TrackContract
 					.dropTable(TrackContract.TABLE_NAME_TAG_TRACKS));
-			db.execSQL(AlbumContract.dropTable(AlbumContract.TABLE_NAME_TAG_TOP_ALBUMS));
+			db.execSQL(AlbumContract
+					.dropTable(AlbumContract.TABLE_NAME_TAG_TOP_ALBUMS));
 			db.execSQL(PlaylistContract.DROP_TABLE);
 			db.execSQL(PlaylistTrackContract.DROP_TABLE);
 			db.execSQL(UserTrackContract.DROP_TABLE);
+			db.execSQL(WallTrackContract
+					.dropTable(WallTrackContract.TABLE_NAME_WALL_TRACKS));
 			db.setTransactionSuccessful();
 		} finally {
 			db.endTransaction();

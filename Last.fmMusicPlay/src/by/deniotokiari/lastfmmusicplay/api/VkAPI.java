@@ -22,12 +22,29 @@ public class VkAPI {
 	}
 
 	public static String audioGetLyrics(String id) {
-		String result = String.format("%slyrics_id=%s", template("audio.getLyrics"), id);
+		String result = String.format("%slyrics_id=%s",
+				template("audio.getLyrics"), id);
 		return returnUrl(result);
 	}
-	
+
 	public static String audioGet(int count, int offset) {
-		String result = String.format("%scount=%s&offset=%s", template("audio.get"), String.valueOf(count), String.valueOf(offset));
+		String result = String.format("%scount=%s&offset=%s",
+				template("audio.get"), String.valueOf(count),
+				String.valueOf(offset));
+		return returnUrl(result);
+	}
+
+	public static String wallGet(int count, int offset) {
+		String result = String.format("%scount=%s&offset=%s",
+				template("wall.get"), String.valueOf(count),
+				String.valueOf(offset));
+		return returnUrl(result);
+	}
+
+	public static String newsfeedGet(int count, int offset) {
+		String result = String.format("%scount=%s&offset=%s&filters=post",
+				template("newsfeed.get"), String.valueOf(count),
+				String.valueOf(offset));
 		return returnUrl(result);
 	}
 
