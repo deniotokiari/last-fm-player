@@ -13,7 +13,7 @@ import by.deniotokiari.lastfmmusicplay.content.json.lastfm.Track;
 import by.deniotokiari.lastfmmusicplay.fragment.AbstractLastfmListFragment;
 import by.deniotokiari.lastfmmusicplay.fragment.tag.TagsFragment;
 
-public class TagTopTracks extends AbstractLastfmListFragment {
+public class TagTopTracksFragment extends AbstractLastfmListFragment {
 
 	private static final int itemsPerPage = 50;
 	private static final Uri uri = TrackContract.URI_TAG_TRACKS;
@@ -24,7 +24,7 @@ public class TagTopTracks extends AbstractLastfmListFragment {
 	private static String sortOrder = TrackContract.Columns.RANK + " ASC";
 	private String tag;
 
-	public TagTopTracks() {
+	public TagTopTracksFragment() {
 		super(jsonKeys, itemsPerPage, uri, selection, selectionArgs, sortOrder);
 	}
 
