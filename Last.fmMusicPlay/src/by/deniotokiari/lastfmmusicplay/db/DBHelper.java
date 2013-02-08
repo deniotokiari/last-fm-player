@@ -1,9 +1,10 @@
 package by.deniotokiari.lastfmmusicplay.db;
 
-import by.deniotokiari.lastfmmusicplay.content.contract.PlaylistTrackContract;
+import by.deniotokiari.lastfmmusicplay.content.contract.PlayerPlaylistContract;
 import by.deniotokiari.lastfmmusicplay.content.contract.lastfm.AlbumContract;
 import by.deniotokiari.lastfmmusicplay.content.contract.lastfm.ArtistContract;
 import by.deniotokiari.lastfmmusicplay.content.contract.lastfm.PlaylistContract;
+import by.deniotokiari.lastfmmusicplay.content.contract.lastfm.PlaylistTrackContract;
 import by.deniotokiari.lastfmmusicplay.content.contract.lastfm.TagContract;
 import by.deniotokiari.lastfmmusicplay.content.contract.lastfm.TrackContract;
 import by.deniotokiari.lastfmmusicplay.content.contract.vk.UserTrackContract;
@@ -53,6 +54,7 @@ public class DBHelper extends SQLiteOpenHelper {
 			db.execSQL(UserTrackContract.CREATE_TABLE);
 			db.execSQL(WallTrackContract
 					.createTable(WallTrackContract.TABLE_NAME_WALL_TRACKS));
+			db.execSQL(PlayerPlaylistContract.CREATE_TABLE);
 			db.setTransactionSuccessful();
 		} finally {
 			db.endTransaction();
@@ -87,6 +89,7 @@ public class DBHelper extends SQLiteOpenHelper {
 			db.execSQL(UserTrackContract.DROP_TABLE);
 			db.execSQL(WallTrackContract
 					.dropTable(WallTrackContract.TABLE_NAME_WALL_TRACKS));
+			db.execSQL(PlayerPlaylistContract.DROP_TABLE);
 			db.setTransactionSuccessful();
 		} finally {
 			db.endTransaction();
@@ -105,6 +108,11 @@ public class DBHelper extends SQLiteOpenHelper {
 	public long addContent(String table, ContentValues values) {
 		SQLiteDatabase db = getWritableDatabase();
 		return db.insert(table, null, values);
+	}
+	
+	public int deleteAll(String tableName) {
+		SQLiteDatabase db = getWritableDatabase();
+		return db.delete(tableName, null, null);
 	}
 
 }

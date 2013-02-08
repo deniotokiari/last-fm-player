@@ -8,7 +8,7 @@ import android.support.v4.content.Loader;
 import by.deniotokiari.lastfmmusicplay.adapter.AbstractCursorAdapter;
 import by.deniotokiari.lastfmmusicplay.adapter.TrackAdapter;
 import by.deniotokiari.lastfmmusicplay.api.LastFmAPI;
-import by.deniotokiari.lastfmmusicplay.content.contract.PlaylistTrackContract;
+import by.deniotokiari.lastfmmusicplay.content.contract.lastfm.PlaylistTrackContract;
 import by.deniotokiari.lastfmmusicplay.content.json.other.Track;
 import by.deniotokiari.lastfmmusicplay.fragment.AbstractLastfmListFragment;
 

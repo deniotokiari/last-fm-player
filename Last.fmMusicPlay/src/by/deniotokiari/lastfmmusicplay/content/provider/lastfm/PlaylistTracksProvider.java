@@ -2,7 +2,7 @@ package by.deniotokiari.lastfmmusicplay.content.provider.lastfm;
 
 import android.content.ContentValues;
 import android.net.Uri;
-import by.deniotokiari.lastfmmusicplay.content.contract.PlaylistTrackContract;
+import by.deniotokiari.lastfmmusicplay.content.contract.lastfm.PlaylistTrackContract;
 import by.deniotokiari.lastfmmusicplay.content.json.other.Track;
 import by.deniotokiari.lastfmmusicplay.content.provider.AbstractProvider;
 
