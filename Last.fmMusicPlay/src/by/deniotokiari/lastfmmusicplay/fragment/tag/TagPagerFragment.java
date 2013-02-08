@@ -7,9 +7,9 @@ import android.os.Bundle;
 import by.deniotokiari.lastfmmusicplay.R;
 import by.deniotokiari.lastfmmusicplay.fragment.AbstractPagerFragment;
 import by.deniotokiari.lastfmmusicplay.fragment.PageInfo;
-import by.deniotokiari.lastfmmusicplay.fragment.tag.page.TagTopAlbums;
-import by.deniotokiari.lastfmmusicplay.fragment.tag.page.TagTopArtists;
-import by.deniotokiari.lastfmmusicplay.fragment.tag.page.TagTopTracks;
+import by.deniotokiari.lastfmmusicplay.fragment.tag.page.TagTopAlbumsFragment;
+import by.deniotokiari.lastfmmusicplay.fragment.tag.page.TagTopArtistsFragment;
+import by.deniotokiari.lastfmmusicplay.fragment.tag.page.TagTopTracksFragment;
 
 public class TagPagerFragment extends AbstractPagerFragment {
 
@@ -29,9 +29,9 @@ public class TagPagerFragment extends AbstractPagerFragment {
 		Bundle args = new Bundle();
 		args.putString(TagsFragment.KEY_TAG, getArguments().getString(TagsFragment.KEY_TAG));
 		List<PageInfo> list = new ArrayList<PageInfo>();
-		list.add(new PageInfo(TagTopTracks.class, args));
-		list.add(new PageInfo(TagTopArtists.class, args));
-		list.add(new PageInfo(TagTopAlbums.class, args));
+		list.add(new PageInfo(TagTopTracksFragment.class, args));
+		list.add(new PageInfo(TagTopArtistsFragment.class, args));
+		list.add(new PageInfo(TagTopAlbumsFragment.class, args));
 		return list;
 	}
 

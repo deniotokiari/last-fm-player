@@ -20,9 +20,6 @@ public class PlayerPlaylistProvider extends AbstractProvider {
 				title);
 		contentValues.put(PlayerPlaylistContract.Columns.ARTIST,
 				artist);
-	/*	if (album != null) {
-			
-		}*/
 		contentValues.put(PlayerPlaylistContract.Columns.ALBUM,
 				album);
 		return contentValues;

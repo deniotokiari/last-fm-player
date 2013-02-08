@@ -62,16 +62,20 @@
             android:authorities="by.deniotokiari.lastfmmusicplay.provider.PlaylistsProvider"
             android:exported="false" />
         <provider
-            android:name="by.deniotokiari.lastfmmusicplay.content.provider.PlaylistTracksProvider"
+            android:name="by.deniotokiari.lastfmmusicplay.content.provider.lastfm.PlaylistTracksProvider"
             android:authorities="by.deniotokiari.lastfmmusicplay.provider.PlaylistTracksProvider"
             android:exported="false" />
         <provider
             android:name="by.deniotokiari.lastfmmusicplay.content.provider.vk.UserTracksProvider"
             android:authorities="by.deniotokiari.lastfmmusicplay.provider.UserTracksProvider"
             android:exported="false" />
-           <provider
+        <provider
             android:name="by.deniotokiari.lastfmmusicplay.content.provider.vk.WallTracksProvider"
             android:authorities="by.deniotokiari.lastfmmusicplay.provider.WallTracksProvider"
+            android:exported="false" />
+        <provider
+            android:name="by.deniotokiari.lastfmmusicplay.content.provider.PlayerPlaylistProvider"
+            android:authorities="by.deniotokiari.lastfmmusicplay.provider.PlayerPlaylistProvider"
             android:exported="false" />
     </application>
 

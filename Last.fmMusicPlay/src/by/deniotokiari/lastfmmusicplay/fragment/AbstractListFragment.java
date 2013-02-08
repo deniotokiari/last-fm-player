@@ -3,6 +3,7 @@ package by.deniotokiari.lastfmmusicplay.fragment;
 import by.deniotokiari.lastfmmusicplay.R;
 import by.deniotokiari.lastfmmusicplay.adapter.AbstractCursorAdapter;
 import by.deniotokiari.lastfmmusicplay.content.ContentRequestBuilder;
+import by.deniotokiari.lastfmmusicplay.playlist.PlaylistManager;
 import by.deniotokiari.lastfmmusicplay.service.GetDataService;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -30,7 +31,7 @@ abstract public class AbstractListFragment extends ListFragment implements
 	private String id;
 
 	public static int FOOTER_RES = R.layout.view_footer;
-	private static int LOADER_ID = 0;
+	private static int LOADER_ID = 1;
 	private int itemsCount;
 	private int offset;
 
@@ -171,6 +172,11 @@ abstract public class AbstractListFragment extends ListFragment implements
 
 			}
 		}
+	}
+	
+	@Override
+	public void onListItemClick(ListView l, View v, int position, long id) {
+		PlaylistManager.getInstance().setPlaylist(position, uri, selection, selectionArgs, sortOrder);
 	}
 
 	@Override
