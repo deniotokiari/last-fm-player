@@ -1,8 +1,6 @@
 package by.deniotokiari.lastfmmusicplay.fragment.lastfm.page;
 
 import android.net.Uri;
-import android.view.View;
-import android.widget.ListView;
 import by.deniotokiari.lastfmmusicplay.adapter.AbstractCursorAdapter;
 import by.deniotokiari.lastfmmusicplay.adapter.TrackAdapter;
 import by.deniotokiari.lastfmmusicplay.api.LastFmAPI;
@@ -10,7 +8,6 @@ import by.deniotokiari.lastfmmusicplay.api.LastfmAuthHelper;
 import by.deniotokiari.lastfmmusicplay.content.contract.lastfm.TrackContract;
 import by.deniotokiari.lastfmmusicplay.content.json.lastfm.Track;
 import by.deniotokiari.lastfmmusicplay.fragment.AbstractLastfmListFragment;
-import by.deniotokiari.lastfmmusicplay.playlist.PlaylistManager;
 
 public class LibraryTracksFragment extends AbstractLastfmListFragment {
 
@@ -34,11 +31,6 @@ public class LibraryTracksFragment extends AbstractLastfmListFragment {
 	@Override
 	protected AbstractCursorAdapter adapter() {
 		return new TrackAdapter(getActivity());
-	}
-	
-	@Override
-	public void onListItemClick(ListView l, View v, int position, long id) {
-		PlaylistManager.getInstance().setPlaylist(uri, null, null, sortOrder);
 	}
 
 }
