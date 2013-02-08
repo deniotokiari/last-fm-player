@@ -18,12 +18,12 @@ abstract public class AbstractProvider extends ContentProvider {
 	abstract public String tableName(Uri uri);
 
 	@Override
-	public int delete(Uri arg0, String arg1, String[] arg2) {
-		return 0;
+	public int delete(Uri uri, String selection, String[] selectionArgs) {
+		return mDbHelper.deleteAll(tableName(uri));
 	}
 
 	@Override
-	public int update(Uri arg0, ContentValues arg1, String arg2, String[] arg3) {
+	public int update(Uri uri, ContentValues values, String arg2, String[] arg3) {
 		return 0;
 	}
 
