@@ -1,9 +1,10 @@
-package by.deniotokiari.lastfmmusicplay.content.provider;
+package by.deniotokiari.lastfmmusicplay.content.provider.lastfm;
 
 import android.content.ContentValues;
 import android.net.Uri;
 import by.deniotokiari.lastfmmusicplay.content.contract.PlaylistTrackContract;
 import by.deniotokiari.lastfmmusicplay.content.json.other.Track;
+import by.deniotokiari.lastfmmusicplay.content.provider.AbstractProvider;
 
 public class PlaylistTracksProvider extends AbstractProvider {
 
