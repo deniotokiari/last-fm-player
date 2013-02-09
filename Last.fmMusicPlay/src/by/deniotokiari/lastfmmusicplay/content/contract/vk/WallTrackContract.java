@@ -18,16 +18,19 @@ public class WallTrackContract {
 		public static final String TRACK_ID = _ID;
 		public static final String TITLE = "TITLE";
 		public static final String ARTIST = "ARTIST";
+		public static final String ALBUM = "ALBUM";
 
 	}
 
 	public static final int INDEX_ID = 0;
 	public static final int INDEX_TITLE = 1;
 	public static final int INDEX_ARTIST = 2;
+	public static final int INDEX_ALBUM = 3;
 
 	private static String createTableTemplate = "CREATE TABLE %s " + " ("
 			+ Columns.TRACK_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-			+ Columns.TITLE + " VARCHAR, " + Columns.ARTIST + " VARCHAR" + ")";
+			+ Columns.TITLE + " VARCHAR, " + Columns.ARTIST + " VARCHAR, "
+			+ Columns.ALBUM + " VARCHAR" + ")";
 	private static String dropTableTemplate = "DROP TABLE IF EXISTS %s";
 
 	public static String createTable(String tableName) {

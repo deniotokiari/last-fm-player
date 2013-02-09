@@ -43,4 +43,17 @@ public class PreferencesHelper {
 		return preferences.getInt(key, -1);
 	}
 
+	public void putBoolean(String name, String key, boolean value) {
+		Editor editor = CONTEXT
+				.getSharedPreferences(name, Context.MODE_PRIVATE).edit();
+		editor.putBoolean(key, value);
+		editor.commit();
+	}
+
+	public boolean getBoolean(String name, String key) {
+		SharedPreferences preferences = CONTEXT.getSharedPreferences(name,
+				Context.MODE_PRIVATE);
+		return preferences.getBoolean(key, false);
+	}
+
 }
