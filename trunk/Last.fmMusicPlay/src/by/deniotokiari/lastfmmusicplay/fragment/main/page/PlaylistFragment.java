@@ -2,6 +2,7 @@ package by.deniotokiari.lastfmmusicplay.fragment.main.page;
 
 import by.deniotokiari.lastfmmusicplay.adapter.TrackAdapter;
 import by.deniotokiari.lastfmmusicplay.content.contract.PlayerPlaylistContract;
+import by.deniotokiari.lastfmmusicplay.content.contract.lastfm.TrackContract;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,6 +10,9 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.util.Log;
+import android.view.View;
+import android.widget.ListView;
 
 public class PlaylistFragment extends ListFragment implements
 		LoaderCallbacks<Cursor> {
@@ -40,6 +44,11 @@ public class PlaylistFragment extends ListFragment implements
 	@Override
 	public void onLoaderReset(Loader<Cursor> loader) {
 		mAdapter.swapCursor(null);
+	}
+	
+	@Override
+	public void onListItemClick(ListView l, View v, int position, long id) {
+		
 	}
 
 }

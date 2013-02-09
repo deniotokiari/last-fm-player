@@ -15,17 +15,20 @@ public class UserTrackContract {
 		public static final String TRACK_ID = _ID;
 		public static final String TITLE = "TITLE";
 		public static final String ARTIST = "ARTIST";
+		public static final String ALBUM = "ALBUM";
 
 	}
 
 	public static final int INDEX_ID = 0;
 	public static final int INDEX_TITLE = 1;
 	public static final int INDEX_ARTIST = 2;
+	public static final int INDEX_ALBUM = 3;
 
 	public static final String CREATE_TABLE = "CREATE TABLE "
 			+ TABLE_NAME_USER_TRACKS + " (" + Columns.TRACK_ID
 			+ " INTEGER PRIMARY KEY AUTOINCREMENT, " + Columns.TITLE
-			+ " VARCHAR, " + Columns.ARTIST + " VARCHAR" + ")";
+			+ " VARCHAR, " + Columns.ARTIST + " VARCHAR, " + Columns.ALBUM
+			+ " VARCHAR" + ")";
 	public static final String DROP_TABLE = "DROP TABLE IF EXISTS "
 			+ TABLE_NAME_USER_TRACKS;
 
