@@ -25,15 +25,22 @@ public class PlaylistManager {
 	public static PlaylistManager getInstance() {
 		if (instance == null) {
 			instance = new PlaylistManager();
-			POSITION = PreferencesHelper.getInstance().getInt(PREF_NAME, PREF_KEY_POSITION);
+			POSITION = PreferencesHelper.getInstance().getInt(PREF_NAME,
+					PREF_KEY_POSITION);
 		}
 		return instance;
 	}
 
-	public void setPlaylist(int position ,final Uri uri, final String selection,
-			final String[] selectionArgs, final String sortOrder) {
+	public void setPosition(int position) {
 		POSITION = position;
-		PreferencesHelper.getInstance().putInt(PREF_NAME, PREF_KEY_POSITION, POSITION);
+		PreferencesHelper.getInstance().putInt(PREF_NAME, PREF_KEY_POSITION,
+				POSITION);
+	}
+
+	public void setPlaylist(int position, final Uri uri,
+			final String selection, final String[] selectionArgs,
+			final String sortOrder) {
+		setPosition(position);
 		new Thread(new Runnable() {
 
 			@Override
@@ -77,8 +84,8 @@ public class PlaylistManager {
 		return getString(INDEX_ARTIST);
 	}
 
-	public String getAlbum() {
-		return getString(INDEX_ALBUM);
+	public String getTrack() {
+		return getArtist() + " - " + getTitle();
 	}
-
+	
 }

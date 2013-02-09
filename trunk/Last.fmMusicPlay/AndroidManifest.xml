@@ -40,6 +40,7 @@
         </activity>
 
         <service android:name="by.deniotokiari.lastfmmusicplay.service.GetDataService" />
+        <service android:name="by.deniotokiari.lastfmmusicplay.service.MusicPlayService" />
 
         <provider
             android:name="by.deniotokiari.lastfmmusicplay.content.provider.lastfm.TracksProvider"
