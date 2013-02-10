@@ -105,7 +105,7 @@ public class MusicPlayService extends Service implements OnCompletionListener,
 
 	@Override
 	public void onCompletion(MediaPlayer mediaPlayer) {
-		stop();
+		next();
 	}
 
 	public class MyBinder extends Binder {
@@ -182,6 +182,7 @@ public class MusicPlayService extends Service implements OnCompletionListener,
 					@Override
 					public void onError(Throwable e, Object... objects) {
 						Log.d("LOG", "error in url request");
+						next();
 					}
 
 				}, VkAPI.audioSearch(request.split("- ")[1], 1));
@@ -229,6 +230,7 @@ public class MusicPlayService extends Service implements OnCompletionListener,
 	}
 	
 	public void start() {
+		stop();
 		startPlay(PlaylistManager.getInstance().getTrack());
 	}
 	
@@ -238,6 +240,31 @@ public class MusicPlayService extends Service implements OnCompletionListener,
 	
 	public void setRepeat(boolean b) {
 		REPEAT = b;
+	}
+	
+	public int getBufferedPercent() {
+		return buffered;
+	}
+	
+	public int getDuration() {
+		return mMediaPlayer.getDuration();
+	}
+	
+	public int getCurrentPosition() {
+		return mMediaPlayer.getCurrentPosition();
+	}
+	
+	public void seekTo(int position) {
+		mMediaPlayer.seekTo(position);
+	}
+	
+	public void next() {
+		Log.d("LOG", "NEXT");	
+		startPlay(PlaylistManager.getInstance().getNext(SHUFFLE, REPEAT));
+	}
+	
+	public void previous() {
+		Log.d("LOG", "PREV");
 	}
 	
 }

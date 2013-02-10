@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
@@ -30,17 +31,22 @@ public class NowPlayingFragment extends Fragment implements OnClickListener,
 
 	private TextView mTextViewTrackTitle;
 	private TextView mTextViewArtistTitle;
+	private TextView mTextViewDurationCurrent;
+	private TextView mTextViewDurationAll;
 	private ToggleButton mButtonPlayPause;
 	private ToggleButton mButtonShuffle;
 	private ToggleButton mButtonPrevious;
 	private ToggleButton mButtonNext;
 	private ToggleButton mButtonRepeat;
 	private SeekBar mSeekBar;
+	private ProgressBar mProgressBar;
 
-	private MusicPlayService mService =  new MusicPlayService();
+	private MusicPlayService mService = new MusicPlayService();
 	private ServiceConnection mConnection;
 	private BroadcastReceiver mReceiver;
 	private IntentFilter mFilter;
+
+	private boolean isTracking = false;
 
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -49,6 +55,10 @@ public class NowPlayingFragment extends Fragment implements OnClickListener,
 				R.id.txv_trackTitle);
 		mTextViewArtistTitle = (TextView) getActivity().findViewById(
 				R.id.txv_artistTitle);
+		mTextViewDurationCurrent = (TextView) getActivity().findViewById(
+				R.id.txv_durationCurrent);
+		mTextViewDurationAll = (TextView) getActivity().findViewById(
+				R.id.txv_durationAll);
 		mButtonPlayPause = (ToggleButton) getActivity().findViewById(
 				R.id.btn_play);
 		mButtonShuffle = (ToggleButton) getActivity().findViewById(
@@ -60,12 +70,18 @@ public class NowPlayingFragment extends Fragment implements OnClickListener,
 		mButtonRepeat = (ToggleButton) getActivity().findViewById(
 				R.id.btn_repeat);
 		mSeekBar = (SeekBar) getActivity().findViewById(R.id.sb_progress);
+		mProgressBar = (ProgressBar) getActivity().findViewById(
+				R.id.prepareMusicService);
 		mButtonShuffle.setOnClickListener(this);
 		mButtonRepeat.setOnClickListener(this);
 		mButtonPlayPause.setOnClickListener(this);
 		mButtonNext.setOnClickListener(this);
 		mButtonPrevious.setOnClickListener(this);
 		mSeekBar.setOnSeekBarChangeListener(this);
+		mButtonRepeat.setChecked(PreferencesHelper.getInstance().getBoolean(
+				MusicPlayService.PREF_NAME, MusicPlayService.PREF_KEY_REPEAT));
+		mButtonShuffle.setChecked(PreferencesHelper.getInstance().getBoolean(
+				MusicPlayService.PREF_NAME, MusicPlayService.PREF_KEY_SHUFFLE));
 		disableControls();
 	}
 
@@ -90,6 +106,7 @@ public class NowPlayingFragment extends Fragment implements OnClickListener,
 			public void onReceive(Context context, Intent intent) {
 				String action = intent.getAction();
 				if (action.equals(MusicPlayService.ACTION_ON_PREPARE)) {
+					mProgressBar.setVisibility(View.VISIBLE);
 					disableControls();
 					mSeekBar.setSecondaryProgress(0);
 					mSeekBar.setProgress(0);
@@ -97,11 +114,26 @@ public class NowPlayingFragment extends Fragment implements OnClickListener,
 							.setBackgroundResource(R.drawable.states_play);
 					mButtonPlayPause.setChecked(false);
 					initNowPlaying();
+
 				} else if (action.equals(MusicPlayService.ACTION_ON_PLAY)) {
+					mProgressBar.setVisibility(View.GONE);
 					mButtonPlayPause
 							.setBackgroundResource(R.drawable.states_pause);
 					mButtonPlayPause.setChecked(true);
 					enableControls();
+				} else if (action
+						.equals(MusicPlayService.ACTION_ON_BUFFERING_UPDATE)) {
+					mSeekBar.setSecondaryProgress(mService.getBufferedPercent());
+				} else if (action
+						.equals(MusicPlayService.ACTION_ON_PROGRESS_CHANGE)) {
+					if (!isTracking) {
+						mSeekBar.setProgress((int) (((float) mService
+								.getCurrentPosition() / mService.getDuration()) * 100));
+					}
+					mTextViewDurationAll
+							.setText(convert(mService.getDuration()));
+					mTextViewDurationCurrent.setText(convert(mService
+							.getCurrentPosition()));
 				}
 			}
 
@@ -156,20 +188,19 @@ public class NowPlayingFragment extends Fragment implements OnClickListener,
 
 	@Override
 	public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void onStartTrackingTouch(SeekBar seekBar) {
-		// TODO Auto-generated method stub
-
+		isTracking = true;
 	}
 
 	@Override
 	public void onStopTrackingTouch(SeekBar seekBar) {
-		// TODO Auto-generated method stub
-
+		int position = (mService.getDuration() / 100) * seekBar.getProgress();
+		mService.seekTo(position);
+		isTracking = false;
 	}
 
 	@Override
@@ -217,6 +248,12 @@ public class NowPlayingFragment extends Fragment implements OnClickListener,
 						MusicPlayService.PREF_KEY_REPEAT, false);
 				mService.setRepeat(false);
 			}
+			break;
+		case R.id.btn_forward:
+			mService.next();
+			break;
+		case R.id.btn_prev:
+			mService.previous();
 		}
 	}
 
@@ -232,6 +269,22 @@ public class NowPlayingFragment extends Fragment implements OnClickListener,
 		mButtonPlayPause.setEnabled(true);
 		mButtonNext.setEnabled(true);
 		mSeekBar.setEnabled(true);
+	}
+
+	private String convert(int ms) {
+		int time = ms / 1000;
+		String seconds = Integer.toString(time % 60);
+		String minutes = Integer.toString((time % 3600) / 60);
+		for (int i = 0; i < 2; i++) {
+			if (seconds.length() < 2) {
+				seconds = "0" + seconds;
+			}
+			if (minutes.length() < 2) {
+				minutes = "0" + minutes;
+			}
+
+		}
+		return String.format("%s:%s", minutes, seconds);
 	}
 
 }

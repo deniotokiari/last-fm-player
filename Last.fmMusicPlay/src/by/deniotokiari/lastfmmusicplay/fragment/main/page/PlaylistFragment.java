@@ -2,11 +2,13 @@ package by.deniotokiari.lastfmmusicplay.fragment.main.page;
 
 import by.deniotokiari.lastfmmusicplay.adapter.TrackAdapter;
 import by.deniotokiari.lastfmmusicplay.content.contract.PlayerPlaylistContract;
-import by.deniotokiari.lastfmmusicplay.content.contract.lastfm.TrackContract;
 import by.deniotokiari.lastfmmusicplay.playlist.PlaylistManager;
 import by.deniotokiari.lastfmmusicplay.service.MusicPlayService;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.database.Cursor;
 import android.net.Uri;
@@ -16,7 +18,7 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.util.Log;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.ListView;
 
@@ -28,12 +30,30 @@ public class PlaylistFragment extends ListFragment implements
 	private TrackAdapter mAdapter;
 	private MusicPlayService mService;
 	private ServiceConnection mConnection;
+	private IntentFilter mFilter;
+	private BroadcastReceiver mBroadcastReceiver;
 
 	private boolean isBound;
 
 	@Override
 	public void onResume() {
 		super.onResume();
+		mFilter = new IntentFilter();
+		mFilter.addAction(MusicPlayService.ACTION_ON_PREPARE);
+		mBroadcastReceiver = new BroadcastReceiver() {
+
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				String action = intent.getAction();
+				if (action.equals(MusicPlayService.ACTION_ON_PREPARE)) {
+					((TrackAdapter) getListAdapter()).setCheked(PlaylistManager
+							.getInstance().getPosition());
+				}
+			}
+
+		};
+		LocalBroadcastManager.getInstance(getActivity()).registerReceiver(
+				mBroadcastReceiver, mFilter);
 		mConnection = new ServiceConnection() {
 
 			@Override
@@ -56,11 +76,13 @@ public class PlaylistFragment extends ListFragment implements
 				new Intent(getActivity(), MusicPlayService.class), mConnection,
 				0);
 	}
-	
+
 	@Override
 	public void onPause() {
 		super.onPause();
 		getActivity().unbindService(mConnection);
+		LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(
+				mBroadcastReceiver);
 	}
 
 	@Override
@@ -82,6 +104,10 @@ public class PlaylistFragment extends ListFragment implements
 			setListAdapter(mAdapter);
 			mAdapter.swapCursor(cursor);
 		}
+		if (PlaylistManager.getInstance().getPosition() != -1) {
+			((TrackAdapter) getListAdapter()).setCheked(PlaylistManager
+					.getInstance().getPosition());
+		}
 	}
 
 	@Override
@@ -93,11 +119,12 @@ public class PlaylistFragment extends ListFragment implements
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		PlaylistManager.getInstance().setPosition(position);
 		if (!isBound) {
-			getActivity().startService(new Intent(getActivity(), MusicPlayService.class));
+			getActivity().startService(
+					new Intent(getActivity(), MusicPlayService.class));
 		} else {
 			mService.start();
 		}
-		
+		((TrackAdapter) getListAdapter()).setCheked(position);
 	}
 
 }

@@ -18,6 +18,14 @@
             android:scaleType="centerCrop"
             android:src="@drawable/default_artist" />
 
+        <ProgressBar
+            android:id="@+id/prepareMusicService"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
+
         <LinearLayout
             android:id="@+id/lrl_info"
             android:layout_width="match_parent"
@@ -111,6 +119,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
+                android:paddingRight="4dip"
                 android:singleLine="true"
                 android:text="@string/duration_blank"
                 android:textColor="@color/bg_nowplaying_info" />
@@ -129,6 +138,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
+                android:paddingLeft="4dip"
                 android:singleLine="true"
                 android:text="@string/duration_blank"
                 android:textColor="@color/bg_nowplaying_info" />
