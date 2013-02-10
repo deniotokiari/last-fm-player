@@ -5,14 +5,18 @@ import by.deniotokiari.lastfmmusicplay.adapter.AbstractCursorAdapter;
 import by.deniotokiari.lastfmmusicplay.content.ContentRequestBuilder;
 import by.deniotokiari.lastfmmusicplay.playlist.PlaylistManager;
 import by.deniotokiari.lastfmmusicplay.service.GetDataService;
+import by.deniotokiari.lastfmmusicplay.service.MusicPlayService;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
@@ -38,6 +42,10 @@ abstract public class AbstractListFragment extends ListFragment implements
 	protected boolean isLoading;
 	protected boolean isEndOfData;
 	protected boolean isError;
+
+	private MusicPlayService mService;
+	private ServiceConnection mConnection;
+	private boolean isBound;
 
 	private AbstractCursorAdapter mAdapter;
 	private View mFooterView;
@@ -135,6 +143,27 @@ abstract public class AbstractListFragment extends ListFragment implements
 		};
 		LocalBroadcastManager.getInstance(this.getActivity()).registerReceiver(
 				mReceiver, mFilter);
+		mConnection = new ServiceConnection() {
+
+			@Override
+			public void onServiceDisconnected(ComponentName componentName) {
+				isBound = false;
+			}
+
+			@Override
+			public void onServiceConnected(ComponentName componentName,
+					IBinder binder) {
+				mService = ((MusicPlayService.MyBinder) binder).getService();
+				isBound = true;
+				if (!mService.isPlaying()) {
+					mService.start();
+				}
+			}
+
+		};
+		getActivity().bindService(
+				new Intent(getActivity(), MusicPlayService.class), mConnection,
+				0);
 	}
 
 	@Override
@@ -142,6 +171,7 @@ abstract public class AbstractListFragment extends ListFragment implements
 		super.onPause();
 		LocalBroadcastManager.getInstance(this.getActivity())
 				.unregisterReceiver(mReceiver);
+		getActivity().unbindService(mConnection);
 	}
 
 	@Override
@@ -173,10 +203,24 @@ abstract public class AbstractListFragment extends ListFragment implements
 			}
 		}
 	}
-	
+
 	@Override
-	public void onListItemClick(ListView l, View v, int position, long id) {
-		PlaylistManager.getInstance().setPlaylist(position, uri, selection, selectionArgs, sortOrder);
+	public void onListItemClick(ListView l, View v, final int position, long id) {
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				PlaylistManager.getInstance().setPlaylist(position, uri, selection,
+						selectionArgs, sortOrder);
+				if (!isBound) {
+					getActivity().startService(
+							new Intent(getActivity(), MusicPlayService.class));
+				} else {
+					mService.start();
+				}
+			}
+			
+		}).start();
 	}
 
 	@Override

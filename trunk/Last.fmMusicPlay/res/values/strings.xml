@@ -20,6 +20,7 @@
     <color name="bg_nowplaying_info">#f0f0f0</color>
     <color name="text_color">#f0f0f0</color>
     <color name="bg_controls">#222222</color>
+    <color name="bg_list">#faf7c6</color>
 
     <string-array name="main_pages_name">
         <item>Menu</item>

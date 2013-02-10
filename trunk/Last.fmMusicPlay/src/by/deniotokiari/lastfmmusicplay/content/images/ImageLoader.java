@@ -3,9 +3,6 @@ package by.deniotokiari.lastfmmusicplay.content.images;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.WeakHashMap;
-
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.widget.BaseAdapter;
@@ -26,7 +23,6 @@ public class ImageLoader {
 	}
 
 	private ImageCache mCache;
-	private Map<String, Bitmap> mStorage;
 	private List<Callback> mQueue;
 
 	public interface Callback {
@@ -39,8 +35,6 @@ public class ImageLoader {
 	}
 
 	private ImageLoader() {
-		mStorage = Collections
-				.synchronizedMap(new WeakHashMap<String, Bitmap>());
 		mQueue = Collections.synchronizedList(new ArrayList<Callback>());
 		int cacheSize = 4 * 1024 * 1024 / 8;
 		mCache = new ImageCache(ContextHolder.getInstance().getContext(),
@@ -48,10 +42,10 @@ public class ImageLoader {
 	}
 
 	public void bind(final ImageView imageView, final String url) {
-		Bitmap bitmap = null;
-		if (mStorage.containsKey(url)) {
+		Bitmap bitmap = mCache.get(url);
+/*		if (mCache.containsKey(url)) {
 			bitmap = mStorage.get(url);
-		}
+		}*/
 		if (bitmap != null) {
 			imageView.setImageBitmap(bitmap);
 			return;
@@ -81,10 +75,10 @@ public class ImageLoader {
 
 	public void bind(final BaseAdapter adapter, final ImageView imageView,
 			final String url) {
-		Bitmap bitmap = null;
-		if (mStorage.containsKey(url)) {
+		Bitmap bitmap = mCache.get(url);
+	/*	if (mStorage.containsKey(url)) {
 			bitmap = mStorage.get(url);
-		}
+		}*/
 		if (bitmap != null) {
 			imageView.setImageBitmap(bitmap);
 			return;
@@ -140,7 +134,7 @@ public class ImageLoader {
 				super.onPostExecute(result);
 				if (result instanceof Bitmap) {
 					Bitmap bitmap = (Bitmap) result;
-					mStorage.put(callback.getUrl(), bitmap);
+					//mStorage.put(callback.getUrl(), bitmap);
 					callback.success(bitmap);
 				} else {
 					callback.onError((Exception) result);
