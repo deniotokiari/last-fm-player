@@ -1,11 +1,8 @@
 package by.deniotokiari.lastfmmusicplay.api;
 
-import java.util.Calendar;
 import java.util.Date;
 
 import android.net.Uri;
-import android.text.format.DateUtils;
-import android.text.format.Time;
 import by.deniotokiari.lastfmmusicplay.utilities.Md5;
 
 public class LastFmAPI {
@@ -21,8 +18,19 @@ public class LastFmAPI {
 	}
 	
 	//Scroble
-	public static String trackScrobble(String artis, String track, String time) {
-		return "";
+	public static String trackScrobble(String artist, String track, Date date) {
+		String result = template("track.scrobble") + "&sk=" + LastfmAuthHelper.getSession();
+		result += "&artist=" + Uri.encode(artist);
+		result += "&track=" + Uri.encode(track);
+		result += "&timestamp=" + String.valueOf(date.getTime());
+		String sign = "api_key" + API_KEY;
+		sign += "artist" + Uri.encode(artist);
+		sign += "methodtrack.scrobblesk" + LastfmAuthHelper.getSession();
+		sign += "timestamp" + String.valueOf(date.getTime());
+		sign += "track" + Uri.encode(track);
+		sign += SECRET_KEY;
+		result += "&api_sig=" + Md5.md5(sign);
+		return result;
 	}
 
 	// User
