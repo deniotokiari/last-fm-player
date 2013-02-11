@@ -35,6 +35,7 @@ public class MusicPlayService extends Service implements OnCompletionListener,
 	public static final String PREF_NAME = "music_service";
 	public static final String PREF_KEY_REPEAT = "repeat";
 	public static final String PREF_KEY_SHUFFLE = "shuffle";
+	public static final String PREF_KEY_CURRENT_POSITION = "current_position";
 
 	private MediaPlayer mMediaPlayer = new MediaPlayer();
 	private Handler mHandler = new Handler();
@@ -42,8 +43,10 @@ public class MusicPlayService extends Service implements OnCompletionListener,
 
 	private boolean REPEAT;
 	private boolean SHUFFLE;
+	private boolean isPaused; 
 
 	private int buffered;
+	private int CURRENT_POSITION;
 
 	@Override
 	public void onCreate() {
@@ -56,6 +59,7 @@ public class MusicPlayService extends Service implements OnCompletionListener,
 				PREF_KEY_REPEAT);
 		SHUFFLE = PreferencesHelper.getInstance().getBoolean(PREF_NAME,
 				PREF_KEY_SHUFFLE);
+		CURRENT_POSITION = PreferencesHelper.getInstance().getInt(PREF_NAME, PREF_KEY_CURRENT_POSITION);
 	}
 
 	@Override
@@ -67,6 +71,8 @@ public class MusicPlayService extends Service implements OnCompletionListener,
 	public void onDestroy() {
 		super.onDestroy();
 		if (mMediaPlayer != null) {
+			CURRENT_POSITION = mMediaPlayer.getCurrentPosition();
+			PreferencesHelper.getInstance().putInt(PREF_NAME, PREF_KEY_CURRENT_POSITION, CURRENT_POSITION);
 			if (mMediaPlayer.isPlaying()) {
 				mMediaPlayer.stop();
 			}
@@ -105,6 +111,8 @@ public class MusicPlayService extends Service implements OnCompletionListener,
 
 	@Override
 	public void onCompletion(MediaPlayer mediaPlayer) {
+		CURRENT_POSITION = 0;
+		PreferencesHelper.getInstance().putInt(PREF_NAME, PREF_KEY_CURRENT_POSITION, CURRENT_POSITION);
 		next();
 	}
 
@@ -131,6 +139,7 @@ public class MusicPlayService extends Service implements OnCompletionListener,
 	public void pause() {
 		if (mMediaPlayer.isPlaying()) {
 			mMediaPlayer.pause();
+			isPaused = true;
 		}
 	}
 
@@ -151,6 +160,9 @@ public class MusicPlayService extends Service implements OnCompletionListener,
 	}
 
 	private void startPlay(final String request) {
+		if (request == null) {
+			stopSelf();
+		}
 		LocalBroadcastManager.getInstance(getApplicationContext())
 				.sendBroadcast(new Intent(ACTION_ON_PREPARE));
 		RequestManager.getInstance().get(new Callback<Object>() {
@@ -213,6 +225,7 @@ public class MusicPlayService extends Service implements OnCompletionListener,
 	public void play() {
 		if (!mMediaPlayer.isPlaying()) {
 			mMediaPlayer.start();
+			isPaused = false;
 			LocalBroadcastManager.getInstance(getApplicationContext())
 					.sendBroadcast(new Intent(ACTION_ON_PLAY));
 			primarySeekBarProgressUpdater();
@@ -265,6 +278,10 @@ public class MusicPlayService extends Service implements OnCompletionListener,
 	
 	public void previous() {
 		Log.d("LOG", "PREV");
+	}
+	
+	public boolean isPaused() {
+		return isPaused;
 	}
 	
 }

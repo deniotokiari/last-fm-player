@@ -39,6 +39,7 @@ public class TrackAdapter extends AbstractCursorAdapter {
 	
 	public void setCheked(int position) {
 		checkedPosition = position;
+		notifyDataSetChanged();
 	}
 
 }
