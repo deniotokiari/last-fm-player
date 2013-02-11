@@ -47,7 +47,7 @@ public class PlaylistManager {
 		return POSITION;
 	}
 
-	public void setPlaylist(int position, final Uri uri,
+	synchronized public void setPlaylist(int position, final Uri uri,
 			final String selection, final String[] selectionArgs,
 			final String sortOrder) {
 		setPosition(position);
