@@ -155,7 +155,7 @@ abstract public class AbstractListFragment extends ListFragment implements
 					IBinder binder) {
 				mService = ((MusicPlayService.MyBinder) binder).getService();
 				isBound = true;
-				if (!mService.isPlaying()) {
+				if (!mService.isPaused() && !mService.isPlaying()) {
 					mService.start();
 				}
 			}

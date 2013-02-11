@@ -82,7 +82,15 @@ public class NowPlayingFragment extends Fragment implements OnClickListener,
 				MusicPlayService.PREF_NAME, MusicPlayService.PREF_KEY_REPEAT));
 		mButtonShuffle.setChecked(PreferencesHelper.getInstance().getBoolean(
 				MusicPlayService.PREF_NAME, MusicPlayService.PREF_KEY_SHUFFLE));
-		disableControls();
+	/*	if (PreferencesHelper.getInstance().getInt(MusicPlayService.PREF_NAME,
+				MusicPlayService.PREF_KEY_CURRENT_POSITION) != 0 && mService.) {
+			getActivity().startService(
+					new Intent(getActivity(), MusicPlayService.class));
+			initNowPlaying();
+			
+		} else {*/
+			disableControls();
+		/*}*/
 	}
 
 	@Override

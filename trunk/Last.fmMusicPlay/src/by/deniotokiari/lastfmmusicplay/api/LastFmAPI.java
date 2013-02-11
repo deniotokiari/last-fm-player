@@ -1,6 +1,11 @@
 package by.deniotokiari.lastfmmusicplay.api;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import android.net.Uri;
+import android.text.format.DateUtils;
+import android.text.format.Time;
 import by.deniotokiari.lastfmmusicplay.utilities.Md5;
 
 public class LastFmAPI {
@@ -13,6 +18,11 @@ public class LastFmAPI {
 	private static String template(String method) {
 		return String.format("%s%s&api_key=%s%s", URL_API, method, API_KEY,
 				RESULT_FORMAT);
+	}
+	
+	//Scroble
+	public static String trackScrobble(String artis, String track, String time) {
+		return "";
 	}
 
 	// User

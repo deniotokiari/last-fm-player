@@ -1,5 +1,8 @@
 package by.deniotokiari.lastfmmusicplay;
 
+
+import com.bugsense.trace.BugSenseHandler;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -15,6 +18,7 @@ public class MainActivity extends FragmentActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		BugSenseHandler.initAndStartSession(MainActivity.this, "4634f20e");
 		setContentView(R.layout.activity_main);
 		if (savedInstanceState != null) {
 			return;
