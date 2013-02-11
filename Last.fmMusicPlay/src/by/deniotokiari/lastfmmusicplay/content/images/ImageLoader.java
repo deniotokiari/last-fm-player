@@ -3,6 +3,8 @@ package by.deniotokiari.lastfmmusicplay.content.images;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Queue;
+
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.widget.BaseAdapter;

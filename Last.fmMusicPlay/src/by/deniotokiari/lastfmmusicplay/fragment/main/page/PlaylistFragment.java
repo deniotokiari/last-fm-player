@@ -1,7 +1,13 @@
 package by.deniotokiari.lastfmmusicplay.fragment.main.page;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import by.deniotokiari.lastfmmusicplay.adapter.TrackAdapter;
+import by.deniotokiari.lastfmmusicplay.api.LastFmAPI;
 import by.deniotokiari.lastfmmusicplay.content.contract.PlayerPlaylistContract;
+import by.deniotokiari.lastfmmusicplay.content.contract.lastfm.ArtistContract;
+import by.deniotokiari.lastfmmusicplay.content.contract.lastfm.TrackContract;
 import by.deniotokiari.lastfmmusicplay.playlist.PlaylistManager;
 import by.deniotokiari.lastfmmusicplay.service.MusicPlayService;
 import android.content.BroadcastReceiver;
@@ -19,6 +25,7 @@ import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 
@@ -117,14 +124,19 @@ public class PlaylistFragment extends ListFragment implements
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-		PlaylistManager.getInstance().setPosition(position);
+		Cursor cursor = (Cursor) getListView().getItemAtPosition(position);
+		String artist = cursor.getString(TrackContract.INDEX_ARTIST);
+		String track = cursor.getString(TrackContract.INDEX_TITLE);
+		Date date = Calendar.getInstance().getTime();
+/*		PlaylistManager.getInstance().setPosition(position);
 		if (!isBound) {
 			getActivity().startService(
 					new Intent(getActivity(), MusicPlayService.class));
 		} else {
 			mService.start();
 		}
-		((TrackAdapter) getListAdapter()).setCheked(position);
+		((TrackAdapter) getListAdapter()).setCheked(position);*/
+		Log.d("LOG", LastFmAPI.trackScrobble(artist, track, date));
 	}
 
 }

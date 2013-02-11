@@ -24,10 +24,10 @@ public class LastFmAPI {
 		result += "&track=" + Uri.encode(track);
 		result += "&timestamp=" + String.valueOf(date.getTime());
 		String sign = "api_key" + API_KEY;
-		sign += "artist" + Uri.encode(artist);
+		sign += "artist" + artist;
 		sign += "methodtrack.scrobblesk" + LastfmAuthHelper.getSession();
 		sign += "timestamp" + String.valueOf(date.getTime());
-		sign += "track" + Uri.encode(track);
+		sign += "track" + track;
 		sign += SECRET_KEY;
 		result += "&api_sig=" + Md5.md5(sign);
 		return result;
