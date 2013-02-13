@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import by.deniotokiari.lastfmmusicplay.api.LastfmAuthHelper;
 import by.deniotokiari.lastfmmusicplay.api.VkAuthHelper;
+import by.deniotokiari.lastfmmusicplay.content.images.ImageLoader;
 import by.deniotokiari.lastfmmusicplay.fragment.main.MainPagerFragment;
 
 public class MainActivity extends FragmentActivity {
@@ -47,6 +48,12 @@ public class MainActivity extends FragmentActivity {
 			break;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		ImageLoader.getInstance().stopLoaderThread();
 	}
 
 }

@@ -17,13 +17,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.Message;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
@@ -35,13 +33,12 @@ abstract public class AbstractListFragment extends ListFragment implements
 	private String id;
 
 	public static int FOOTER_RES = R.layout.view_footer;
-	private static int LOADER_ID = 1;
-	private int itemsCount;
-	private int offset;
+	private int itemsCount = 0;
+	private int offset = 0;
 
-	protected boolean isLoading;
-	protected boolean isEndOfData;
-	protected boolean isError;
+	protected boolean isLoading = false;
+	protected boolean isEndOfData = false;
+	protected boolean isError = false;
 
 	private MusicPlayService mService;
 	private ServiceConnection mConnection;
@@ -51,14 +48,7 @@ abstract public class AbstractListFragment extends ListFragment implements
 	private View mFooterView;
 	private BroadcastReceiver mReceiver;
 	private IntentFilter mFilter;
-	private Handler mHandler = new Handler() {
-
-		@Override
-		public void handleMessage(Message msg) {
-			hideFooter();
-		}
-
-	};
+	private Handler mHandler;
 
 	/** Sql args to query **/
 	private Uri uri;
@@ -87,25 +77,31 @@ abstract public class AbstractListFragment extends ListFragment implements
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		isLoading = false;
-		isEndOfData = false;
-		isError = false;
-		itemsCount = 0;
-		offset = 0;
+		id = String.valueOf(getClass().getSimpleName().hashCode());
+		if (savedInstanceState != null) {
+			isLoading = savedInstanceState.getBoolean(id);
+		}
+		mHandler = new Handler();
+		id = String.valueOf(getClass().getSimpleName().hashCode());
 		mFooterView = getLayoutInflater(savedInstanceState).inflate(FOOTER_RES,
 				null, false);
 		getListView().addFooterView(mFooterView);
-		hideFooter();
+		mHandler.post(hideFooter);
 		mAdapter = adapter();
 		getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-		this.getLoaderManager().initLoader(LOADER_ID++, null, this);
+		this.getLoaderManager().initLoader(Integer.valueOf(id), null, this);
 		setOnScrollListener();
+	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		outState.putBoolean(id, isLoading);
+		super.onSaveInstanceState(outState);
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		id = String.valueOf(hashCode());
 		mFilter = new IntentFilter();
 		mFilter.addAction(GetDataService.ACTION_ON_ERROR + id);
 		mFilter.addAction(GetDataService.ACTION_ON_SUCCESS + id);
@@ -127,15 +123,11 @@ abstract public class AbstractListFragment extends ListFragment implements
 						// TODO dlg error imp and isEndOfData
 						setEndOfData(true);
 					}
-					// hideFooter();
-					mHandler.sendEmptyMessage(0);
+					mHandler.post(hideFooter);
 					isLoading = false;
 					isError = true;
-					Log.d("LOG", "INVOKED ERROR #" + id);
 				} else if (action.equals(GetDataService.ACTION_ON_SUCCESS + id)) {
-					// hideFooter();
-					mHandler.sendEmptyMessage(0);
-					Log.d("LOG", "INVOKED SUCCESS #" + id);
+					mHandler.post(hideFooter);
 					isLoading = false;
 				}
 			}
@@ -187,11 +179,12 @@ abstract public class AbstractListFragment extends ListFragment implements
 		if (getListAdapter() == null && cursor.getCount() != 0) {
 			setListAdapter(mAdapter);
 			mAdapter.swapCursor(cursor);
+			isLoading = false;
 
 		} else if (cursor.getCount() != 0) {
 			mAdapter.swapCursor(cursor);
 		}
-		if (cursor.getCount() == 0 && !isEndOfData) {
+		if (cursor.getCount() == 0 && !isEndOfData && !isLoading) {
 			load();
 		}
 		if (isEndOfData) {
@@ -261,9 +254,14 @@ abstract public class AbstractListFragment extends ListFragment implements
 		mFooterView.setVisibility(View.VISIBLE);
 	}
 
-	private void hideFooter() {
-		mFooterView.setVisibility(View.GONE);
-	}
+	private Runnable hideFooter = new Runnable() {
+
+		@Override
+		public void run() {
+			mFooterView.setVisibility(View.GONE);
+		}
+
+	};
 
 	protected int getItemsCount() {
 		return itemsCount;
