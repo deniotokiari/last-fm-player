@@ -52,6 +52,7 @@ public class PlaylistManager {
 			final String sortOrder) {
 		setPosition(position);
 		mContext.getContentResolver().delete(mUri, null, null);
+		mContext.getContentResolver().notifyChange(mUri, null);
 		Cursor cursor = mContext.getContentResolver().query(uri, null,
 				selection, selectionArgs, sortOrder);
 		COUNT = cursor.getCount();

@@ -14,6 +14,9 @@ abstract public class AbstractLastfmListFragment extends AbstractListFragment {
 
 	@Override
 	protected int changeOffset(int itemsCount) {
+		if (itemsCount % ITEMS_PER_PAGE != 0) {
+			setEndOfData(true);
+		}
 		if (getOffset() == 0) {
 			return itemsCount / ITEMS_PER_PAGE;
 		}

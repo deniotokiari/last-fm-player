@@ -7,6 +7,7 @@ import by.deniotokiari.lastfmmusicplay.adapter.ContentPagerAdapter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -17,7 +18,7 @@ abstract public class AbstractPagerFragment extends Fragment {
 
 	private String[] mPagesName;
 	private List<PageInfo> mPages;
-	private ContentPagerAdapter mAdapter;
+	private PagerAdapter mAdapter;
 	private ViewPager mViewPager;
 
 	protected abstract String[] pagesName();
@@ -35,11 +36,14 @@ abstract public class AbstractPagerFragment extends Fragment {
 		super.onViewCreated(view, savedInstanceState);
 		mPagesName = pagesName();
 		mPages = pages();
-		mAdapter = new ContentPagerAdapter(getActivity(),
-				getChildFragmentManager(), mPagesName, mPages);
+		if (getAdapter() == null) {
+			mAdapter = new ContentPagerAdapter(getActivity(),
+					getChildFragmentManager(), mPagesName, mPages);
+		} else {
+			mAdapter = getAdapter();
+		}
 		mViewPager = (ViewPager) view.findViewById(R.id.viewPager);
 		mViewPager.setAdapter(mAdapter);
-		mViewPager.setOffscreenPageLimit(3);
 		PagerTabStrip pagerTabStrip = (PagerTabStrip) getActivity()
 				.findViewById(R.id.pagerTabStrip);
 		// TODO color imp
@@ -50,6 +54,10 @@ abstract public class AbstractPagerFragment extends Fragment {
 
 	protected void setPage(int page) {
 		mViewPager.setCurrentItem(page);
+	}
+	
+	protected PagerAdapter getAdapter() {
+		return null;
 	}
 
 }

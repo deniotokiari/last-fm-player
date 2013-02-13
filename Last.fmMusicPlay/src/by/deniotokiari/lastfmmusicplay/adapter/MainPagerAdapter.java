@@ -5,16 +5,16 @@ import java.util.List;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentPagerAdapter;
 import by.deniotokiari.lastfmmusicplay.fragment.PageInfo;
 
-public class ContentPagerAdapter extends FragmentStatePagerAdapter {
+public class MainPagerAdapter extends FragmentPagerAdapter {
 
 	private String[] mPagesName;
 	private List<PageInfo> mPages;
 	private Context mContext;
 
-	public ContentPagerAdapter(Context context, FragmentManager manager,
+	public MainPagerAdapter(Context context, FragmentManager manager,
 			String[] pagesName, List<PageInfo> pages) {
 		super(manager);
 		mPagesName = pagesName;
@@ -25,8 +25,8 @@ public class ContentPagerAdapter extends FragmentStatePagerAdapter {
 	@Override
 	public Fragment getItem(int position) {
 		PageInfo pageInfo = mPages.get(position);
-		Fragment fragment = Fragment.instantiate(mContext, pageInfo.getClss().getName(),
-				pageInfo.getArgs());
+		Fragment fragment = Fragment.instantiate(mContext, pageInfo.getClss()
+				.getName(), pageInfo.getArgs());
 		return fragment;
 	}
 
@@ -38,6 +38,6 @@ public class ContentPagerAdapter extends FragmentStatePagerAdapter {
 	@Override
 	public CharSequence getPageTitle(int position) {
 		return mPagesName[position];
-	}	
+	}
 
 }

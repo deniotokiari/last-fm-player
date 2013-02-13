@@ -22,7 +22,7 @@ public class ImageCache extends LruCache<String, Bitmap> {
 	}
 
 	public Bitmap getImage(String key) {
-		Bitmap bitmap = get(key);
+		Bitmap bitmap = get(Md5.md5(key));
 		if (bitmap != null) {
 			return bitmap;
 		}
@@ -41,10 +41,10 @@ public class ImageCache extends LruCache<String, Bitmap> {
 	public Bitmap putImage(String key, Bitmap bitmap) {
 		File image = new File(cacheDir + "/" + Md5.md5(key));
 		if (image.exists()) {
-			if (get(key) != null) {
+			if (get(Md5.md5(key)) != null) {
 				return bitmap;
 			}
-			return put(key, bitmap);
+			return put(Md5.md5(key), bitmap);
 		}
 		try {
 			image.createNewFile();
@@ -54,7 +54,27 @@ public class ImageCache extends LruCache<String, Bitmap> {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return put(key, bitmap);
+		return put(Md5.md5(key), bitmap);
+	}
+
+	synchronized public void clear() {
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				File file = new File(cacheDir);
+				File[] files = file.listFiles();
+				if (files == null) {
+					return;
+				}
+				for (File f : files) {
+					f.delete();
+				}
+				clear();
+
+			}
+
+		}).start();
 	}
 
 }

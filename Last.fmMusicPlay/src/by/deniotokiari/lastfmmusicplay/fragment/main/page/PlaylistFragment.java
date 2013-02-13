@@ -110,10 +110,10 @@ public class PlaylistFragment extends ListFragment implements
 		if (cursor.getCount() != 0) {
 			setListAdapter(mAdapter);
 			mAdapter.swapCursor(cursor);
-		}
-		if (PlaylistManager.getInstance().getPosition() != -1) {
-			((TrackAdapter) getListAdapter()).setCheked(PlaylistManager
-					.getInstance().getPosition());
+			if (PlaylistManager.getInstance().getPosition() != -1) {
+				((TrackAdapter) getListAdapter()).setCheked(PlaylistManager
+						.getInstance().getPosition());
+			}
 		}
 	}
 
@@ -128,14 +128,12 @@ public class PlaylistFragment extends ListFragment implements
 		String artist = cursor.getString(TrackContract.INDEX_ARTIST);
 		String track = cursor.getString(TrackContract.INDEX_TITLE);
 		Date date = Calendar.getInstance().getTime();
-/*		PlaylistManager.getInstance().setPosition(position);
-		if (!isBound) {
-			getActivity().startService(
-					new Intent(getActivity(), MusicPlayService.class));
-		} else {
-			mService.start();
-		}
-		((TrackAdapter) getListAdapter()).setCheked(position);*/
+		/*
+		 * PlaylistManager.getInstance().setPosition(position); if (!isBound) {
+		 * getActivity().startService( new Intent(getActivity(),
+		 * MusicPlayService.class)); } else { mService.start(); }
+		 * ((TrackAdapter) getListAdapter()).setCheked(position);
+		 */
 		Log.d("LOG", LastFmAPI.trackScrobble(artist, track, date));
 	}
 

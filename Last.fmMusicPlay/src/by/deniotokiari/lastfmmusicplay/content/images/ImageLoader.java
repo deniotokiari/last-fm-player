@@ -1,12 +1,10 @@
 package by.deniotokiari.lastfmmusicplay.content.images;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Queue;
+import java.util.Stack;
 
 import android.graphics.Bitmap;
-import android.os.AsyncTask;
+import android.os.Handler;
+import android.util.Log;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import by.deniotokiari.lastfmmusicplay.ContextHolder;
@@ -16,6 +14,7 @@ import by.deniotokiari.lastfmmusicplay.http.HttpManager;
 public class ImageLoader {
 
 	private static ImageLoader instance;
+	private static final int RES_DEFAULT_ALBUM = R.drawable.default_album;
 
 	public static ImageLoader getInstance() {
 		if (instance == null) {
@@ -23,130 +22,126 @@ public class ImageLoader {
 		}
 		return instance;
 	}
-
-	private ImageCache mCache;
-	private List<Callback> mQueue;
-
-	public interface Callback {
-
-		String getUrl();
-
-		void success(Bitmap bm);
-
-		void onError(Exception e);
+	
+	private class ImageInfo {
+		
+		public String url;
+		public ImageView imageView;
+		public BaseAdapter adapter;
+		
+		public ImageInfo(String url, ImageView imageView, BaseAdapter adapter) {
+			this.url = url;
+			this.imageView = imageView;
+			this.adapter = adapter;
+		}
+		
 	}
 
+	private ImageCache mCache;
+	private Handler mHandler;
+	private Stack<ImageInfo> mQueue;
+	private Loader mLoader;
+
 	private ImageLoader() {
-		mQueue = Collections.synchronizedList(new ArrayList<Callback>());
 		int cacheSize = 4 * 1024 * 1024 / 8;
 		mCache = new ImageCache(ContextHolder.getInstance().getContext(),
 				cacheSize);
+		mHandler = new Handler();
+		mQueue = new Stack<ImageInfo>();
+		mQueue.setSize(5);
+		mLoader = new Loader();
 	}
 
-	public void bind(final ImageView imageView, final String url) {
-		Bitmap bitmap = mCache.get(url);
-/*		if (mCache.containsKey(url)) {
-			bitmap = mStorage.get(url);
-		}*/
+	public void bind(ImageView imageView, String url) {
+		bind(null, imageView, url);
+	}
+	
+	public void bind(BaseAdapter adapter, ImageView imageView, String url) {
+		Bitmap bitmap = mCache.getImage(url);
 		if (bitmap != null) {
 			imageView.setImageBitmap(bitmap);
-			return;
 		} else {
-			imageView.setImageResource(R.drawable.default_album);
-			mQueue.add(0, new Callback() {
-
-				@Override
-				public void success(Bitmap bm) {
-					imageView.setImageBitmap(bm);
-				}
-
-				@Override
-				public String getUrl() {
-					return url;
-				}
-
-				@Override
-				public void onError(Exception e) {
-
-				}
-
-			});
+			imageView.setImageResource(RES_DEFAULT_ALBUM);
+			synchronized (mQueue) {
+				mQueue.push(new ImageInfo(url, imageView, adapter));
+				mQueue.notifyAll();
+			}
+			if (mLoader.getState() == Thread.State.NEW) {
+				mLoader.start();
+			} 
 		}
-		proceed();
+
 	}
-
-	public void bind(final BaseAdapter adapter, final ImageView imageView,
-			final String url) {
-		Bitmap bitmap = mCache.get(url);
-	/*	if (mStorage.containsKey(url)) {
-			bitmap = mStorage.get(url);
-		}*/
-		if (bitmap != null) {
-			imageView.setImageBitmap(bitmap);
-			return;
-		} else {
-			imageView.setImageResource(R.drawable.default_album);
-			mQueue.add(0, new Callback() {
-
-				@Override
-				public void success(Bitmap bm) {
-					adapter.notifyDataSetChanged();
-				}
-
-				@Override
-				public String getUrl() {
-					return url;
-				}
-
-				@Override
-				public void onError(Exception e) {
-
-				}
-
-			});
-		}
-		proceed();
+	
+	public void stopLoaderThread() {
+		mLoader.interrupt();
 	}
+	
+	private class Loader extends Thread {
+		
+		@Override
+		public void run() {
+			while(true) {
+				if (mQueue.size() == 0) {
+					synchronized (mQueue) {
+						try {
+							mQueue.wait();
+						} catch (InterruptedException e) {
 
-	private void proceed() {
-		if (mQueue.isEmpty()) {
-			return;
-		}
-		final Callback callback = mQueue.remove(0);
-		new AsyncTask<Callback, Void, Object>() {
-
-			@Override
-			protected Object doInBackground(Callback... params) {
-				String url = params[0].getUrl();
-				Bitmap bitmap = mCache.getImage(url);
-				if (bitmap != null) {
-					return bitmap;
-				} else {
-					bitmap = getBitmapFromURL(url);
-					if (bitmap == null) {
-						return null;
+						}
 					}
-					mCache.putImage(url, bitmap);
-					return bitmap;
+				}
+				if (mQueue.size() != 0) {
+					ImageInfo imageInfo;
+					synchronized (mQueue) {
+						imageInfo = mQueue.pop();
+					}
+					if (imageInfo != null) {
+						Bitmap bitmap = getBitmapFromURL(imageInfo.url);
+						if (bitmap != null) {
+							mCache.putImage(imageInfo.url, bitmap);
+							mHandler.post(new Displayer(imageInfo.adapter, bitmap,
+									imageInfo.imageView));
+						}
+					}
+				}
+				if (Thread.interrupted()) {
+					break;
 				}
 			}
+		}
+		
+	}
+	
+	private class Displayer implements Runnable {
 
-			@Override
-			protected void onPostExecute(Object result) {
-				super.onPostExecute(result);
-				if (result instanceof Bitmap) {
-					Bitmap bitmap = (Bitmap) result;
-					//mStorage.put(callback.getUrl(), bitmap);
-					callback.success(bitmap);
+		private BaseAdapter adapter;
+		private Bitmap bitmap;
+		private ImageView imageView;
+		
+		public Displayer(BaseAdapter adapter, Bitmap bitmap, ImageView imageView) {
+			this.adapter = adapter;
+			this.bitmap = bitmap;
+			this.imageView = imageView;
+		}
+		
+		@Override
+		public void run() {
+			if (bitmap != null) {
+				if (adapter != null) {
+					adapter.notifyDataSetChanged();
 				} else {
-					callback.onError((Exception) result);
+					imageView.setImageBitmap(bitmap);
 				}
+			} else {
+				imageView.setImageResource(RES_DEFAULT_ALBUM);
 			}
-
-		}.execute(callback);
+		}
+		
 	}
 
 	private Bitmap getBitmapFromURL(String url) {
+		Log.d("LOG", url);
 		if (url.length() == 0) {
 			return null;
 		}
