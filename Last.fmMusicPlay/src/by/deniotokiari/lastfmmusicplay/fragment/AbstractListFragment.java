@@ -22,6 +22,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
@@ -77,6 +78,7 @@ abstract public class AbstractListFragment extends ListFragment implements
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
+		Log.d("LOG", getClass().getSimpleName() + " onActivityCreated");
 		id = String.valueOf(getClass().getSimpleName().hashCode());
 		if (savedInstanceState != null) {
 			isLoading = savedInstanceState.getBoolean(id);
