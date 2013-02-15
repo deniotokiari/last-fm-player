@@ -78,7 +78,6 @@ abstract public class AbstractListFragment extends ListFragment implements
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		Log.d("LOG", getClass().getSimpleName() + " onActivityCreated");
 		id = String.valueOf(getClass().getSimpleName().hashCode());
 		if (savedInstanceState != null) {
 			isLoading = savedInstanceState.getBoolean(id);
@@ -149,9 +148,6 @@ abstract public class AbstractListFragment extends ListFragment implements
 					IBinder binder) {
 				mService = ((MusicPlayService.MyBinder) binder).getService();
 				isBound = true;
-				if (!mService.isPaused() && !mService.isPlaying()) {
-					mService.start();
-				}
 			}
 
 		};
@@ -207,12 +203,6 @@ abstract public class AbstractListFragment extends ListFragment implements
 			public void run() {
 				PlaylistManager.getInstance().setPlaylist(position, uri, selection,
 						selectionArgs, sortOrder);
-				if (!isBound) {
-					getActivity().startService(
-							new Intent(getActivity(), MusicPlayService.class));
-				} else {
-					mService.start();
-				}
 			}
 			
 		}).start();

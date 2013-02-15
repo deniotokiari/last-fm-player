@@ -24,7 +24,7 @@ public class ArtistAdapter extends AbstractCursorAdapter {
 		textView1.setText(cursor.getString(ArtistContract.INDEX_NAME));
 		textView2.setVisibility(View.GONE);
 		String url = cursor.getString(ArtistContract.INDEX_IMAGE);
-		ImageLoader.getInstance().bind(this, imageView, url);
+		ImageLoader.getInstance().bind(this, imageView, url, 0);
 	}
 
 	@Override

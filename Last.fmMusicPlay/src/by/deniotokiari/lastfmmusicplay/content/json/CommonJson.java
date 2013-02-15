@@ -51,7 +51,7 @@ public class CommonJson {
 		return "";
 	}
 
-	protected String getArrayItem(String root, String key, int index) {
+	public String getArrayItem(String root, String key, int index) {
 		if (mJsonObject != null) {
 			JSONArray array = mJsonObject.optJSONArray(root);
 			if (array != null) {

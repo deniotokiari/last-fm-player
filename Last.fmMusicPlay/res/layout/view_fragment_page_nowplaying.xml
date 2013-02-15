@@ -11,6 +11,7 @@
         android:layout_weight="1" >
 
         <ImageView
+            android:id="@+id/imgv_artist"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:adjustViewBounds="false"
@@ -31,67 +32,52 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
+            android:layout_gravity="center_vertical"
             android:background="@drawable/bg_info_pressed"
-            android:orientation="horizontal"
-            android:padding="4dip" >
+            android:orientation="vertical"
+            android:padding="4dip"
+            android:paddingLeft="8dip" >
 
-            <ImageView
-                android:id="@+id/imv_albumArt"
-                android:layout_width="80dip"
-                android:layout_height="80dip"
-                android:layout_gravity="center"
-                android:contentDescription="@string/content_description"
-                android:src="@drawable/default_album" />
+            <TextView
+                android:id="@+id/txv_trackTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:textColor="@color/bg_nowplaying_info"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
             <LinearLayout
-                android:layout_width="0dip"
+                android:id="@+id/lnl_artistiTitle"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:paddingLeft="8dip" >
+                android:orientation="horizontal"
+                android:paddingLeft="4dip" >
 
                 <TextView
-                    android:id="@+id/txv_trackTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="4dip"
+                    android:text="@string/artist_by"
+                    android:textColor="@color/bg_nowplaying_info"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/txv_artistTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
                     android:textColor="@color/bg_nowplaying_info"
-                    android:textSize="24sp"
+                    android:textSize="15sp"
                     android:textStyle="bold" />
+            </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/lnl_artistiTitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingLeft="4dip" >
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingRight="4dip"
-                        android:text="@string/artist_by"
-                        android:textColor="@color/bg_nowplaying_info"
-                        android:textSize="15sp" />
-
-                    <TextView
-                        android:id="@+id/txv_artistTitle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:singleLine="true"
-                        android:textColor="@color/bg_nowplaying_info"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/lnl_albumTitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingLeft="4dip" >
-                </LinearLayout>
+            <LinearLayout
+                android:id="@+id/lnl_albumTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingLeft="4dip" >
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>

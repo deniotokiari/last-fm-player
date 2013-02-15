@@ -118,6 +118,11 @@ public class LastFmAPI {
 				template("artist.gettopalbums"), Uri.encode(artist),
 				String.valueOf(limit), String.valueOf(page));
 	}
+	
+	public static String artistGetInfo(String artist) {
+		return String.format("%s&artist=%s&autocorrect1",
+				template("artist.getInfo"), Uri.encode(artist));
+	}
 
 	// Album
 	public static String albumGetInfo(String artist, String album) {

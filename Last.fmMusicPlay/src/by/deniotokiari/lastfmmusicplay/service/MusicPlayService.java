@@ -2,13 +2,6 @@ package by.deniotokiari.lastfmmusicplay.service;
 
 import java.io.IOException;
 
-import by.deniotokiari.lastfmmusicplay.api.VkAPI;
-import by.deniotokiari.lastfmmusicplay.content.Callback;
-import by.deniotokiari.lastfmmusicplay.content.json.vk.Track;
-import by.deniotokiari.lastfmmusicplay.http.RequestManager;
-import by.deniotokiari.lastfmmusicplay.notification.MusicNotification;
-import by.deniotokiari.lastfmmusicplay.playlist.PlaylistManager;
-import by.deniotokiari.lastfmmusicplay.preferences.PreferencesHelper;
 import android.app.Service;
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -22,6 +15,13 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import by.deniotokiari.lastfmmusicplay.api.VkAPI;
+import by.deniotokiari.lastfmmusicplay.content.Callback;
+import by.deniotokiari.lastfmmusicplay.content.json.vk.Track;
+import by.deniotokiari.lastfmmusicplay.http.RequestManager;
+import by.deniotokiari.lastfmmusicplay.notification.MusicNotification;
+import by.deniotokiari.lastfmmusicplay.playlist.PlaylistManager;
+import by.deniotokiari.lastfmmusicplay.preferences.PreferencesHelper;
 
 public class MusicPlayService extends Service implements OnCompletionListener,
 		OnPreparedListener, OnErrorListener, OnSeekCompleteListener,
@@ -60,10 +60,12 @@ public class MusicPlayService extends Service implements OnCompletionListener,
 		SHUFFLE = PreferencesHelper.getInstance().getBoolean(PREF_NAME,
 				PREF_KEY_SHUFFLE);
 		CURRENT_POSITION = PreferencesHelper.getInstance().getInt(PREF_NAME, PREF_KEY_CURRENT_POSITION);
+		Log.d("LOG",String.valueOf(CURRENT_POSITION));
 	}
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
+		initNotification();
 		return START_STICKY;
 	}
 

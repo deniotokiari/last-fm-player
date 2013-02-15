@@ -53,7 +53,7 @@ public class MainActivity extends FragmentActivity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		ImageLoader.getInstance().stopLoaderThread();
+		ImageLoader.getInstance().stopQueueThread();
 	}
 
 }

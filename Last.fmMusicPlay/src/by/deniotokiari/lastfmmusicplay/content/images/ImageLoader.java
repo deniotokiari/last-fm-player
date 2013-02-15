@@ -1,10 +1,8 @@
 package by.deniotokiari.lastfmmusicplay.content.images;
 
 import java.util.Stack;
-
 import android.graphics.Bitmap;
 import android.os.Handler;
-import android.util.Log;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import by.deniotokiari.lastfmmusicplay.ContextHolder;
@@ -15,6 +13,7 @@ public class ImageLoader {
 
 	private static ImageLoader instance;
 	private static final int RES_DEFAULT_ALBUM = R.drawable.default_album;
+	private static final int RES_DEFAULT_ARTIST = R.drawable.default_artist;
 
 	public static ImageLoader getInstance() {
 		if (instance == null) {
@@ -22,109 +21,123 @@ public class ImageLoader {
 		}
 		return instance;
 	}
-	
-	private class ImageInfo {
-		
+
+	public class ImageInfo {
+
 		public String url;
 		public ImageView imageView;
 		public BaseAdapter adapter;
-		
+
 		public ImageInfo(String url, ImageView imageView, BaseAdapter adapter) {
 			this.url = url;
 			this.imageView = imageView;
 			this.adapter = adapter;
 		}
-		
+
 	}
 
 	private ImageCache mCache;
 	private Handler mHandler;
-	private Stack<ImageInfo> mQueue;
-	private Loader mLoader;
+	private Queue mQueue;
 
 	private ImageLoader() {
 		int cacheSize = 4 * 1024 * 1024 / 8;
 		mCache = new ImageCache(ContextHolder.getInstance().getContext(),
 				cacheSize);
 		mHandler = new Handler();
-		mQueue = new Stack<ImageInfo>();
-		mQueue.setSize(5);
-		mLoader = new Loader();
+		mQueue = new Queue();
+
 	}
 
-	public void bind(ImageView imageView, String url) {
-		bind(null, imageView, url);
+	public void bind(ImageView imageView, String url, int res) {
+		bind(null, imageView, url, res);
 	}
-	
-	public void bind(BaseAdapter adapter, ImageView imageView, String url) {
+
+	public void bind(BaseAdapter adapter, ImageView imageView, String url,
+			int res) {
 		Bitmap bitmap = mCache.getImage(url);
 		if (bitmap != null) {
 			imageView.setImageBitmap(bitmap);
 		} else {
-			imageView.setImageResource(RES_DEFAULT_ALBUM);
-			synchronized (mQueue) {
-				mQueue.push(new ImageInfo(url, imageView, adapter));
-				mQueue.notifyAll();
+			if (res == 0) {
+				imageView.setImageResource(RES_DEFAULT_ALBUM);
+			} else if (res == 1) {
+				imageView.setImageResource(RES_DEFAULT_ARTIST);
 			}
-			if (mLoader.getState() == Thread.State.NEW) {
-				mLoader.start();
-			} 
+			mQueue.push(new ImageInfo(url, imageView, adapter));
+			if (mQueue.getState() == Thread.State.NEW) {
+				mQueue.start();
+			}
 		}
 
 	}
-	
-	public void stopLoaderThread() {
-		mLoader.interrupt();
+
+	public void stopQueueThread() {
+		mQueue.interrupt();
 	}
-	
-	private class Loader extends Thread {
-		
+
+	private class Queue extends Thread {
+
+		private Stack<ImageInfo> queue;
+
+		public Queue() {
+			queue = new Stack<ImageInfo>();
+			queue.setSize(5);
+		}
+
+		public void push(ImageInfo imageInfo) {
+			synchronized (queue) {
+				queue.push(imageInfo);
+				queue.notifyAll();
+			}
+		}
+
 		@Override
 		public void run() {
-			while(true) {
-				if (mQueue.size() == 0) {
-					synchronized (mQueue) {
+			while (true) {
+				if (queue.size() == 0) {
+					synchronized (queue) {
 						try {
-							mQueue.wait();
+							queue.wait();
 						} catch (InterruptedException e) {
 
 						}
 					}
 				}
-				if (mQueue.size() != 0) {
+				if (queue.size() != 0) {
 					ImageInfo imageInfo;
-					synchronized (mQueue) {
-						imageInfo = mQueue.pop();
+					synchronized (queue) {
+						imageInfo = queue.pop();
 					}
 					if (imageInfo != null) {
 						Bitmap bitmap = getBitmapFromURL(imageInfo.url);
 						if (bitmap != null) {
 							mCache.putImage(imageInfo.url, bitmap);
-							mHandler.post(new Displayer(imageInfo.adapter, bitmap,
-									imageInfo.imageView));
+							mHandler.post(new Displayer(imageInfo.adapter,
+									bitmap, imageInfo.imageView));
 						}
 					}
 				}
-				if (Thread.interrupted()) {
+				if (interrupted()) {
 					break;
 				}
 			}
 		}
-		
+
 	}
-	
+
 	private class Displayer implements Runnable {
 
 		private BaseAdapter adapter;
 		private Bitmap bitmap;
 		private ImageView imageView;
-		
+
 		public Displayer(BaseAdapter adapter, Bitmap bitmap, ImageView imageView) {
 			this.adapter = adapter;
 			this.bitmap = bitmap;
 			this.imageView = imageView;
 		}
-		
+
 		@Override
 		public void run() {
 			if (bitmap != null) {
@@ -133,15 +146,12 @@ public class ImageLoader {
 				} else {
 					imageView.setImageBitmap(bitmap);
 				}
-			} else {
-				imageView.setImageResource(RES_DEFAULT_ALBUM);
 			}
 		}
-		
+
 	}
 
 	private Bitmap getBitmapFromURL(String url) {
-		Log.d("LOG", url);
 		if (url.length() == 0) {
 			return null;
 		}
