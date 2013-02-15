@@ -7,6 +7,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import by.deniotokiari.lastfmmusicplay.R;
 import by.deniotokiari.lastfmmusicplay.adapter.AbstractCursorAdapter;
@@ -16,6 +17,7 @@ import by.deniotokiari.lastfmmusicplay.content.contract.lastfm.TrackContract;
 import by.deniotokiari.lastfmmusicplay.content.images.ImageLoader;
 import by.deniotokiari.lastfmmusicplay.content.json.lastfm.Track;
 import by.deniotokiari.lastfmmusicplay.fragment.AbstractLastfmListFragment;
+import by.deniotokiari.lastfmmusicplay.playlist.PlaylistManager;
 
 public class AlbumTracksFragment extends AbstractLastfmListFragment {
 
@@ -54,13 +56,13 @@ public class AlbumTracksFragment extends AbstractLastfmListFragment {
 		super.onViewCreated(view, savedInstanceState);
 		mHeader = getLayoutInflater(savedInstanceState).inflate(HEADER_RES,
 				null, false);
-		getListView().addHeaderView(mHeader);
+		getListView().addHeaderView(mHeader, null, false);
 		TextView textView1 = (TextView) mHeader.findViewById(R.id.album_title);
 		TextView textView2 = (TextView) mHeader.findViewById(R.id.album_artist);
 		textView1.setText(album);
 		textView2.setText(artist);
 		ImageView imageView = (ImageView) mHeader.findViewById(R.id.album_art);
-		ImageLoader.getInstance().bind(imageView, url);
+		ImageLoader.getInstance().bind(imageView, url, 0);
 	}
 	
 	@Override
@@ -85,6 +87,19 @@ public class AlbumTracksFragment extends AbstractLastfmListFragment {
 	@Override
 	protected AbstractCursorAdapter adapter() {
 		return new TrackAdapter(getActivity());
+	}
+	
+	@Override
+	public void onListItemClick(ListView l, View v, final int position, long id) {
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				PlaylistManager.getInstance().setPlaylist(position - 1, uri, selection,
+						selectionArgs, sortOrder);
+			}
+			
+		}).start();
 	}
 
 }

@@ -1,9 +1,5 @@
 package by.deniotokiari.lastfmmusicplay.fragment.main.page;
 
-import by.deniotokiari.lastfmmusicplay.R;
-import by.deniotokiari.lastfmmusicplay.playlist.PlaylistManager;
-import by.deniotokiari.lastfmmusicplay.preferences.PreferencesHelper;
-import by.deniotokiari.lastfmmusicplay.service.MusicPlayService;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -14,15 +10,26 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.ToggleButton;
+import by.deniotokiari.lastfmmusicplay.R;
+import by.deniotokiari.lastfmmusicplay.api.LastFmAPI;
+import by.deniotokiari.lastfmmusicplay.content.Callback;
+import by.deniotokiari.lastfmmusicplay.content.images.ImageLoader;
+import by.deniotokiari.lastfmmusicplay.content.json.CommonJson;
+import by.deniotokiari.lastfmmusicplay.http.RequestManager;
+import by.deniotokiari.lastfmmusicplay.playlist.PlaylistManager;
+import by.deniotokiari.lastfmmusicplay.preferences.PreferencesHelper;
+import by.deniotokiari.lastfmmusicplay.service.MusicPlayService;
 
 public class NowPlayingFragment extends Fragment implements OnClickListener,
 		OnSeekBarChangeListener {
@@ -40,6 +47,7 @@ public class NowPlayingFragment extends Fragment implements OnClickListener,
 	private ToggleButton mButtonRepeat;
 	private SeekBar mSeekBar;
 	private ProgressBar mProgressBar;
+	private ImageView mImageViewArtist;
 
 	private MusicPlayService mService = new MusicPlayService();
 	private ServiceConnection mConnection;
@@ -72,6 +80,7 @@ public class NowPlayingFragment extends Fragment implements OnClickListener,
 		mSeekBar = (SeekBar) getActivity().findViewById(R.id.sb_progress);
 		mProgressBar = (ProgressBar) getActivity().findViewById(
 				R.id.prepareMusicService);
+		mImageViewArtist = (ImageView) getActivity().findViewById(R.id.imgv_artist);
 		mButtonShuffle.setOnClickListener(this);
 		mButtonRepeat.setOnClickListener(this);
 		mButtonPlayPause.setOnClickListener(this);
@@ -82,15 +91,10 @@ public class NowPlayingFragment extends Fragment implements OnClickListener,
 				MusicPlayService.PREF_NAME, MusicPlayService.PREF_KEY_REPEAT));
 		mButtonShuffle.setChecked(PreferencesHelper.getInstance().getBoolean(
 				MusicPlayService.PREF_NAME, MusicPlayService.PREF_KEY_SHUFFLE));
-	/*	if (PreferencesHelper.getInstance().getInt(MusicPlayService.PREF_NAME,
-				MusicPlayService.PREF_KEY_CURRENT_POSITION) != 0 && mService.) {
-			getActivity().startService(
-					new Intent(getActivity(), MusicPlayService.class));
-			initNowPlaying();
-			
-		} else {*/
-			disableControls();
-		/*}*/
+		disableControls();
+		getActivity().startService(
+				new Intent(getActivity(), MusicPlayService.class));
+
 	}
 
 	@Override
@@ -158,15 +162,16 @@ public class NowPlayingFragment extends Fragment implements OnClickListener,
 			@Override
 			public void onServiceConnected(ComponentName name, IBinder service) {
 				mService = ((MusicPlayService.MyBinder) service).getService();
-				if (mService.isPlaying()) {
+				if (PlaylistManager.getInstance().getPosition() != -1) {
 					initNowPlaying();
 					enableControls();
-					mButtonPlayPause
-							.setBackgroundResource(R.drawable.states_pause);
-					mButtonPlayPause.setChecked(true);
+					if (mService.isPlaying()) {
+						mButtonPlayPause
+								.setBackgroundResource(R.drawable.states_pause);
+						mButtonPlayPause.setChecked(true);
+					}
 				}
 			}
-
 		};
 		getActivity().bindService(
 				new Intent(getActivity(), MusicPlayService.class), mConnection,
@@ -191,7 +196,23 @@ public class NowPlayingFragment extends Fragment implements OnClickListener,
 
 	private void initNowPlaying() {
 		mTextViewTrackTitle.setText(PlaylistManager.getInstance().getTitle());
-		mTextViewArtistTitle.setText(PlaylistManager.getInstance().getArtist());
+		String artist = PlaylistManager.getInstance().getArtist();
+		mTextViewArtistTitle.setText(artist);
+		RequestManager.getInstance().get(new Callback<Object>() {
+			
+			@Override
+			public void onSuccess(Object t, Object... objects) {
+				CommonJson json = new CommonJson((String) t, "artist");
+				String imageUrl = json.getArrayItem("image", "#text", 4);
+				ImageLoader.getInstance().bind(mImageViewArtist, imageUrl, 1);			
+			}
+			
+			@Override
+			public void onError(Throwable e, Object... objects) {
+				
+			}
+			
+		}, LastFmAPI.artistGetInfo(artist));
 	}
 
 	@Override

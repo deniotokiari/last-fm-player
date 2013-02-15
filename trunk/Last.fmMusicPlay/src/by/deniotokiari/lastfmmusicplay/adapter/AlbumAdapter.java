@@ -24,7 +24,7 @@ public class AlbumAdapter extends AbstractCursorAdapter {
 		textView1.setText(cursor.getString(AlbumContract.INDEX_NAME));
 		textView2.setText(cursor.getString(AlbumContract.INDEX_ARTIST));
 		String url = cursor.getString(AlbumContract.INDEX_IMAGE);
-		ImageLoader.getInstance().bind(this, imageView, url);
+		ImageLoader.getInstance().bind(this, imageView, url, 0);
 	}
 
 	@Override
