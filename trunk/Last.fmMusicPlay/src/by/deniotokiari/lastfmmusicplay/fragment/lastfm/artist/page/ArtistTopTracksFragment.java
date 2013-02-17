@@ -5,8 +5,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.view.View;
-import android.widget.ListView;
 import by.deniotokiari.lastfmmusicplay.adapter.AbstractCursorAdapter;
 import by.deniotokiari.lastfmmusicplay.adapter.TrackAdapter;
 import by.deniotokiari.lastfmmusicplay.api.LastFmAPI;
@@ -14,7 +12,6 @@ import by.deniotokiari.lastfmmusicplay.content.contract.lastfm.TrackContract;
 import by.deniotokiari.lastfmmusicplay.content.json.lastfm.Track;
 import by.deniotokiari.lastfmmusicplay.fragment.AbstractLastfmListFragment;
 import by.deniotokiari.lastfmmusicplay.fragment.lastfm.artist.ArtistPagerFragment;
-import by.deniotokiari.lastfmmusicplay.playlist.PlaylistManager;
 
 public class ArtistTopTracksFragment extends AbstractLastfmListFragment {
 
@@ -55,19 +52,6 @@ public class ArtistTopTracksFragment extends AbstractLastfmListFragment {
 	public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
 		return new CursorLoader(this.getActivity(), uri, null, selection,
 				selectionArgs, sortOrder);
-	}
-	
-	@Override
-	public void onListItemClick(ListView l, View v, final int position, long id) {
-		new Thread(new Runnable() {
-			
-			@Override
-			public void run() {
-				PlaylistManager.getInstance().setPlaylist(position, uri, selection,
-						selectionArgs, sortOrder);
-			}
-			
-		}).start();
 	}
 
 }

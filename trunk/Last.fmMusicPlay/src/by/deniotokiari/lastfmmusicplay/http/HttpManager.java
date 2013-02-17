@@ -11,6 +11,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.HttpVersion;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
@@ -33,6 +34,10 @@ public class HttpManager {
 	private DefaultHttpClient client;
 	public static final int SO_TIMEOUT = 20000;
 	private static final String UTF_8 = "UTF-8";
+
+	public static enum TYPE {
+		POST, GET
+	};
 
 	private HttpManager() {
 		HttpParams params = new BasicHttpParams();
@@ -61,8 +66,14 @@ public class HttpManager {
 		return instance;
 	}
 
-	public String loadAsString(String url) throws IOException {
-		return loadAsString(new HttpGet(url));
+	public String loadAsString(String url, TYPE name) throws IOException {
+		if (name.equals(TYPE.GET)) {
+			return loadAsString(new HttpGet(url));
+		} else if (name.equals(TYPE.POST)) {
+			return loadAsString(new HttpPost(url));
+		}
+		return null;
+
 	}
 
 	public String loadAsString(HttpRequestBase request) throws IOException {

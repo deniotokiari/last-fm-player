@@ -40,7 +40,7 @@
     <string-array name="library_sections">
         <item>Last.fm</item>
         <item>Vk.com</item>
-        <item>Local</item>
+        <!-- <item>Local</item> -->
         <item>Tags</item>
         <item>Playlists</item>
     </string-array>

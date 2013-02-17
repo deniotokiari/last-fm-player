@@ -75,12 +75,19 @@ public class PlaylistManager {
 	}
 
 	private String getString(int index) {
-		Cursor cursor = mContext.getContentResolver().query(mUri, null, null,
-				null, null);
-		cursor.moveToPosition(POSITION);
-		String result = cursor.getString(index);
-		cursor.close();
-		return result;
+		if (COUNT == 0 || POSITION == -1) {
+			return " ";
+		}
+		if (POSITION > COUNT) {
+			return " ";
+		} else {
+			Cursor cursor = mContext.getContentResolver().query(mUri, null,
+					null, null, null);
+			cursor.moveToPosition(POSITION);
+			String result = cursor.getString(index);
+			cursor.close();
+			return result;
+		}
 	}
 
 	public String getTitle() {

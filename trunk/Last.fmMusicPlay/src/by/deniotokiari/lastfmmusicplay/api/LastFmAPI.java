@@ -16,17 +16,52 @@ public class LastFmAPI {
 		return String.format("%s%s&api_key=%s%s", URL_API, method, API_KEY,
 				RESULT_FORMAT);
 	}
-	
-	//Scroble
+
+	// Track
 	public static String trackScrobble(String artist, String track, Date date) {
-		String result = template("track.scrobble") + "&sk=" + LastfmAuthHelper.getSession();
+		String result = template("track.scrobble") + "&sk="
+				+ LastfmAuthHelper.getSession();
 		result += "&artist=" + Uri.encode(artist);
 		result += "&track=" + Uri.encode(track);
-		result += "&timestamp=" + String.valueOf(date.getTime());
+		result += "&timestamp=" + String.valueOf(date.getTime() / 1000);
 		String sign = "api_key" + API_KEY;
 		sign += "artist" + artist;
 		sign += "methodtrack.scrobblesk" + LastfmAuthHelper.getSession();
-		sign += "timestamp" + String.valueOf(date.getTime());
+		sign += "timestamp" + String.valueOf(date.getTime() / 1000);
+		sign += "track" + track;
+		sign += SECRET_KEY;
+		result += "&api_sig=" + Md5.md5(sign);
+		return result;
+	}
+
+	public static String trackGetInfo(String track, String artist, String user) {
+		return String.format("%s&track=%s&artist=%s&username=%s&autocorrect1",
+				template("track.getInfo"), Uri.encode(track),
+				Uri.encode(artist), user);
+	}
+
+	public static String trackLove(String track, String artist) {
+		String result = template("track.love") + "&sk="
+				+ LastfmAuthHelper.getSession();
+		result += "&artist=" + Uri.encode(artist);
+		result += "&track=" + Uri.encode(track);
+		String sign = "api_key" + API_KEY;
+		sign += "artist" + artist;
+		sign += "methodtrack.lovesk" + LastfmAuthHelper.getSession();
+		sign += "track" + track;
+		sign += SECRET_KEY;
+		result += "&api_sig=" + Md5.md5(sign);
+		return result;
+	}
+	
+	public static String trackUnlove(String track, String artist) {
+		String result = template("track.unlove") + "&sk="
+				+ LastfmAuthHelper.getSession();
+		result += "&artist=" + Uri.encode(artist);
+		result += "&track=" + Uri.encode(track);
+		String sign = "api_key" + API_KEY;
+		sign += "artist" + artist;
+		sign += "methodtrack.unlovesk" + LastfmAuthHelper.getSession();
 		sign += "track" + track;
 		sign += SECRET_KEY;
 		result += "&api_sig=" + Md5.md5(sign);
@@ -118,7 +153,7 @@ public class LastFmAPI {
 				template("artist.gettopalbums"), Uri.encode(artist),
 				String.valueOf(limit), String.valueOf(page));
 	}
-	
+
 	public static String artistGetInfo(String artist) {
 		return String.format("%s&artist=%s&autocorrect1",
 				template("artist.getInfo"), Uri.encode(artist));

@@ -17,7 +17,6 @@ import by.deniotokiari.lastfmmusicplay.content.contract.lastfm.TrackContract;
 import by.deniotokiari.lastfmmusicplay.content.images.ImageLoader;
 import by.deniotokiari.lastfmmusicplay.content.json.lastfm.Track;
 import by.deniotokiari.lastfmmusicplay.fragment.AbstractLastfmListFragment;
-import by.deniotokiari.lastfmmusicplay.playlist.PlaylistManager;
 
 public class AlbumTracksFragment extends AbstractLastfmListFragment {
 
@@ -36,7 +35,8 @@ public class AlbumTracksFragment extends AbstractLastfmListFragment {
 	private static final String selection = TrackContract.Columns.ALBUM
 			+ " = ?";
 	private static final Uri uri = TrackContract.URI_ALBUM_TRACKS;
-	private static final String sortOrder = null;//TrackContract.Columns.RANK + " ASC";
+	private static final String sortOrder = null;// TrackContract.Columns.RANK +
+													// " ASC";
 	private static String[] jsonKeys = { Track.ROOT_ALBUM_TRACKS,
 			Track.ITEM_ROOT_ALBUM_TRACKS, Track.ITEM, null, null };
 
@@ -64,10 +64,11 @@ public class AlbumTracksFragment extends AbstractLastfmListFragment {
 		ImageView imageView = (ImageView) mHeader.findViewById(R.id.album_art);
 		ImageLoader.getInstance().bind(imageView, url, 0);
 	}
-	
+
 	@Override
 	public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-		return new CursorLoader(this.getActivity(), uri, null, selection, selectionArgs, sortOrder);
+		return new CursorLoader(this.getActivity(), uri, null, selection,
+				selectionArgs, sortOrder);
 	}
 
 	@Override
@@ -88,18 +89,10 @@ public class AlbumTracksFragment extends AbstractLastfmListFragment {
 	protected AbstractCursorAdapter adapter() {
 		return new TrackAdapter(getActivity());
 	}
-	
+
 	@Override
 	public void onListItemClick(ListView l, View v, final int position, long id) {
-		new Thread(new Runnable() {
-			
-			@Override
-			public void run() {
-				PlaylistManager.getInstance().setPlaylist(position - 1, uri, selection,
-						selectionArgs, sortOrder);
-			}
-			
-		}).start();
+		super.onListItemClick(l, v, position - 1, id);
 	}
 
 }
