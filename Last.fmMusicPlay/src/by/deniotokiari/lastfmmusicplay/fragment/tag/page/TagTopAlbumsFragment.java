@@ -17,6 +17,7 @@ import by.deniotokiari.lastfmmusicplay.content.contract.lastfm.AlbumContract;
 import by.deniotokiari.lastfmmusicplay.content.json.lastfm.Album;
 import by.deniotokiari.lastfmmusicplay.fragment.AbstractLastfmListFragment;
 import by.deniotokiari.lastfmmusicplay.fragment.lastfm.AlbumTracksFragment;
+import by.deniotokiari.lastfmmusicplay.fragment.lastfm.AlbumTracksPagerFragment;
 import by.deniotokiari.lastfmmusicplay.fragment.tag.TagsFragment;
 
 public class TagTopAlbumsFragment extends AbstractLastfmListFragment {
@@ -77,7 +78,8 @@ public class TagTopAlbumsFragment extends AbstractLastfmListFragment {
 		bundle.putString(AlbumTracksFragment.EXTRA_KEY_ARTIST, artist);
 		bundle.putString(AlbumTracksFragment.EXTRA_KEY_URL, album_art_url);
 		FragmentTransaction transaction = getParentFragment().getFragmentManager().beginTransaction();
-		Fragment fragment = new AlbumTracksFragment();
+		//Fragment fragment = new AlbumTracksFragment();
+		Fragment fragment = new AlbumTracksPagerFragment();
 		fragment.setArguments(bundle);
 		transaction.replace(R.id.content, fragment);
 		transaction.addToBackStack(null);

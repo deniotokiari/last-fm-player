@@ -9,6 +9,7 @@ import org.json.JSONObject;
 
 import by.deniotokiari.lastfmmusicplay.content.Callback;
 import by.deniotokiari.lastfmmusicplay.content.CommonAsyncTask;
+import by.deniotokiari.lastfmmusicplay.http.HttpManager.TYPE;
 
 public class CommonJsonAsyncTask extends CommonAsyncTask<List<String>> {
 
@@ -18,7 +19,7 @@ public class CommonJsonAsyncTask extends CommonAsyncTask<List<String>> {
 
 	public CommonJsonAsyncTask(Callback<List<String>> callback, String[] keys,
 			String... params) {
-		super(callback, params);
+		super(callback, TYPE.GET, params);
 		mKeys = keys;
 	}
 

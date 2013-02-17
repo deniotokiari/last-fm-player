@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 import by.deniotokiari.lastfmmusicplay.R;
 import by.deniotokiari.lastfmmusicplay.api.LastFmAPI;
+import by.deniotokiari.lastfmmusicplay.api.LastfmAuthHelper;
 import by.deniotokiari.lastfmmusicplay.content.Callback;
 import by.deniotokiari.lastfmmusicplay.content.images.ImageLoader;
 import by.deniotokiari.lastfmmusicplay.content.json.CommonJson;
@@ -35,6 +36,11 @@ public class NowPlayingFragment extends Fragment implements OnClickListener,
 		OnSeekBarChangeListener {
 
 	public static final int PAGE_NUM = 1;
+	public static final String PREF_NAME = "nowplaying";
+	public static final String PREF_KEY_ARTIST = "artist";
+	public static final String PREF_KEY_URL = "url";
+	public static final String PREF_KEY_TRACK = "track";
+	public static final String PREF_KEY_LOVED = "loved";
 
 	private TextView mTextViewTrackTitle;
 	private TextView mTextViewArtistTitle;
@@ -45,6 +51,7 @@ public class NowPlayingFragment extends Fragment implements OnClickListener,
 	private ToggleButton mButtonPrevious;
 	private ToggleButton mButtonNext;
 	private ToggleButton mButtonRepeat;
+	private ToggleButton mButtonLoved;
 	private SeekBar mSeekBar;
 	private ProgressBar mProgressBar;
 	private ImageView mImageViewArtist;
@@ -77,16 +84,19 @@ public class NowPlayingFragment extends Fragment implements OnClickListener,
 				R.id.btn_forward);
 		mButtonRepeat = (ToggleButton) getActivity().findViewById(
 				R.id.btn_repeat);
+		mButtonLoved = (ToggleButton) getActivity().findViewById(R.id.btn_love);
 		mSeekBar = (SeekBar) getActivity().findViewById(R.id.sb_progress);
 		mProgressBar = (ProgressBar) getActivity().findViewById(
 				R.id.prepareMusicService);
-		mImageViewArtist = (ImageView) getActivity().findViewById(R.id.imgv_artist);
+		mImageViewArtist = (ImageView) getActivity().findViewById(
+				R.id.imgv_artist);
 		mButtonShuffle.setOnClickListener(this);
 		mButtonRepeat.setOnClickListener(this);
 		mButtonPlayPause.setOnClickListener(this);
 		mButtonNext.setOnClickListener(this);
 		mButtonPrevious.setOnClickListener(this);
 		mSeekBar.setOnSeekBarChangeListener(this);
+		mButtonLoved.setOnClickListener(this);
 		mButtonRepeat.setChecked(PreferencesHelper.getInstance().getBoolean(
 				MusicPlayService.PREF_NAME, MusicPlayService.PREF_KEY_REPEAT));
 		mButtonShuffle.setChecked(PreferencesHelper.getInstance().getBoolean(
@@ -94,7 +104,6 @@ public class NowPlayingFragment extends Fragment implements OnClickListener,
 		disableControls();
 		getActivity().startService(
 				new Intent(getActivity(), MusicPlayService.class));
-
 	}
 
 	@Override
@@ -119,12 +128,12 @@ public class NowPlayingFragment extends Fragment implements OnClickListener,
 				String action = intent.getAction();
 				if (action.equals(MusicPlayService.ACTION_ON_PREPARE)) {
 					mProgressBar.setVisibility(View.VISIBLE);
-					disableControls();
+					// disableControls();
 					mSeekBar.setSecondaryProgress(0);
 					mSeekBar.setProgress(0);
-					mButtonPlayPause
-							.setBackgroundResource(R.drawable.states_play);
-					mButtonPlayPause.setChecked(false);
+					// mButtonPlayPause
+					// .setBackgroundResource(R.drawable.states_play);
+					// mButtonPlayPause.setChecked(false);
 					initNowPlaying();
 
 				} else if (action.equals(MusicPlayService.ACTION_ON_PLAY)) {
@@ -197,22 +206,71 @@ public class NowPlayingFragment extends Fragment implements OnClickListener,
 	private void initNowPlaying() {
 		mTextViewTrackTitle.setText(PlaylistManager.getInstance().getTitle());
 		String artist = PlaylistManager.getInstance().getArtist();
+		String track = PlaylistManager.getInstance().getTitle();
 		mTextViewArtistTitle.setText(artist);
-		RequestManager.getInstance().get(new Callback<Object>() {
-			
-			@Override
-			public void onSuccess(Object t, Object... objects) {
-				CommonJson json = new CommonJson((String) t, "artist");
-				String imageUrl = json.getArrayItem("image", "#text", 4);
-				ImageLoader.getInstance().bind(mImageViewArtist, imageUrl, 1);			
-			}
-			
-			@Override
-			public void onError(Throwable e, Object... objects) {
-				
-			}
-			
-		}, LastFmAPI.artistGetInfo(artist));
+		if (artist.equals(PreferencesHelper.getInstance().getString(PREF_NAME,
+				PREF_KEY_ARTIST))) {
+			ImageLoader.getInstance().bind(
+					mImageViewArtist,
+					PreferencesHelper.getInstance().getString(PREF_NAME,
+							PREF_KEY_URL), 1);
+		} else {
+			PreferencesHelper.getInstance().putString(PREF_NAME,
+					PREF_KEY_ARTIST, artist);
+			RequestManager.getInstance().get(new Callback<Object>() {
+
+				@Override
+				public void onSuccess(Object t, Object... objects) {
+					CommonJson json = new CommonJson((String) t, "artist");
+					String imageUrl = json.getArrayItem("image", "#text", 4);
+					PreferencesHelper.getInstance().putString(PREF_NAME,
+							PREF_KEY_URL, imageUrl);
+					ImageLoader.getInstance().bind(mImageViewArtist, imageUrl,
+							1);
+				}
+
+				@Override
+				public void onError(Throwable e, Object... objects) {
+
+				}
+
+			}, LastFmAPI.artistGetInfo(artist));
+		}
+		if (track.equals(PreferencesHelper.getInstance().getString(PREF_NAME,
+				PREF_KEY_TRACK))) {
+			mButtonLoved.setChecked(PreferencesHelper.getInstance().getBoolean(
+					PREF_NAME, PREF_KEY_LOVED));
+		} else {
+			PreferencesHelper.getInstance().putString(PREF_NAME,
+					PREF_KEY_TRACK, track);
+			RequestManager.getInstance().get(
+					new Callback<Object>() {
+
+						@Override
+						public void onSuccess(Object t, Object... objects) {
+							CommonJson json = new CommonJson((String) t,
+									"track");
+							String loved = json.getString("userloved");
+							if (loved.equals("1")) {
+								PreferencesHelper.getInstance().putBoolean(
+										PREF_NAME, PREF_KEY_LOVED, true);
+								mButtonLoved.setChecked(true);
+							} else {
+								PreferencesHelper.getInstance().putBoolean(
+										PREF_NAME, PREF_KEY_LOVED, false);
+								mButtonLoved.setChecked(false);
+							}
+						}
+
+						@Override
+						public void onError(Throwable e, Object... objects) {
+
+						}
+
+					},
+					LastFmAPI.trackGetInfo(track, artist,
+							LastfmAuthHelper.getUserName()));
+		}
 	}
 
 	@Override
@@ -242,7 +300,11 @@ public class NowPlayingFragment extends Fragment implements OnClickListener,
 		case R.id.btn_play:
 			if (isChecked) {
 				mButtonPlayPause.setBackgroundResource(R.drawable.states_pause);
-				mService.play();
+				if (mService.getCurrentPosition() < 0) {
+					mService.start();
+				} else {
+					mService.play();
+				}
 			} else {
 				mButtonPlayPause.setBackgroundResource(R.drawable.states_play);
 				mService.pause();
@@ -283,6 +345,34 @@ public class NowPlayingFragment extends Fragment implements OnClickListener,
 			break;
 		case R.id.btn_prev:
 			mService.previous();
+			break;
+		case R.id.btn_love:
+			String request;
+			if (isChecked) {
+				mButtonLoved.setChecked(true);
+				request = LastFmAPI.trackLove(PlaylistManager.getInstance()
+						.getTitle(), PlaylistManager.getInstance().getArtist());
+			} else {
+				mButtonLoved.setChecked(false);
+				request = LastFmAPI.trackUnlove(PlaylistManager.getInstance()
+						.getTitle(), PlaylistManager.getInstance().getArtist());
+			}
+			mButtonLoved.setEnabled(false);
+			Callback<Object> callback = new Callback<Object>() {
+
+				@Override
+				public void onSuccess(Object t, Object... objects) {
+					Log.d("LOG", (String) t);
+					mButtonLoved.setEnabled(true);
+				}
+
+				@Override
+				public void onError(Throwable e, Object... objects) {
+					mButtonLoved.setEnabled(true);
+				}
+
+			};
+			RequestManager.getInstance().post(callback, request);
 		}
 	}
 

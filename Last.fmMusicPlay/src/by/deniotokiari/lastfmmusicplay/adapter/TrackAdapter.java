@@ -37,6 +37,7 @@ public class TrackAdapter extends AbstractCursorAdapter {
 		return View.inflate(context, R.layout.adapter_text, null);
 	}
 	
+	@Override
 	public void setCheked(int position) {
 		checkedPosition = position;
 		notifyDataSetChanged();

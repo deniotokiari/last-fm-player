@@ -1,6 +1,8 @@
 package by.deniotokiari.lastfmmusicplay.service;
 
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
 
 import android.app.Service;
 import android.content.Intent;
@@ -9,12 +11,12 @@ import android.media.MediaPlayer.OnBufferingUpdateListener;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnErrorListener;
 import android.media.MediaPlayer.OnPreparedListener;
-import android.media.MediaPlayer.OnSeekCompleteListener;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import by.deniotokiari.lastfmmusicplay.api.LastFmAPI;
 import by.deniotokiari.lastfmmusicplay.api.VkAPI;
 import by.deniotokiari.lastfmmusicplay.content.Callback;
 import by.deniotokiari.lastfmmusicplay.content.json.vk.Track;
@@ -24,8 +26,7 @@ import by.deniotokiari.lastfmmusicplay.playlist.PlaylistManager;
 import by.deniotokiari.lastfmmusicplay.preferences.PreferencesHelper;
 
 public class MusicPlayService extends Service implements OnCompletionListener,
-		OnPreparedListener, OnErrorListener, OnSeekCompleteListener,
-		OnBufferingUpdateListener {
+		OnPreparedListener, OnErrorListener, OnBufferingUpdateListener {
 
 	public static final String ACTION_ON_PLAY = "by.last.fmplay.deniotokiari.service.ACTION_ON_PLAY";
 	public static final String ACTION_ON_PREPARE = "by.last.fmplay.deniotokiari.service.ACTION_ON_PREPARE";
@@ -43,8 +44,9 @@ public class MusicPlayService extends Service implements OnCompletionListener,
 
 	private boolean REPEAT;
 	private boolean SHUFFLE;
-	private boolean isPaused; 
-
+	private boolean isPaused;
+	private boolean isScrobbled;
+	
 	private int buffered;
 	private int CURRENT_POSITION;
 
@@ -54,13 +56,12 @@ public class MusicPlayService extends Service implements OnCompletionListener,
 		mMediaPlayer.setOnErrorListener(this);
 		mMediaPlayer.setOnPreparedListener(this);
 		mMediaPlayer.setOnBufferingUpdateListener(this);
-		mMediaPlayer.setOnSeekCompleteListener(this);
 		REPEAT = PreferencesHelper.getInstance().getBoolean(PREF_NAME,
 				PREF_KEY_REPEAT);
 		SHUFFLE = PreferencesHelper.getInstance().getBoolean(PREF_NAME,
 				PREF_KEY_SHUFFLE);
-		CURRENT_POSITION = PreferencesHelper.getInstance().getInt(PREF_NAME, PREF_KEY_CURRENT_POSITION);
-		Log.d("LOG",String.valueOf(CURRENT_POSITION));
+		CURRENT_POSITION = PreferencesHelper.getInstance().getInt(PREF_NAME,
+				PREF_KEY_CURRENT_POSITION);
 	}
 
 	@Override
@@ -74,7 +75,8 @@ public class MusicPlayService extends Service implements OnCompletionListener,
 		super.onDestroy();
 		if (mMediaPlayer != null) {
 			CURRENT_POSITION = mMediaPlayer.getCurrentPosition();
-			PreferencesHelper.getInstance().putInt(PREF_NAME, PREF_KEY_CURRENT_POSITION, CURRENT_POSITION);
+			PreferencesHelper.getInstance().putInt(PREF_NAME,
+					PREF_KEY_CURRENT_POSITION, CURRENT_POSITION);
 			if (mMediaPlayer.isPlaying()) {
 				mMediaPlayer.stop();
 			}
@@ -96,12 +98,6 @@ public class MusicPlayService extends Service implements OnCompletionListener,
 	}
 
 	@Override
-	public void onSeekComplete(MediaPlayer mediaPlayer) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public boolean onError(MediaPlayer mediaPlayer, int i, int j) {
 		return true;
 	}
@@ -114,7 +110,8 @@ public class MusicPlayService extends Service implements OnCompletionListener,
 	@Override
 	public void onCompletion(MediaPlayer mediaPlayer) {
 		CURRENT_POSITION = 0;
-		PreferencesHelper.getInstance().putInt(PREF_NAME, PREF_KEY_CURRENT_POSITION, CURRENT_POSITION);
+		PreferencesHelper.getInstance().putInt(PREF_NAME,
+				PREF_KEY_CURRENT_POSITION, CURRENT_POSITION);
 		next();
 	}
 
@@ -148,6 +145,24 @@ public class MusicPlayService extends Service implements OnCompletionListener,
 	private void primarySeekBarProgressUpdater() {
 		LocalBroadcastManager.getInstance(getApplicationContext())
 				.sendBroadcast(new Intent(ACTION_ON_PROGRESS_CHANGE));
+		if (mMediaPlayer.getCurrentPosition() > mMediaPlayer.getDuration() / 2 && !isScrobbled) {
+			isScrobbled = true;
+			Date date = Calendar.getInstance().getTime();
+			Log.d("LOG", LastFmAPI.trackScrobble(PlaylistManager.getInstance().getArtist(), PlaylistManager.getInstance().getTitle(), date));
+			RequestManager.getInstance().post(new Callback<Object>() {
+				
+				@Override
+				public void onSuccess(Object t, Object... objects) {
+					Log.d("LOG", (String) t);
+				}
+				
+				@Override
+				public void onError(Throwable e, Object... objects) {
+					
+				}
+				
+			}, LastFmAPI.trackScrobble(PlaylistManager.getInstance().getArtist(), PlaylistManager.getInstance().getTitle(), date));
+		}
 		if (mMediaPlayer.isPlaying()) {
 			Runnable update = new Runnable() {
 
@@ -206,6 +221,7 @@ public class MusicPlayService extends Service implements OnCompletionListener,
 	}
 
 	private void start(String url) {
+		isScrobbled = false;
 		mMediaPlayer.reset();
 		if (!mMediaPlayer.isPlaying()) {
 			try {
@@ -243,47 +259,47 @@ public class MusicPlayService extends Service implements OnCompletionListener,
 	public boolean isPlaying() {
 		return mMediaPlayer.isPlaying();
 	}
-	
+
 	public void start() {
 		stop();
 		startPlay(PlaylistManager.getInstance().getTrack());
 	}
-	
+
 	public void setShuffle(boolean b) {
 		SHUFFLE = b;
 	}
-	
+
 	public void setRepeat(boolean b) {
 		REPEAT = b;
 	}
-	
+
 	public int getBufferedPercent() {
 		return buffered;
 	}
-	
+
 	public int getDuration() {
 		return mMediaPlayer.getDuration();
 	}
-	
+
 	public int getCurrentPosition() {
 		return mMediaPlayer.getCurrentPosition();
 	}
-	
+
 	public void seekTo(int position) {
 		mMediaPlayer.seekTo(position);
 	}
-	
+
 	public void next() {
-		Log.d("LOG", "NEXT");	
+		Log.d("LOG", "NEXT");
 		startPlay(PlaylistManager.getInstance().getNext(SHUFFLE, REPEAT));
 	}
-	
+
 	public void previous() {
 		Log.d("LOG", "PREV");
 	}
-	
+
 	public boolean isPaused() {
 		return isPaused;
 	}
-	
+
 }

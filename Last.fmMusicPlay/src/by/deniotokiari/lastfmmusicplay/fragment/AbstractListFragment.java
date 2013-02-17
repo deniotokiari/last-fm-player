@@ -6,6 +6,7 @@ import by.deniotokiari.lastfmmusicplay.content.ContentRequestBuilder;
 import by.deniotokiari.lastfmmusicplay.playlist.PlaylistManager;
 import by.deniotokiari.lastfmmusicplay.service.GetDataService;
 import by.deniotokiari.lastfmmusicplay.service.MusicPlayService;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -22,7 +23,6 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
@@ -50,6 +50,7 @@ abstract public class AbstractListFragment extends ListFragment implements
 	private BroadcastReceiver mReceiver;
 	private IntentFilter mFilter;
 	private Handler mHandler;
+	private ProgressDialog mProgressDialog;
 
 	/** Sql args to query **/
 	private Uri uri;
@@ -86,6 +87,7 @@ abstract public class AbstractListFragment extends ListFragment implements
 		id = String.valueOf(getClass().getSimpleName().hashCode());
 		mFooterView = getLayoutInflater(savedInstanceState).inflate(FOOTER_RES,
 				null, false);
+		mProgressDialog = new ProgressDialog(getActivity());
 		getListView().addFooterView(mFooterView);
 		mHandler.post(hideFooter);
 		mAdapter = adapter();
@@ -197,15 +199,24 @@ abstract public class AbstractListFragment extends ListFragment implements
 
 	@Override
 	public void onListItemClick(ListView l, View v, final int position, long id) {
+		mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+		mProgressDialog.setIndeterminate(true);
+		mProgressDialog.setMessage(getResources().getString(R.string.loading));
+		mProgressDialog.show();
 		new Thread(new Runnable() {
 			
 			@Override
 			public void run() {
 				PlaylistManager.getInstance().setPlaylist(position, uri, selection,
 						selectionArgs, sortOrder);
+				mHandler.post(dismissProgressDialog);
+				if (isBound) {
+					mService.start();
+				}
 			}
 			
 		}).start();
+		mAdapter.setCheked(position);
 	}
 
 	@Override
@@ -253,6 +264,15 @@ abstract public class AbstractListFragment extends ListFragment implements
 			mFooterView.setVisibility(View.GONE);
 		}
 
+	};
+	
+	private Runnable dismissProgressDialog = new Runnable() {
+		
+		@Override
+		public void run() {
+			mProgressDialog.dismiss();
+		}
+		
 	};
 
 	protected int getItemsCount() {

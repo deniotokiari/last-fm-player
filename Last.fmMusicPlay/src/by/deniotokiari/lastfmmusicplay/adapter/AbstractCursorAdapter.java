@@ -9,5 +9,9 @@ abstract public class AbstractCursorAdapter extends CursorAdapter {
 		super(context, null, true);
 
 	}
+	
+	public void setCheked(int position) {
+
+	}
 
 }

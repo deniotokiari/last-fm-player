@@ -37,10 +37,10 @@ public class LibraryFragment extends ListFragment {
 		case 1:
 			replaceFragment(new VkPagerFragment());
 			break;
-		case 3:
+		case 2:
 			replaceFragment(new TagsFragment());
 			break;
-		case 4:
+		case 3:
 			replaceFragment(new PlaylistFragment());
 		}
 	}
