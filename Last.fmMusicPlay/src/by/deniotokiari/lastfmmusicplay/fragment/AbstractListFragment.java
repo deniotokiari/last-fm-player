@@ -41,16 +41,16 @@ abstract public class AbstractListFragment extends ListFragment implements
 	protected boolean isEndOfData = false;
 	protected boolean isError = false;
 
-	private MusicPlayService mService;
+	protected MusicPlayService mService;
 	private ServiceConnection mConnection;
-	private boolean isBound;
+	protected boolean isBound;
 
-	private AbstractCursorAdapter mAdapter;
+	protected AbstractCursorAdapter mAdapter;
 	private View mFooterView;
 	private BroadcastReceiver mReceiver;
 	private IntentFilter mFilter;
-	private Handler mHandler;
-	private ProgressDialog mProgressDialog;
+	protected Handler mHandler;
+	protected ProgressDialog mProgressDialog;
 
 	/** Sql args to query **/
 	private Uri uri;
@@ -95,7 +95,7 @@ abstract public class AbstractListFragment extends ListFragment implements
 		this.getLoaderManager().initLoader(Integer.valueOf(id), null, this);
 		setOnScrollListener();
 	}
-	
+
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		outState.putBoolean(id, isLoading);
@@ -176,6 +176,9 @@ abstract public class AbstractListFragment extends ListFragment implements
 	public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
 		itemsCount = cursor.getCount();
 		offset = changeOffset(itemsCount);
+		if (itemsCount == 0) {
+			offset = 0;
+		}
 		if (getListAdapter() == null && cursor.getCount() != 0) {
 			setListAdapter(mAdapter);
 			mAdapter.swapCursor(cursor);
@@ -201,24 +204,25 @@ abstract public class AbstractListFragment extends ListFragment implements
 	public void onListItemClick(ListView l, View v, final int position, long id) {
 		mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 		mProgressDialog.setIndeterminate(true);
-		mProgressDialog.setMessage(getResources().getString(R.string.loading));
+		mProgressDialog.setMessage(getResources()
+				.getString(R.string.processing));
 		mProgressDialog.show();
 		new Thread(new Runnable() {
-			
+
 			@Override
 			public void run() {
-				PlaylistManager.getInstance().setPlaylist(position, uri, selection,
-						selectionArgs, sortOrder);
+				PlaylistManager.getInstance().setPlaylist(position, uri,
+						selection, selectionArgs, sortOrder);
 				mHandler.post(dismissProgressDialog);
 				if (isBound) {
 					mService.start();
 				}
 			}
-			
+
 		}).start();
 		mAdapter.setCheked(position);
 	}
-
+	
 	@Override
 	public void onLoaderReset(Loader<Cursor> loader) {
 		mAdapter.swapCursor(null);
@@ -265,14 +269,14 @@ abstract public class AbstractListFragment extends ListFragment implements
 		}
 
 	};
-	
-	private Runnable dismissProgressDialog = new Runnable() {
-		
+
+	protected Runnable dismissProgressDialog = new Runnable() {
+
 		@Override
 		public void run() {
 			mProgressDialog.dismiss();
 		}
-		
+
 	};
 
 	protected int getItemsCount() {

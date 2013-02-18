@@ -1,25 +1,31 @@
 package by.deniotokiari.lastfmmusicplay;
 
-
 import com.bugsense.trace.BugSenseHandler;
 
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences.Editor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuItem;
 import by.deniotokiari.lastfmmusicplay.api.LastfmAuthHelper;
 import by.deniotokiari.lastfmmusicplay.api.VkAuthHelper;
-import by.deniotokiari.lastfmmusicplay.content.images.ImageCache;
 import by.deniotokiari.lastfmmusicplay.content.images.ImageLoader;
 import by.deniotokiari.lastfmmusicplay.db.DBHelper;
 import by.deniotokiari.lastfmmusicplay.fragment.main.MainPagerFragment;
+import by.deniotokiari.lastfmmusicplay.playlist.PlaylistManager;
 
 public class MainActivity extends FragmentActivity {
-	
+
+	private ProgressDialog mProgressDialog;
+	private Handler mHandler;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -28,6 +34,8 @@ public class MainActivity extends FragmentActivity {
 		if (savedInstanceState != null) {
 			return;
 		}
+		mHandler = new Handler();
+		mProgressDialog = new ProgressDialog(MainActivity.this);
 		FragmentTransaction transaction = getSupportFragmentManager()
 				.beginTransaction();
 		transaction.add(R.id.content, new MainPagerFragment());
@@ -47,27 +55,34 @@ public class MainActivity extends FragmentActivity {
 			LastfmAuthHelper.logout();
 			VkAuthHelper.logout();
 			ImageLoader.getInstance().clearCache();
-			// TODO database
-			// TODO thread imp
-			
+			Editor playlist = getSharedPreferences(PlaylistManager.PREF_NAME,
+					Context.MODE_PRIVATE).edit();
+			playlist.clear();
+			playlist.commit();
+			clearDatabase();
 			startActivity(new Intent(getApplicationContext(),
 					StartActivity.class));
 			break;
 		case R.id.menu_reload:
-			
+			mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+			mProgressDialog.setIndeterminate(true);
+			mProgressDialog.setMessage(getResources().getString(
+					R.string.processing));
+			mProgressDialog.show();
+			clearDatabase();
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 		ImageLoader.getInstance().stopQueueThread();
 	}
 
-	synchronized private void ClearDatabase() {
+	private void clearDatabase() {
 		new Thread(new Runnable() {
-			
+
 			@Override
 			public void run() {
 				ContentResolver resolver = getContentResolver();
@@ -75,9 +90,19 @@ public class MainActivity extends FragmentActivity {
 					resolver.delete(uri, null, null);
 					resolver.notifyChange(uri, null);
 				}
+				mHandler.post(dismissProgressDialog);
 			}
-			
-		});
+
+		}).start();
 	}
-	
+
+	private Runnable dismissProgressDialog = new Runnable() {
+
+		@Override
+		public void run() {
+			mProgressDialog.dismiss();
+		}
+
+	};
+
 }

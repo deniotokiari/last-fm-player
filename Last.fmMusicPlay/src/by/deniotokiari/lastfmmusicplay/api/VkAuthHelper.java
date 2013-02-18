@@ -42,7 +42,6 @@ public class VkAuthHelper {
 		} catch (Exception e) {
 
 		}
-
 		Editor editor = CONTEXT.getSharedPreferences(VK_SHARED_PREFS,
 				Context.MODE_PRIVATE).edit();
 		editor.clear();
