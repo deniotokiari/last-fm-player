@@ -51,7 +51,6 @@ public class LibraryAlbumsFragment extends AbstractLastfmListFragment {
 		bundle.putString(AlbumTracksFragment.EXTRA_KEY_ARTIST, artist);
 		bundle.putString(AlbumTracksFragment.EXTRA_KEY_URL, album_art_url);
 		FragmentTransaction transaction = getParentFragment().getFragmentManager().beginTransaction();
-		//Fragment fragment = new AlbumTracksFragment();
 		Fragment fragment = new AlbumTracksPagerFragment();
 		fragment.setArguments(bundle);
 		transaction.replace(R.id.content, fragment);

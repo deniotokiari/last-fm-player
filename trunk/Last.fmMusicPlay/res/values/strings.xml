@@ -7,6 +7,7 @@
     <string name="menu_settings">Settings</string>
     <string name="btn_connect_account">Connect account</string>
     <string name="loading">Loading...</string>
+    <string name="processing">Processing...</string>
     <string name="btn_positive">Yes</string>
     <string name="btn_negative">No</string>
     <string name="dlg_msg">Allow access to Last.fm and Vk.com</string>

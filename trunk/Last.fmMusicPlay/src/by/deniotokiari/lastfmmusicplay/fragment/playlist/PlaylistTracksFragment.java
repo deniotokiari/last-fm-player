@@ -1,16 +1,21 @@
 package by.deniotokiari.lastfmmusicplay.fragment.playlist;
 
+import android.app.ProgressDialog;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.view.View;
+import android.widget.ListView;
+import by.deniotokiari.lastfmmusicplay.R;
 import by.deniotokiari.lastfmmusicplay.adapter.AbstractCursorAdapter;
 import by.deniotokiari.lastfmmusicplay.adapter.TrackAdapter;
 import by.deniotokiari.lastfmmusicplay.api.LastFmAPI;
 import by.deniotokiari.lastfmmusicplay.content.contract.lastfm.PlaylistTrackContract;
 import by.deniotokiari.lastfmmusicplay.content.json.other.Track;
 import by.deniotokiari.lastfmmusicplay.fragment.AbstractLastfmListFragment;
+import by.deniotokiari.lastfmmusicplay.playlist.PlaylistManager;
 
 public class PlaylistTracksFragment extends AbstractLastfmListFragment {
 
@@ -59,4 +64,28 @@ public class PlaylistTracksFragment extends AbstractLastfmListFragment {
 		return new TrackAdapter(getActivity());
 	}
 
+	
+	@Override
+	public void onListItemClick(ListView l, View v, final int position, long id) {
+		mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+		mProgressDialog.setIndeterminate(true);
+		mProgressDialog.setMessage(getResources()
+				.getString(R.string.processing));
+		mProgressDialog.show();
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				PlaylistManager.getInstance().setPlaylist(position, uri,
+						selection, selectionArgs, null);
+				mHandler.post(dismissProgressDialog);
+				if (isBound) {
+					mService.start();
+				}
+			}
+
+		}).start();
+		mAdapter.setCheked(position);
+	}
+	
 }
