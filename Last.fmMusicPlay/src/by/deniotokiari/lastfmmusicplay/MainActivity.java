@@ -3,7 +3,9 @@ package by.deniotokiari.lastfmmusicplay;
 
 import com.bugsense.trace.BugSenseHandler;
 
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
@@ -11,7 +13,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import by.deniotokiari.lastfmmusicplay.api.LastfmAuthHelper;
 import by.deniotokiari.lastfmmusicplay.api.VkAuthHelper;
+import by.deniotokiari.lastfmmusicplay.content.images.ImageCache;
 import by.deniotokiari.lastfmmusicplay.content.images.ImageLoader;
+import by.deniotokiari.lastfmmusicplay.db.DBHelper;
 import by.deniotokiari.lastfmmusicplay.fragment.main.MainPagerFragment;
 
 public class MainActivity extends FragmentActivity {
@@ -42,10 +46,15 @@ public class MainActivity extends FragmentActivity {
 		case R.id.menu_logout:
 			LastfmAuthHelper.logout();
 			VkAuthHelper.logout();
-			// TODO clear cache and database
+			ImageLoader.getInstance().clearCache();
+			// TODO database
+			// TODO thread imp
+			
 			startActivity(new Intent(getApplicationContext(),
 					StartActivity.class));
 			break;
+		case R.id.menu_reload:
+			
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -56,4 +65,19 @@ public class MainActivity extends FragmentActivity {
 		ImageLoader.getInstance().stopQueueThread();
 	}
 
+	synchronized private void ClearDatabase() {
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				ContentResolver resolver = getContentResolver();
+				for (Uri uri : DBHelper.URI_CONTRACT) {
+					resolver.delete(uri, null, null);
+					resolver.notifyChange(uri, null);
+				}
+			}
+			
+		});
+	}
+	
 }

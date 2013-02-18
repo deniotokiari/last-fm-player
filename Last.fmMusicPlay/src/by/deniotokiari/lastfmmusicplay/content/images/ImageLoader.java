@@ -157,5 +157,9 @@ public class ImageLoader {
 		}
 		return HttpManager.getInstance().loadAsBitmap(url);
 	}
+	
+	public void clearCache() {
+		mCache.clear();
+	}
 
 }
