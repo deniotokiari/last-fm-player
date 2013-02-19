@@ -17,13 +17,13 @@ import android.view.ViewGroup;
 abstract public class AbstractPagerFragment extends Fragment {
 
 	private String[] mPagesName;
-	private List<PageInfo> mPages;
+	private List<Fragment> mPages;
 	private PagerAdapter mAdapter;
 	private ViewPager mViewPager;
 
 	protected abstract String[] pagesName();
 
-	protected abstract List<PageInfo> pages();
+	protected abstract List<Fragment> pages();
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,8 +37,8 @@ abstract public class AbstractPagerFragment extends Fragment {
 		mPagesName = pagesName();
 		mPages = pages();
 		if (getAdapter() == null) {
-			mAdapter = new ContentPagerAdapter(getActivity(),
-					getChildFragmentManager(), mPagesName, mPages);
+			mAdapter = new ContentPagerAdapter(getChildFragmentManager(),
+					mPagesName, mPages);
 		} else {
 			mAdapter = getAdapter();
 		}
@@ -55,7 +55,7 @@ abstract public class AbstractPagerFragment extends Fragment {
 	protected void setPage(int page) {
 		mViewPager.setCurrentItem(page);
 	}
-	
+
 	protected PagerAdapter getAdapter() {
 		return null;
 	}

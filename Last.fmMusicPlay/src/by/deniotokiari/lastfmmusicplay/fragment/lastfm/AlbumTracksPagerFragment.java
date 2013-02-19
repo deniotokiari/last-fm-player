@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import by.deniotokiari.lastfmmusicplay.fragment.AbstractPagerFragment;
-import by.deniotokiari.lastfmmusicplay.fragment.PageInfo;
 
 public class AlbumTracksPagerFragment extends AbstractPagerFragment {
 
@@ -16,10 +16,12 @@ public class AlbumTracksPagerFragment extends AbstractPagerFragment {
 	}
 
 	@Override
-	protected List<PageInfo> pages() {
+	protected List<Fragment> pages() {
 		Bundle args = getArguments();
-		List<PageInfo> list = new ArrayList<PageInfo>();
-		list.add(new PageInfo(AlbumTracksFragment.class, args));
+		List<Fragment> list = new ArrayList<Fragment>();
+		Fragment fragment = new AlbumTracksFragment();
+		fragment.setArguments(args);
+		list.add(fragment);
 		return list;
 	}
 
