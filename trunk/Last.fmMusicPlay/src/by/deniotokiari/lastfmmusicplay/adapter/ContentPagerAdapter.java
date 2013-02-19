@@ -1,6 +1,9 @@
 package by.deniotokiari.lastfmmusicplay.adapter;
 
 import java.util.List;
+
+import by.deniotokiari.lastfmmusicplay.fragment.PageInfo;
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -8,18 +11,22 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 public class ContentPagerAdapter extends FragmentStatePagerAdapter {
 
 	private String[] mPagesName;
-	private List<Fragment> mPages;
+	private List<PageInfo> mPages;
+	private Context mContext;
 
-	public ContentPagerAdapter(FragmentManager manager, String[] pagesName,
-			List<Fragment> pages) {
+	public ContentPagerAdapter(Context context, FragmentManager manager, String[] pagesName,
+			List<PageInfo> pages) {
 		super(manager);
 		mPagesName = pagesName;
 		mPages = pages;
+		mContext = context;
 	}
 
 	@Override
 	public Fragment getItem(int position) {
-		return mPages.get(position);
+		PageInfo pageInfo = mPages.get(position);
+		Fragment fragment = Fragment.instantiate(mContext, pageInfo.getCls(), pageInfo.getBundle());
+		return fragment;
 	}
 
 	@Override
