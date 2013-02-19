@@ -44,7 +44,7 @@ public class MainActivity extends FragmentActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.activity_main, menu);
+		getMenuInflater().inflate(R.menu.activity_main, menu);	
 		return true;
 	}
 
@@ -70,6 +70,13 @@ public class MainActivity extends FragmentActivity {
 					R.string.processing));
 			mProgressDialog.show();
 			clearDatabase();
+			break;
+		case R.id.menu_share:
+			Intent intent = new Intent(Intent.ACTION_SEND);
+			intent.setType("text/plain");
+			intent.putExtra(Intent.EXTRA_TEXT, PlaylistManager.getInstance().getTrack());
+			startActivity(Intent.createChooser(intent, "Share..."));
+			break;
 		}
 		return super.onOptionsItemSelected(item);
 	}
