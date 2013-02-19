@@ -36,7 +36,7 @@ public class MainPagerFragment extends AbstractPagerFragment {
 		list.add(new PageInfo(NowPlayingFragment.class, null));
 		list.add(new PageInfo(PlaylistFragment.class, null));
 		return list;
-	} 
+	}  
 
 	@Override
 	protected PagerAdapter getAdapter() {
