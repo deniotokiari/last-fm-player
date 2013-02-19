@@ -17,13 +17,13 @@ import android.view.ViewGroup;
 abstract public class AbstractPagerFragment extends Fragment {
 
 	private String[] mPagesName;
-	private List<Fragment> mPages;
+	private List<PageInfo> mPages;
 	private PagerAdapter mAdapter;
 	private ViewPager mViewPager;
 
 	protected abstract String[] pagesName();
 
-	protected abstract List<Fragment> pages();
+	protected abstract List<PageInfo> pages();
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,8 +37,8 @@ abstract public class AbstractPagerFragment extends Fragment {
 		mPagesName = pagesName();
 		mPages = pages();
 		if (getAdapter() == null) {
-			mAdapter = new ContentPagerAdapter(getChildFragmentManager(),
-					mPagesName, mPages);
+			mAdapter = new ContentPagerAdapter(getActivity(),
+					getChildFragmentManager(), mPagesName, mPages);
 		} else {
 			mAdapter = getAdapter();
 		}
@@ -46,7 +46,7 @@ abstract public class AbstractPagerFragment extends Fragment {
 		mViewPager.setAdapter(mAdapter);
 		PagerTabStrip pagerTabStrip = (PagerTabStrip) getActivity()
 				.findViewById(R.id.pagerTabStrip);
-		// TODO color imp
+		// TODO color imp 
 		pagerTabStrip.setTabIndicatorColor(Color.parseColor("#dedede"));
 		pagerTabStrip.setTextColor(Color.parseColor("#ffffff"));
 		pagerTabStrip.setBackgroundColor(Color.parseColor("#2d2d2d"));
@@ -55,7 +55,7 @@ abstract public class AbstractPagerFragment extends Fragment {
 	protected void setPage(int page) {
 		mViewPager.setCurrentItem(page);
 	}
-
+	
 	protected PagerAdapter getAdapter() {
 		return null;
 	}
