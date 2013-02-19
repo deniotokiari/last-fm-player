@@ -30,7 +30,9 @@ public class CommonJson {
 		} catch (JSONException e) {
 			mJsonObject = null;
 		}
-		mJsonObject = mJsonObject.optJSONObject(root);
+		if (mJsonObject != null) {
+			mJsonObject = mJsonObject.optJSONObject(root);
+		}
 
 	}
 

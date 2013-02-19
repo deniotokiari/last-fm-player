@@ -46,9 +46,10 @@ public class MusicPlayService extends Service implements OnCompletionListener,
 	private boolean SHUFFLE;
 	private boolean isPaused;
 	private boolean isScrobbled;
-	
+
 	private int buffered;
 	private int CURRENT_POSITION;
+	private int DURATION;
 
 	@Override
 	public void onCreate() {
@@ -109,6 +110,7 @@ public class MusicPlayService extends Service implements OnCompletionListener,
 
 	@Override
 	public void onCompletion(MediaPlayer mediaPlayer) {
+		mediaPlayer.stop();
 		CURRENT_POSITION = 0;
 		PreferencesHelper.getInstance().putInt(PREF_NAME,
 				PREF_KEY_CURRENT_POSITION, CURRENT_POSITION);
@@ -145,23 +147,29 @@ public class MusicPlayService extends Service implements OnCompletionListener,
 	private void primarySeekBarProgressUpdater() {
 		LocalBroadcastManager.getInstance(getApplicationContext())
 				.sendBroadcast(new Intent(ACTION_ON_PROGRESS_CHANGE));
-		if (mMediaPlayer.getCurrentPosition() > mMediaPlayer.getDuration() / 2 && !isScrobbled) {
+		if (mMediaPlayer.getCurrentPosition() > DURATION / 2 && !isScrobbled) {
 			isScrobbled = true;
 			Date date = Calendar.getInstance().getTime();
-			Log.d("LOG", LastFmAPI.trackScrobble(PlaylistManager.getInstance().getArtist(), PlaylistManager.getInstance().getTitle(), date));
-			RequestManager.getInstance().post(new Callback<Object>() {
-				
-				@Override
-				public void onSuccess(Object t, Object... objects) {
-					Log.d("LOG", (String) t);
-				}
-				
-				@Override
-				public void onError(Throwable e, Object... objects) {
-					
-				}
-				
-			}, LastFmAPI.trackScrobble(PlaylistManager.getInstance().getArtist(), PlaylistManager.getInstance().getTitle(), date));
+			Log.d("LOG", LastFmAPI.trackScrobble(PlaylistManager.getInstance()
+					.getArtist(), PlaylistManager.getInstance().getTitle(),
+					date));
+			RequestManager.getInstance().post(
+					new Callback<Object>() {
+
+						@Override
+						public void onSuccess(Object t, Object... objects) {
+							Log.d("LOG", (String) t);
+						}
+
+						@Override
+						public void onError(Throwable e, Object... objects) {
+
+						}
+
+					},
+					LastFmAPI.trackScrobble(PlaylistManager.getInstance()
+							.getArtist(), PlaylistManager.getInstance()
+							.getTitle(), date));
 		}
 		if (mMediaPlayer.isPlaying()) {
 			Runnable update = new Runnable() {
@@ -243,6 +251,7 @@ public class MusicPlayService extends Service implements OnCompletionListener,
 	public void play() {
 		if (!mMediaPlayer.isPlaying()) {
 			mMediaPlayer.start();
+			DURATION = mMediaPlayer.getDuration();
 			isPaused = false;
 			LocalBroadcastManager.getInstance(getApplicationContext())
 					.sendBroadcast(new Intent(ACTION_ON_PLAY));
@@ -278,7 +287,7 @@ public class MusicPlayService extends Service implements OnCompletionListener,
 	}
 
 	public int getDuration() {
-		return mMediaPlayer.getDuration();
+		return DURATION;
 	}
 
 	public int getCurrentPosition() {
@@ -296,6 +305,7 @@ public class MusicPlayService extends Service implements OnCompletionListener,
 
 	public void previous() {
 		Log.d("LOG", "PREV");
+		startPlay(PlaylistManager.getInstance().getPrevious(SHUFFLE, REPEAT));
 	}
 
 	public boolean isPaused() {

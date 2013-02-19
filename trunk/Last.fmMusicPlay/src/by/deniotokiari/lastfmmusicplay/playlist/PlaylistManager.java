@@ -122,4 +122,21 @@ public class PlaylistManager {
 		return null;
 	}
 
+	public String getPrevious(boolean shuffle, boolean repeat) {
+		if (!shuffle) {
+			if (POSITION == 0 && !repeat) {
+				return null;
+			} else if (POSITION == 0 && repeat) {
+				setPosition(COUNT - 1);
+				return getTrack();
+			} else {
+				setPosition(POSITION - 1);
+				return getTrack();
+			}
+		} else if (shuffle) {
+			return getNext(shuffle, repeat);
+		}
+		return null;
+	}
+
 }

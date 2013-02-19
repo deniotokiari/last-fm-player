@@ -128,12 +128,8 @@ public class NowPlayingFragment extends Fragment implements OnClickListener,
 				String action = intent.getAction();
 				if (action.equals(MusicPlayService.ACTION_ON_PREPARE)) {
 					mProgressBar.setVisibility(View.VISIBLE);
-					// disableControls();
 					mSeekBar.setSecondaryProgress(0);
 					mSeekBar.setProgress(0);
-					// mButtonPlayPause
-					// .setBackgroundResource(R.drawable.states_play);
-					// mButtonPlayPause.setChecked(false);
 					initNowPlaying();
 
 				} else if (action.equals(MusicPlayService.ACTION_ON_PLAY)) {
