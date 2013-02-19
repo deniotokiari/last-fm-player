@@ -16,8 +16,8 @@ public class PageInfo {
 		return bundle;
 	}
 
-	public String getCls() {
-		return cls.toString();
+	public Class<?> getCls() {
+		return cls;
 	}
 
 }

@@ -25,7 +25,7 @@ public class ContentPagerAdapter extends FragmentStatePagerAdapter {
 	@Override
 	public Fragment getItem(int position) {
 		PageInfo pageInfo = mPages.get(position);
-		Fragment fragment = Fragment.instantiate(mContext, pageInfo.getCls(), pageInfo.getBundle());
+		Fragment fragment = Fragment.instantiate(mContext, pageInfo.getCls().getName(), pageInfo.getBundle());
 		return fragment;
 	}
 
