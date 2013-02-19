@@ -45,6 +45,8 @@ public class MainActivity extends FragmentActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.activity_main, menu);	
+		MenuItem me = menu.add(0, 1, 0, "Preferences");
+		me.setIntent(new Intent(this, PrefActivity.class));
 		return true;
 	}
 

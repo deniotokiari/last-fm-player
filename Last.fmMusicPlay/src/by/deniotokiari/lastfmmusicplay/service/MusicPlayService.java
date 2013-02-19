@@ -6,6 +6,7 @@ import java.util.Date;
 
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnBufferingUpdateListener;
 import android.media.MediaPlayer.OnCompletionListener;
@@ -14,8 +15,11 @@ import android.media.MediaPlayer.OnPreparedListener;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import by.deniotokiari.lastfmmusicplay.ContextHolder;
+import by.deniotokiari.lastfmmusicplay.R;
 import by.deniotokiari.lastfmmusicplay.api.LastFmAPI;
 import by.deniotokiari.lastfmmusicplay.api.VkAPI;
 import by.deniotokiari.lastfmmusicplay.content.Callback;
@@ -41,11 +45,13 @@ public class MusicPlayService extends Service implements OnCompletionListener,
 	private MediaPlayer mMediaPlayer = new MediaPlayer();
 	private Handler mHandler = new Handler();
 	private MyBinder mBinder = new MyBinder();
+	private SharedPreferences preferences;
 
 	private boolean REPEAT;
 	private boolean SHUFFLE;
 	private boolean isPaused;
 	private boolean isScrobbled;
+	private boolean SCROBBLING;
 
 	private int buffered;
 	private int CURRENT_POSITION;
@@ -57,6 +63,11 @@ public class MusicPlayService extends Service implements OnCompletionListener,
 		mMediaPlayer.setOnErrorListener(this);
 		mMediaPlayer.setOnPreparedListener(this);
 		mMediaPlayer.setOnBufferingUpdateListener(this);
+		preferences = PreferenceManager
+				.getDefaultSharedPreferences(ContextHolder.getInstance()
+						.getContext());
+		SCROBBLING = preferences.getBoolean(
+				getResources().getString(R.string.pref_key_scrobble), false);
 		REPEAT = PreferencesHelper.getInstance().getBoolean(PREF_NAME,
 				PREF_KEY_REPEAT);
 		SHUFFLE = PreferencesHelper.getInstance().getBoolean(PREF_NAME,
@@ -144,9 +155,7 @@ public class MusicPlayService extends Service implements OnCompletionListener,
 		}
 	}
 
-	private void primarySeekBarProgressUpdater() {
-		LocalBroadcastManager.getInstance(getApplicationContext())
-				.sendBroadcast(new Intent(ACTION_ON_PROGRESS_CHANGE));
+	private void scrobble() {
 		if (mMediaPlayer.getCurrentPosition() > DURATION / 2 && !isScrobbled) {
 			isScrobbled = true;
 			Date date = Calendar.getInstance().getTime();
@@ -170,6 +179,14 @@ public class MusicPlayService extends Service implements OnCompletionListener,
 					LastFmAPI.trackScrobble(PlaylistManager.getInstance()
 							.getArtist(), PlaylistManager.getInstance()
 							.getTitle(), date));
+		}
+	}
+
+	private void primarySeekBarProgressUpdater() {
+		LocalBroadcastManager.getInstance(getApplicationContext())
+				.sendBroadcast(new Intent(ACTION_ON_PROGRESS_CHANGE));
+		if (SCROBBLING) {
+			scrobble();
 		}
 		if (mMediaPlayer.isPlaying()) {
 			Runnable update = new Runnable() {
