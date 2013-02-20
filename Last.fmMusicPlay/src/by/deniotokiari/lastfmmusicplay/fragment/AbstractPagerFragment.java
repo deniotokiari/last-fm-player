@@ -46,16 +46,14 @@ abstract public class AbstractPagerFragment extends Fragment {
 		mViewPager.setAdapter(mAdapter);
 		PagerTabStrip pagerTabStrip = (PagerTabStrip) getActivity()
 				.findViewById(R.id.pagerTabStrip);
-		// TODO color imp  
-		pagerTabStrip.setTabIndicatorColor(Color.parseColor("#dedede"));
-		pagerTabStrip.setTextColor(Color.parseColor("#ffffff"));
-		pagerTabStrip.setBackgroundColor(Color.parseColor("#2d2d2d"));
+		pagerTabStrip.setTabIndicatorColor(getResources().getColor(
+				R.color.pager_tab_strip_indicator_color));
 	}
 
 	protected void setPage(int page) {
 		mViewPager.setCurrentItem(page);
 	}
-	
+
 	protected PagerAdapter getAdapter() {
 		return null;
 	}
