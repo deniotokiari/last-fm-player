@@ -123,7 +123,7 @@ abstract public class AbstractListFragment extends ListFragment implements
 						getListView().setVisibility(View.INVISIBLE);
 					}
 					if (isError) {
-						// TODO dlg error imp and isEndOfData
+						// TODO
 						setEndOfData(true);
 					}
 					mHandler.post(hideFooter);
@@ -191,7 +191,6 @@ abstract public class AbstractListFragment extends ListFragment implements
 			load();
 		}
 		if (isEndOfData) {
-			// TODO imp end of data
 			try {
 				getListView().removeFooterView(mFooterView);
 			} catch (Exception e) {
@@ -222,7 +221,7 @@ abstract public class AbstractListFragment extends ListFragment implements
 		}).start();
 		mAdapter.setCheked(position);
 	}
-	
+
 	@Override
 	public void onLoaderReset(Loader<Cursor> loader) {
 		mAdapter.swapCursor(null);

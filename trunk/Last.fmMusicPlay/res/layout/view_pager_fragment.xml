@@ -11,6 +11,7 @@
 
         <android.support.v4.view.PagerTabStrip
             android:id="@+id/pagerTabStrip"
+            style="@style/PagerTabStrip"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_gravity="top" >
