@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import by.deniotokiari.lastfmmusicplay.R;
 import by.deniotokiari.lastfmmusicplay.fragment.AbstractPagerFragment;
+import by.deniotokiari.lastfmmusicplay.fragment.PageInfo;
 import by.deniotokiari.lastfmmusicplay.fragment.tag.page.TagTopAlbumsFragment;
 import by.deniotokiari.lastfmmusicplay.fragment.tag.page.TagTopArtistsFragment;
 import by.deniotokiari.lastfmmusicplay.fragment.tag.page.TagTopTracksFragment;
@@ -26,20 +26,14 @@ public class TagPagerFragment extends AbstractPagerFragment {
 	}
 
 	@Override
-	protected List<Fragment> pages() {
+	protected List<PageInfo> pages() {
 		Bundle args = new Bundle();
 		args.putString(TagsFragment.KEY_TAG,
 				getArguments().getString(TagsFragment.KEY_TAG));
-		List<Fragment> list = new ArrayList<Fragment>();
-		Fragment fragment = new TagTopTracksFragment();
-		fragment.setArguments(args);
-		list.add(fragment);
-		fragment = new TagTopArtistsFragment();
-		fragment.setArguments(args);
-		list.add(fragment);
-		fragment = new TagTopAlbumsFragment();
-		fragment.setArguments(args);
-		list.add(fragment);
+		List<PageInfo> list = new ArrayList<PageInfo>();
+		list.add(new PageInfo(TagTopTracksFragment.class, args));
+		list.add(new PageInfo(TagTopArtistsFragment.class, args));
+		list.add(new PageInfo(TagTopAlbumsFragment.class, args));
 		return list;
 	}
 
