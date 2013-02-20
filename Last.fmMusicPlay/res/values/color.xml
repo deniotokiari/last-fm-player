@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="bg_activity">#dedede</color>
+    <color name="bg_activity_start">#cfcfcf</color>
+    <color name="bg_nowplaying_info">#f0f0f0</color>
+    <color name="text_color">#f0f0f0</color>
+    <color name="bg_controls">#222222</color>
+    <color name="bg_list">#faf7c6</color>
+    <color name="pager_tab_strip_text_color">#ffffff</color>
+    <color name="pager_tab_strip_bg">#2d2d2d</color>
+    <color name="pager_tab_strip_indicator_color">#dedede</color>
+
+</resources>

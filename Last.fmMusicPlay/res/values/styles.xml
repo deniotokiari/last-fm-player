@@ -12,4 +12,9 @@
         <item name="android:thumb">@drawable/scrubber_control_old</item>
     </style>
 
+    <style name="PagerTabStrip">
+        <item name="android:textColor">@color/pager_tab_strip_text_color</item>
+        <item name="android:background">@color/pager_tab_strip_bg</item>
+    </style>
+
 </resources>
