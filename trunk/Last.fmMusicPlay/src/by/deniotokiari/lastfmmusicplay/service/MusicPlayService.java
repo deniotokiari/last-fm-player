@@ -51,7 +51,6 @@ public class MusicPlayService extends Service implements OnCompletionListener,
 	private boolean SHUFFLE;
 	private boolean isPaused;
 	private boolean isScrobbled;
-	private boolean SCROBBLING;
 
 	private int buffered;
 	private int CURRENT_POSITION;
@@ -66,8 +65,6 @@ public class MusicPlayService extends Service implements OnCompletionListener,
 		preferences = PreferenceManager
 				.getDefaultSharedPreferences(ContextHolder.getInstance()
 						.getContext());
-		SCROBBLING = preferences.getBoolean(
-				getResources().getString(R.string.pref_key_scrobble), false);
 		REPEAT = PreferencesHelper.getInstance().getBoolean(PREF_NAME,
 				PREF_KEY_REPEAT);
 		SHUFFLE = PreferencesHelper.getInstance().getBoolean(PREF_NAME,
@@ -185,7 +182,8 @@ public class MusicPlayService extends Service implements OnCompletionListener,
 	private void primarySeekBarProgressUpdater() {
 		LocalBroadcastManager.getInstance(getApplicationContext())
 				.sendBroadcast(new Intent(ACTION_ON_PROGRESS_CHANGE));
-		if (SCROBBLING) {
+		if (preferences.getBoolean(
+				getResources().getString(R.string.pref_key_scrobble), false)) {
 			scrobble();
 		}
 		if (mMediaPlayer.isPlaying()) {
