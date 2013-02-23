@@ -17,6 +17,7 @@ public class Artist extends CommonJson {
 	public static final String KEY_ROOT_TAG_RANK = "@attr";
 	public static final String KEY_TAG_RANK = "rank";
 	public static final String KEY_TAG = "tag";
+	public static final int IMAGE_NUMBER = 2;
 
 	private String name;
 
@@ -38,7 +39,7 @@ public class Artist extends CommonJson {
 	}
 
 	public String getImage() {
-		return getArrayItem(KEY_ROOT_IMAGE, KEY_IMAGE, 2);
+		return getArrayItem(KEY_ROOT_IMAGE, KEY_IMAGE, IMAGE_NUMBER);
 	}
 	
 	public String getTag() {

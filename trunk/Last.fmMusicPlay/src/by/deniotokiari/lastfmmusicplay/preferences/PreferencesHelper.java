@@ -7,8 +7,6 @@ import android.content.SharedPreferences.Editor;
 
 public class PreferencesHelper {
 
-	private static final Context CONTEXT = ContextHolder.getInstance()
-			.getContext();
 	private static PreferencesHelper instance;
 	private static final int MODE = Context.MODE_PRIVATE;
 
@@ -20,39 +18,41 @@ public class PreferencesHelper {
 	}
 
 	public void putString(String name, String key, String value) {
-		Editor editor = CONTEXT.getSharedPreferences(name, MODE).edit();
+		Editor editor = ContextHolder.getInstance().getContext()
+				.getSharedPreferences(name, MODE).edit();
 		editor.putString(key, value);
 		editor.commit();
 	}
 
 	public String getString(String name, String key) {
-		SharedPreferences preferences = CONTEXT
-				.getSharedPreferences(name, MODE);
+		SharedPreferences preferences = ContextHolder.getInstance()
+				.getContext().getSharedPreferences(name, MODE);
 		return preferences.getString(key, null);
 	}
 
 	public void putInt(String name, String key, int value) {
-		Editor editor = CONTEXT.getSharedPreferences(name, MODE).edit();
+		Editor editor = ContextHolder.getInstance().getContext()
+				.getSharedPreferences(name, MODE).edit();
 		editor.putInt(key, value);
 		editor.commit();
 	}
 
 	public int getInt(String name, String key) {
-		SharedPreferences preferences = CONTEXT
-				.getSharedPreferences(name, MODE);
+		SharedPreferences preferences = ContextHolder.getInstance()
+				.getContext().getSharedPreferences(name, MODE);
 		return preferences.getInt(key, -1);
 	}
 
 	public void putBoolean(String name, String key, boolean value) {
-		Editor editor = CONTEXT
-				.getSharedPreferences(name, Context.MODE_PRIVATE).edit();
+		Editor editor = ContextHolder.getInstance().getContext()
+				.getSharedPreferences(name, MODE).edit();
 		editor.putBoolean(key, value);
 		editor.commit();
 	}
 
 	public boolean getBoolean(String name, String key) {
-		SharedPreferences preferences = CONTEXT.getSharedPreferences(name,
-				Context.MODE_PRIVATE);
+		SharedPreferences preferences = ContextHolder.getInstance()
+				.getContext().getSharedPreferences(name, MODE);
 		return preferences.getBoolean(key, false);
 	}
 

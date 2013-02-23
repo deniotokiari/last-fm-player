@@ -18,30 +18,25 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 
 public class DBHelper extends SQLiteOpenHelper {
-	
-	public static final Uri[] URI_CONTRACT = {
-		TrackContract.URI_ALBUM_TRACKS,
-		TrackContract.URI_ARTIST_TOP_TRACKS,
-		TrackContract.URI_LIBRARY_TRACKS,
-		TrackContract.URI_LOVED_TRACKS,
-		TrackContract.URI_TAG_TRACKS,
-		
-		ArtistContract.URI_ARTISTS,
-		ArtistContract.URI_TAG_ARTISTS,
-		
-		AlbumContract.URI_ARTIST_TOP_ALBUMS,
-		AlbumContract.URI_LIBRARY_ALBUMS,
-		AlbumContract.URI_TAG_TOP_ALBUMS,
-		
-		TagContract.URI_TAGS,
-		
-		UserTrackContract.URI_USER_TRACKS,
-		
-		WallTrackContract.URI_NEWS_TRACKS,
-		WallTrackContract.URI_WALL_TRACKS,
-		
-		PlaylistContract.URI_PLAYLISTS
-	};
+
+	public static final Uri[] URI_CONTRACT = { TrackContract.URI_ALBUM_TRACKS,
+			TrackContract.URI_ARTIST_TOP_TRACKS,
+			TrackContract.URI_LIBRARY_TRACKS, TrackContract.URI_LOVED_TRACKS,
+			TrackContract.URI_TAG_TRACKS,
+
+			ArtistContract.URI_ARTISTS, ArtistContract.URI_TAG_ARTISTS,
+
+			AlbumContract.URI_ARTIST_TOP_ALBUMS,
+			AlbumContract.URI_LIBRARY_ALBUMS, AlbumContract.URI_TAG_TOP_ALBUMS,
+
+			TagContract.URI_TAGS,
+
+			UserTrackContract.URI_USER_TRACKS,
+
+			WallTrackContract.URI_NEWS_TRACKS,
+			WallTrackContract.URI_WALL_TRACKS,
+
+			PlaylistContract.URI_PLAYLISTS };
 
 	public static final String DATABASE_NAME = "store.db";
 	private static final int DATABASE_VERSION = 2;
@@ -132,9 +127,32 @@ public class DBHelper extends SQLiteOpenHelper {
 
 	public long addContent(String table, ContentValues values) {
 		SQLiteDatabase db = getWritableDatabase();
-		return db.insert(table, null, values);
+		long id;
+		try {
+			db.beginTransaction();
+			id = db.insert(table, null, values);
+			db.setTransactionSuccessful();
+		} finally {
+			db.endTransaction();
+		}
+		return id;
 	}
-	
+
+	public int addContent(String table, ContentValues[] values) {
+		SQLiteDatabase db = getWritableDatabase();
+		int rows = 0;
+		try {
+			db.beginTransaction();
+			for (int i = 0; i < values.length; i++, rows++) {
+				db.insert(table, null, values[i]);
+			}
+			db.setTransactionSuccessful();
+		} finally {
+			db.endTransaction();
+		}
+		return rows;
+	}
+
 	public int deleteAll(String tableName) {
 		SQLiteDatabase db = getWritableDatabase();
 		return db.delete(tableName, null, null);

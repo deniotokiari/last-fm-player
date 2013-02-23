@@ -1,5 +1,6 @@
 package by.deniotokiari.lastfmmusicplay.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import by.deniotokiari.lastfmmusicplay.content.Callback;
@@ -30,12 +31,8 @@ public class GetDataService extends Service implements Callback<List<String>> {
 	@Override
 	public void onSuccess(final List<String> t, final Object... objects) {
 		final String id = (String) objects[1];
-		if (t == null) {
+		if (t == null || t.size() == 0) {
 			this.onError(new Throwable(ERROR_MSG), id);
-			return;
-		}
-		if (t.size() == 0) {
-			this.onError(new Throwable(), id);
 			return;
 		}
 		new Thread(new Runnable() {
@@ -43,15 +40,19 @@ public class GetDataService extends Service implements Callback<List<String>> {
 			@Override
 			public void run() {
 				Uri uri = Uri.parse((String) objects[0]);
-				for (String string : t) {
-					ContentValues values = new ContentValues();
-					values.put(AbstractProvider.KEY_DATA, string);
-					getContentResolver().insert(uri, values);
+				List<ContentValues> values = new ArrayList<ContentValues>();
+				for (int i = 0; i < t.size(); i++) {
+					ContentValues contentValues = new ContentValues();
+					contentValues.put(AbstractProvider.KEY_DATA, t.get(i));
+					values.add(contentValues);
 				}
+				ContentValues[] content = {};
+				getContentResolver().bulkInsert(uri, values.toArray(content));
 				getContentResolver().notifyChange(uri, null);
 				LocalBroadcastManager.getInstance(getApplicationContext())
 						.sendBroadcastSync(new Intent(ACTION_ON_SUCCESS + id));
 			}
+
 		}).start();
 	}
 

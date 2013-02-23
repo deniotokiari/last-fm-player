@@ -205,14 +205,14 @@ abstract public class AbstractListFragment extends ListFragment implements
 		mProgressDialog.setIndeterminate(true);
 		mProgressDialog.setMessage(getResources()
 				.getString(R.string.processing));
-		mProgressDialog.show();
+		//mProgressDialog.show();
 		new Thread(new Runnable() {
 
 			@Override
 			public void run() {
 				PlaylistManager.getInstance().setPlaylist(position, uri,
 						selection, selectionArgs, sortOrder);
-				mHandler.post(dismissProgressDialog);
+				//mHandler.post(dismissProgressDialog);
 				if (isBound) {
 					mService.start();
 				}

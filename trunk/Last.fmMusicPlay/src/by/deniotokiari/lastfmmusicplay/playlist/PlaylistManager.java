@@ -1,5 +1,7 @@
 package by.deniotokiari.lastfmmusicplay.playlist;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import by.deniotokiari.lastfmmusicplay.ContextHolder;
@@ -20,15 +22,19 @@ public class PlaylistManager {
 	public static final int INDEX_TITLE = 1;
 	public static final int INDEX_ARTIST = 2;
 	public static final int INDEX_ALBUM = 3;
+
+	private static final Uri URI = PlayerPlaylistContract.URI_PLAYER_PLAYLIST;
+	
 	private static PlaylistManager instance;
-	private static Context mContext = ContextHolder.getInstance().getContext();
-	private static final Uri mUri = PlayerPlaylistContract.URI_PLAYER_PLAYLIST;
+	private static Random random;
+
 	private static int POSITION;
 	private static int COUNT;
 
 	public static PlaylistManager getInstance() {
 		if (instance == null) {
 			instance = new PlaylistManager();
+			random = new Random();
 			POSITION = PreferencesHelper.getInstance().getInt(PREF_NAME,
 					PREF_KEY_POSITION);
 			COUNT = PreferencesHelper.getInstance().getInt(PREF_NAME,
@@ -50,28 +56,30 @@ public class PlaylistManager {
 	synchronized public void setPlaylist(int position, final Uri uri,
 			final String selection, final String[] selectionArgs,
 			final String sortOrder) {
+		Context context = ContextHolder.getInstance().getContext();
 		setPosition(position);
-		mContext.getContentResolver().delete(mUri, null, null);
-		mContext.getContentResolver().notifyChange(mUri, null);
-		Cursor cursor = mContext.getContentResolver().query(uri, null,
+		context.getContentResolver().delete(URI, null, null);
+		context.getContentResolver().notifyChange(URI, null);
+		Cursor cursor = context.getContentResolver().query(uri, null,
 				selection, selectionArgs, sortOrder);
 		COUNT = cursor.getCount();
 		PreferencesHelper.getInstance()
 				.putInt(PREF_NAME, PREF_KEY_COUNT, COUNT);
 		cursor.moveToFirst();
+		List<ContentValues> values = new ArrayList<ContentValues>();
 		while (!cursor.isAfterLast()) {
-			ContentValues values = new ContentValues();
-			values.put(PlayerPlaylistProvider.KEY_TITLE,
+			ContentValues contentCalues = new ContentValues();
+			contentCalues.put(PlayerPlaylistProvider.KEY_TITLE,
 					cursor.getString(INDEX_TITLE));
-			values.put(PlayerPlaylistProvider.KEY_ARTIST,
+			contentCalues.put(PlayerPlaylistProvider.KEY_ARTIST,
 					cursor.getString(INDEX_ARTIST));
-			values.put(PlayerPlaylistProvider.KEY_ALBUM,
-					cursor.getString(INDEX_ALBUM));
-			mContext.getContentResolver().insert(mUri, values);
+			values.add(contentCalues);
 			cursor.moveToNext();
 		}
 		cursor.close();
-		mContext.getContentResolver().notifyChange(mUri, null);
+		ContentValues[] content = {};
+		context.getContentResolver().bulkInsert(URI, values.toArray(content));
+		context.getContentResolver().notifyChange(URI, null);
 	}
 
 	private String getString(int index) {
@@ -81,8 +89,8 @@ public class PlaylistManager {
 		if (POSITION > COUNT) {
 			return " ";
 		} else {
-			Cursor cursor = mContext.getContentResolver().query(mUri, null,
-					null, null, null);
+			Cursor cursor = ContextHolder.getInstance().getContext()
+					.getContentResolver().query(URI, null, null, null, null);
 			cursor.moveToPosition(POSITION);
 			String result = cursor.getString(index);
 			cursor.close();
@@ -114,7 +122,6 @@ public class PlaylistManager {
 				return getTrack();
 			}
 		} else if (shuffle) {
-			Random random = new Random();
 			int next = random.nextInt(COUNT);
 			setPosition(next);
 			return getTrack();

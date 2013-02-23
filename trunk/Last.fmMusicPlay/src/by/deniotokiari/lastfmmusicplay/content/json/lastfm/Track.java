@@ -31,7 +31,10 @@ public class Track extends CommonJson {
 	public static final String KEY_RANK_ROOT_TAG_TRACKS = "@attr";
 	public static final String KEY_RANK_TAG_TRACKS = "rank";
 	public static final String KEY_TAG = "tag";
-
+	
+	public static final String KEY_USER_LOVED_TRACK = "userloved";
+	public static final String KEY_USER_LOVED_TRACK_TRUE = "1";
+	
 	private String title;
 	private String artist;
 	private String albumArt;
