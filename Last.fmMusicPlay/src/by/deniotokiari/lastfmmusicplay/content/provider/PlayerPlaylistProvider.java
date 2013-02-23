@@ -8,20 +8,16 @@ public class PlayerPlaylistProvider extends AbstractProvider {
 
 	public static final String KEY_TITLE = "title";
 	public static final String KEY_ARTIST = "artist";
-	public static final String KEY_ALBUM = "album";
 
 	@Override
 	public ContentValues getContentValues(ContentValues values, Uri uri) {
 		ContentValues contentValues = new ContentValues();
 		String title = values.getAsString(KEY_TITLE);
 		String artist = values.getAsString(KEY_ARTIST);
-		String album = values.getAsString(KEY_ALBUM);
 		contentValues.put(PlayerPlaylistContract.Columns.TITLE,
 				title);
 		contentValues.put(PlayerPlaylistContract.Columns.ARTIST,
 				artist);
-		contentValues.put(PlayerPlaylistContract.Columns.ALBUM,
-				album);
 		return contentValues;
 	}
 

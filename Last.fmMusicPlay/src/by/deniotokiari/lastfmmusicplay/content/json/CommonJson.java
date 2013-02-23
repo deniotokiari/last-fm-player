@@ -56,8 +56,13 @@ public class CommonJson {
 	public String getArrayItem(String root, String key, int index) {
 		if (mJsonObject != null) {
 			JSONArray array = mJsonObject.optJSONArray(root);
+			JSONObject image;
 			if (array != null) {
-				JSONObject image = array.optJSONObject(index);
+				if (index == -1) {
+					image = array.optJSONObject(array.length() - 1);
+				} else {
+					image = array.optJSONObject(index);
+				}
 				if (image != null) {
 					return image.optString(key);
 				}
@@ -65,19 +70,9 @@ public class CommonJson {
 		}
 		return "";
 	}
-	
-	/** "item,item" **/
-	protected String getArrayItemsAsString(String root, String key) {
-		if (mJsonObject != null) {
-			JSONObject jsonObject = mJsonObject.optJSONObject(root);
-			if (jsonObject != null) {
-				JSONArray array = jsonObject.optJSONArray(key);
-				if (array != null) {
-					return array.toString();
-				}
-			}
-		}
-		return "";
+
+	public String getLastArrayItem(String root, String key) {
+		return getArrayItem(root, key, -1);
 	}
 
 	@Override

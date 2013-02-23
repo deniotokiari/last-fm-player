@@ -27,6 +27,8 @@ import by.deniotokiari.lastfmmusicplay.api.LastfmAuthHelper;
 import by.deniotokiari.lastfmmusicplay.content.Callback;
 import by.deniotokiari.lastfmmusicplay.content.images.ImageLoader;
 import by.deniotokiari.lastfmmusicplay.content.json.CommonJson;
+import by.deniotokiari.lastfmmusicplay.content.json.lastfm.Artist;
+import by.deniotokiari.lastfmmusicplay.content.json.lastfm.Track;
 import by.deniotokiari.lastfmmusicplay.http.RequestManager;
 import by.deniotokiari.lastfmmusicplay.playlist.PlaylistManager;
 import by.deniotokiari.lastfmmusicplay.preferences.PreferencesHelper;
@@ -36,6 +38,7 @@ public class NowPlayingFragment extends Fragment implements OnClickListener,
 		OnSeekBarChangeListener {
 
 	public static final int PAGE_NUM = 1;
+
 	public static final String PREF_NAME = "nowplaying";
 	public static final String PREF_KEY_ARTIST = "artist";
 	public static final String PREF_KEY_URL = "url";
@@ -217,8 +220,9 @@ public class NowPlayingFragment extends Fragment implements OnClickListener,
 
 				@Override
 				public void onSuccess(Object t, Object... objects) {
-					CommonJson json = new CommonJson((String) t, "artist");
-					String imageUrl = json.getArrayItem("image", "#text", 4);
+					CommonJson json = new CommonJson((String) t, Artist.ITEM);
+					String imageUrl = json.getLastArrayItem(
+							Artist.KEY_ROOT_IMAGE, Artist.KEY_IMAGE);
 					PreferencesHelper.getInstance().putString(PREF_NAME,
 							PREF_KEY_URL, imageUrl);
 					ImageLoader.getInstance().bind(mImageViewArtist, imageUrl,
@@ -245,9 +249,10 @@ public class NowPlayingFragment extends Fragment implements OnClickListener,
 						@Override
 						public void onSuccess(Object t, Object... objects) {
 							CommonJson json = new CommonJson((String) t,
-									"track");
-							String loved = json.getString("userloved");
-							if (loved.equals("1")) {
+									Track.ITEM);
+							String loved = json
+									.getString(Track.KEY_USER_LOVED_TRACK);
+							if (loved.equals(Track.KEY_USER_LOVED_TRACK_TRUE)) {
 								PreferencesHelper.getInstance().putBoolean(
 										PREF_NAME, PREF_KEY_LOVED, true);
 								mButtonLoved.setChecked(true);
@@ -358,7 +363,7 @@ public class NowPlayingFragment extends Fragment implements OnClickListener,
 
 				@Override
 				public void onSuccess(Object t, Object... objects) {
-					Log.d("LOG", (String) t);
+					Log.d("LOG", "Scrobbling success");
 					mButtonLoved.setEnabled(true);
 				}
 

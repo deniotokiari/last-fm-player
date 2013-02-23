@@ -1,5 +1,8 @@
 package by.deniotokiari.lastfmmusicplay.content.provider;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import by.deniotokiari.lastfmmusicplay.db.DBHelper;
 import android.content.ContentProvider;
 import android.content.ContentUris;
@@ -12,7 +15,7 @@ abstract public class AbstractProvider extends ContentProvider {
 	private DBHelper mDbHelper;
 
 	public static final String KEY_DATA = "data";
-	
+
 	abstract public ContentValues getContentValues(ContentValues values, Uri uri);
 
 	abstract public String tableName(Uri uri);
@@ -23,12 +26,12 @@ abstract public class AbstractProvider extends ContentProvider {
 	}
 
 	@Override
-	public int update(Uri uri, ContentValues values, String arg2, String[] arg3) {
+	public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
 		return 0;
 	}
 
 	@Override
-	public String getType(Uri arg0) {
+	public String getType(Uri uri) {
 		return null;
 	}
 
@@ -53,6 +56,21 @@ abstract public class AbstractProvider extends ContentProvider {
 				selection, selectionArgs, sortOrder);
 		cursor.setNotificationUri(getContext().getContentResolver(), uri);
 		return cursor;
+	}
+
+	@Override
+	public int bulkInsert(Uri uri, ContentValues[] values) {
+		return mDbHelper.addContent(tableName(uri),
+				getContentValues(values, uri));
+	}
+
+	private ContentValues[] getContentValues(ContentValues[] values, Uri uri) {
+		List<ContentValues> contentValues = new ArrayList<ContentValues>();
+		for (ContentValues val : values) {
+			contentValues.add(getContentValues(val, uri));
+		}
+		ContentValues[] contentValuesArray = {};
+		return contentValues.toArray(contentValuesArray);
 	}
 
 }
