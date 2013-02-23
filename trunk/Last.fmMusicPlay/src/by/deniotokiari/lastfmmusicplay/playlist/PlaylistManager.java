@@ -21,10 +21,9 @@ public class PlaylistManager {
 
 	public static final int INDEX_TITLE = 1;
 	public static final int INDEX_ARTIST = 2;
-	public static final int INDEX_ALBUM = 3;
 
 	private static final Uri URI = PlayerPlaylistContract.URI_PLAYER_PLAYLIST;
-	
+
 	private static PlaylistManager instance;
 	private static Random random;
 
@@ -80,6 +79,7 @@ public class PlaylistManager {
 		ContentValues[] content = {};
 		context.getContentResolver().bulkInsert(URI, values.toArray(content));
 		context.getContentResolver().notifyChange(URI, null);
+
 	}
 
 	private String getString(int index) {

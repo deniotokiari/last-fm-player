@@ -18,6 +18,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -55,7 +56,7 @@ abstract public class AbstractListFragment extends ListFragment implements
 	/** Sql args to query **/
 	private Uri uri;
 	private String selection;
-	private String[] selectionArgs;
+	protected String[] selectionArgs;
 	private String sortOrder;
 
 	/** Json keys for parser **/
@@ -205,14 +206,15 @@ abstract public class AbstractListFragment extends ListFragment implements
 		mProgressDialog.setIndeterminate(true);
 		mProgressDialog.setMessage(getResources()
 				.getString(R.string.processing));
-		//mProgressDialog.show();
+		mProgressDialog.show();
 		new Thread(new Runnable() {
 
 			@Override
 			public void run() {
 				PlaylistManager.getInstance().setPlaylist(position, uri,
 						selection, selectionArgs, sortOrder);
-				//mHandler.post(dismissProgressDialog);
+				Looper.prepare();
+				mHandler.post(dismissProgressDialog);
 				if (isBound) {
 					mService.start();
 				}

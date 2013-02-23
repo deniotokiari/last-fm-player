@@ -31,7 +31,6 @@ public class AlbumTracksFragment extends AbstractLastfmListFragment {
 	private String album;
 	private String artist;
 	private String url;
-	private static String[] selectionArgs;
 	private static final String selection = TrackContract.Columns.ALBUM
 			+ " = ?";
 	private static final Uri uri = TrackContract.URI_ALBUM_TRACKS;
@@ -41,11 +40,11 @@ public class AlbumTracksFragment extends AbstractLastfmListFragment {
 			Track.ITEM_ROOT_ALBUM_TRACKS, Track.ITEM, null, null };
 
 	public AlbumTracksFragment() {
-		super(jsonKeys, itemsPerPage, uri, selection, selectionArgs, sortOrder);
+		super(jsonKeys, itemsPerPage, uri, selection, null, sortOrder);
 	}
 
 	@Override
-	public void onViewCreated(View view, Bundle savedInstanceState) {
+	public void onActivityCreated(Bundle savedInstanceState) {
 		album = getArguments().getString(EXTRA_KEY_ALBUM);
 		artist = getArguments().getString(EXTRA_KEY_ARTIST);
 		url = getArguments().getString(EXTRA_KEY_URL);
@@ -53,7 +52,7 @@ public class AlbumTracksFragment extends AbstractLastfmListFragment {
 		selectionArgs = strings;
 		jsonKeys[3] = JSON_KEY;
 		jsonKeys[4] = album;
-		super.onViewCreated(view, savedInstanceState);
+		super.onActivityCreated(savedInstanceState);
 		mHeader = getLayoutInflater(savedInstanceState).inflate(HEADER_RES,
 				null, false);
 		getListView().addHeaderView(mHeader, null, false);
