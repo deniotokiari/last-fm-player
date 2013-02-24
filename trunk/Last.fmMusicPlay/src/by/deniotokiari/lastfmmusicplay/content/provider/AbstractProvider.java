@@ -26,7 +26,8 @@ abstract public class AbstractProvider extends ContentProvider {
 	}
 
 	@Override
-	public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+	public int update(Uri uri, ContentValues values, String selection,
+			String[] selectionArgs) {
 		return 0;
 	}
 
@@ -69,8 +70,7 @@ abstract public class AbstractProvider extends ContentProvider {
 		for (ContentValues val : values) {
 			contentValues.add(getContentValues(val, uri));
 		}
-		ContentValues[] contentValuesArray = {};
-		return contentValues.toArray(contentValuesArray);
+		return contentValues.toArray(new ContentValues[] {});
 	}
 
 }

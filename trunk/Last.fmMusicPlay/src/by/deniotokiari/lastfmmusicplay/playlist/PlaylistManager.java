@@ -76,8 +76,8 @@ public class PlaylistManager {
 			cursor.moveToNext();
 		}
 		cursor.close();
-		ContentValues[] content = {};
-		context.getContentResolver().bulkInsert(URI, values.toArray(content));
+		context.getContentResolver().bulkInsert(URI,
+				values.toArray(new ContentValues[] {}));
 		context.getContentResolver().notifyChange(URI, null);
 
 	}
