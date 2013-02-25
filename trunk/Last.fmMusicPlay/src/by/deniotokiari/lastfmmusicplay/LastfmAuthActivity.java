@@ -18,6 +18,10 @@ import android.widget.ProgressBar;
 @SuppressLint("SetJavaScriptEnabled")
 public class LastfmAuthActivity extends Activity {
 
+	public static final String KEY_TOKEN = "token";
+	public static final String KEY_SESSION = "session";
+	public static final String KEY_SESSION_KEY = "key";
+	public static final String KEY_NAME = "name";
 	private WebView mWebView;
 	private ProgressBar mProgressBar;
 	private String mToken;
@@ -43,11 +47,11 @@ public class LastfmAuthActivity extends Activity {
 						@Override
 						public void onSuccess(Object t, Object... objects) {
 							CommonJson session = new CommonJson((String) t,
-									"session");
+									KEY_SESSION);
 							LastfmAuthHelper.saveSession(session
-									.getString("key"));
+									.getString(KEY_SESSION_KEY));
 							LastfmAuthHelper.saveUserName(session
-									.getString("name"));
+									.getString(KEY_NAME));
 							startActivity(new Intent(getApplicationContext(),
 									VkAuthActivity.class));
 							finish();
@@ -55,7 +59,7 @@ public class LastfmAuthActivity extends Activity {
 
 						@Override
 						public void onError(Throwable e, Object... objects) {
-							// TODO alertDialogimpl
+
 						}
 
 					}, LastFmAPI.authGetSession(mToken));
@@ -75,13 +79,13 @@ public class LastfmAuthActivity extends Activity {
 
 			@Override
 			public void onSuccess(Object t, Object... objects) {
-				mToken = (new CommonJson((String) t)).getString("token");
+				mToken = (new CommonJson((String) t)).getString(KEY_TOKEN);
 				mWebView.loadUrl(LastFmAPI.grantAccessUrl(mToken));
 			}
 
 			@Override
 			public void onError(Throwable e, Object... objects) {
-				// TODO alertDialogimpl
+
 			}
 
 		}, LastFmAPI.authGetToken());

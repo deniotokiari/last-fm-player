@@ -47,14 +47,14 @@ public class MusicPlayService extends Service implements OnCompletionListener,
 	private MyBinder mBinder = new MyBinder();
 	private SharedPreferences preferences;
 
-	private boolean REPEAT;
-	private boolean SHUFFLE;
+	private boolean isRepeat;
+	private boolean isShuffle;
 	private boolean isPaused;
 	private boolean isScrobbled;
 
 	private int buffered;
-	private int CURRENT_POSITION;
-	private int DURATION;
+	private int currentPosition;
+	private int duration;
 
 	@Override
 	public void onCreate() {
@@ -65,11 +65,11 @@ public class MusicPlayService extends Service implements OnCompletionListener,
 		preferences = PreferenceManager
 				.getDefaultSharedPreferences(ContextHolder.getInstance()
 						.getContext());
-		REPEAT = PreferencesHelper.getInstance().getBoolean(PREF_NAME,
+		isRepeat = PreferencesHelper.getInstance().getBoolean(PREF_NAME,
 				PREF_KEY_REPEAT);
-		SHUFFLE = PreferencesHelper.getInstance().getBoolean(PREF_NAME,
+		isShuffle = PreferencesHelper.getInstance().getBoolean(PREF_NAME,
 				PREF_KEY_SHUFFLE);
-		CURRENT_POSITION = PreferencesHelper.getInstance().getInt(PREF_NAME,
+		currentPosition = PreferencesHelper.getInstance().getInt(PREF_NAME,
 				PREF_KEY_CURRENT_POSITION);
 	}
 
@@ -83,9 +83,9 @@ public class MusicPlayService extends Service implements OnCompletionListener,
 	public void onDestroy() {
 		super.onDestroy();
 		if (mMediaPlayer != null) {
-			CURRENT_POSITION = mMediaPlayer.getCurrentPosition();
+			currentPosition = mMediaPlayer.getCurrentPosition();
 			PreferencesHelper.getInstance().putInt(PREF_NAME,
-					PREF_KEY_CURRENT_POSITION, CURRENT_POSITION);
+					PREF_KEY_CURRENT_POSITION, currentPosition);
 			if (mMediaPlayer.isPlaying()) {
 				mMediaPlayer.stop();
 			}
@@ -119,9 +119,9 @@ public class MusicPlayService extends Service implements OnCompletionListener,
 	@Override
 	public void onCompletion(MediaPlayer mediaPlayer) {
 		mediaPlayer.stop();
-		CURRENT_POSITION = 0;
+		currentPosition = 0;
 		PreferencesHelper.getInstance().putInt(PREF_NAME,
-				PREF_KEY_CURRENT_POSITION, CURRENT_POSITION);
+				PREF_KEY_CURRENT_POSITION, currentPosition);
 		next();
 	}
 
@@ -153,7 +153,7 @@ public class MusicPlayService extends Service implements OnCompletionListener,
 	}
 
 	private void scrobble() {
-		if (mMediaPlayer.getCurrentPosition() > DURATION / 2 && !isScrobbled) {
+		if (mMediaPlayer.getCurrentPosition() > duration / 2 && !isScrobbled) {
 			isScrobbled = true;
 			Date date = Calendar.getInstance().getTime();
 			Log.d("LOG", LastFmAPI.trackScrobble(PlaylistManager.getInstance()
@@ -164,7 +164,7 @@ public class MusicPlayService extends Service implements OnCompletionListener,
 
 						@Override
 						public void onSuccess(Object t, Object... objects) {
-							Log.d("LOG", (String) t);
+							Log.d("LOG", "Scrobble success");
 						}
 
 						@Override
@@ -266,7 +266,7 @@ public class MusicPlayService extends Service implements OnCompletionListener,
 	public void play() {
 		if (!mMediaPlayer.isPlaying()) {
 			mMediaPlayer.start();
-			DURATION = mMediaPlayer.getDuration();
+			duration = mMediaPlayer.getDuration();
 			isPaused = false;
 			LocalBroadcastManager.getInstance(getApplicationContext())
 					.sendBroadcast(new Intent(ACTION_ON_PLAY));
@@ -290,11 +290,11 @@ public class MusicPlayService extends Service implements OnCompletionListener,
 	}
 
 	public void setShuffle(boolean b) {
-		SHUFFLE = b;
+		isShuffle = b;
 	}
 
 	public void setRepeat(boolean b) {
-		REPEAT = b;
+		isRepeat = b;
 	}
 
 	public int getBufferedPercent() {
@@ -302,7 +302,7 @@ public class MusicPlayService extends Service implements OnCompletionListener,
 	}
 
 	public int getDuration() {
-		return DURATION;
+		return duration;
 	}
 
 	public int getCurrentPosition() {
@@ -315,12 +315,12 @@ public class MusicPlayService extends Service implements OnCompletionListener,
 
 	public void next() {
 		Log.d("LOG", "NEXT");
-		startPlay(PlaylistManager.getInstance().getNext(SHUFFLE, REPEAT));
+		startPlay(PlaylistManager.getInstance().getNext(isShuffle, isRepeat));
 	}
 
 	public void previous() {
 		Log.d("LOG", "PREV");
-		startPlay(PlaylistManager.getInstance().getPrevious(SHUFFLE, REPEAT));
+		startPlay(PlaylistManager.getInstance().getPrevious(isShuffle, isRepeat));
 	}
 
 	public boolean isPaused() {

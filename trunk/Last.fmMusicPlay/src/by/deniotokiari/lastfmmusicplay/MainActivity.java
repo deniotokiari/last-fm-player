@@ -23,6 +23,8 @@ import by.deniotokiari.lastfmmusicplay.playlist.PlaylistManager;
 
 public class MainActivity extends FragmentActivity {
 
+	public static final String TYPE = "text/plain";
+	
 	private ProgressDialog mProgressDialog;
 	private Handler mHandler;
 
@@ -44,8 +46,9 @@ public class MainActivity extends FragmentActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.activity_main, menu);	
-		MenuItem me = menu.add(0, 1, 0, "Preferences");
+		getMenuInflater().inflate(R.menu.activity_main, menu);
+		MenuItem me = menu.add(0, 1, 0,
+				getResources().getString(R.string.menu_item_pref));
 		me.setIntent(new Intent(this, PrefActivity.class));
 		return true;
 	}
@@ -75,9 +78,11 @@ public class MainActivity extends FragmentActivity {
 			break;
 		case R.id.menu_share:
 			Intent intent = new Intent(Intent.ACTION_SEND);
-			intent.setType("text/plain");
-			intent.putExtra(Intent.EXTRA_TEXT, PlaylistManager.getInstance().getTrack());
-			startActivity(Intent.createChooser(intent, "Share..."));
+			intent.setType(TYPE);
+			intent.putExtra(Intent.EXTRA_TEXT, PlaylistManager.getInstance()
+					.getTrack());
+			startActivity(Intent.createChooser(intent, getResources()
+					.getString(R.string.title_share)));
 			break;
 		}
 		return super.onOptionsItemSelected(item);

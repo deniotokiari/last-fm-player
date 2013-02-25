@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -363,7 +362,6 @@ public class NowPlayingFragment extends Fragment implements OnClickListener,
 
 				@Override
 				public void onSuccess(Object t, Object... objects) {
-					Log.d("LOG", "Scrobbling success");
 					mButtonLoved.setEnabled(true);
 				}
 
