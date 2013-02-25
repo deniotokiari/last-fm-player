@@ -123,12 +123,14 @@ public class HttpManager {
 				try {
 					content.close();
 				} catch (IOException e) {
+					throw e;
 				}
 			}
 			if (reader != null) {
 				try {
 					reader.close();
 				} catch (IOException e) {
+					throw e;
 				}
 			}
 		}

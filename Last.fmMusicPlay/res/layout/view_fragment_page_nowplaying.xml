@@ -146,8 +146,8 @@
 
             <ToggleButton
                 android:id="@+id/btn_shuffle"
-                android:layout_width="45dip"
-                android:layout_height="45dip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginRight="8dip"
                 android:background="@drawable/states_shuffle"
                 android:textOff=""
@@ -155,16 +155,16 @@
 
             <ToggleButton
                 android:id="@+id/btn_prev"
-                android:layout_width="38dip"
-                android:layout_height="38dip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:background="@drawable/states_prev"
                 android:textOff=""
                 android:textOn="" />
 
             <ToggleButton
                 android:id="@+id/btn_play"
-                android:layout_width="60dip"
-                android:layout_height="60dip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="12dip"
                 android:layout_marginRight="12dip"
                 android:background="@drawable/states_play"
@@ -173,16 +173,16 @@
 
             <ToggleButton
                 android:id="@+id/btn_forward"
-                android:layout_width="38dip"
-                android:layout_height="38dip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:background="@drawable/states_forward"
                 android:textOff=""
                 android:textOn="" />
 
             <ToggleButton
                 android:id="@+id/btn_repeat"
-                android:layout_width="45dip"
-                android:layout_height="45dip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="8dip"
                 android:background="@drawable/states_repeat"
                 android:textOff=""

@@ -6,10 +6,14 @@ import by.deniotokiari.lastfmmusicplay.content.ContentRequestBuilder;
 import by.deniotokiari.lastfmmusicplay.playlist.PlaylistManager;
 import by.deniotokiari.lastfmmusicplay.service.GetDataService;
 import by.deniotokiari.lastfmmusicplay.service.MusicPlayService;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
@@ -52,6 +56,7 @@ abstract public class AbstractListFragment extends ListFragment implements
 	private IntentFilter mFilter;
 	protected Handler mHandler;
 	protected ProgressDialog mProgressDialog;
+	protected OnClickListener mClickListener;
 
 	/** Sql args to query **/
 	private Uri uri;
@@ -93,6 +98,18 @@ abstract public class AbstractListFragment extends ListFragment implements
 		mHandler.post(hideFooter);
 		mAdapter = adapter();
 		getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+		mClickListener = new OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialogInterface, int which) {
+				switch (which) {
+				case Dialog.BUTTON_POSITIVE:
+					load();
+					break;
+				}
+			}
+
+		};
 		this.getLoaderManager().initLoader(Integer.valueOf(id), null, this);
 		setOnScrollListener();
 	}
@@ -122,9 +139,10 @@ abstract public class AbstractListFragment extends ListFragment implements
 						isEndOfData = true;
 						setListAdapter(mAdapter);
 						getListView().setVisibility(View.INVISIBLE);
+					} else if (message != null) {
+						showAlertDialog(message);
 					}
 					if (isError) {
-						// TODO
 						setEndOfData(true);
 					}
 					mHandler.post(hideFooter);
@@ -300,6 +318,19 @@ abstract public class AbstractListFragment extends ListFragment implements
 		Intent intent = new Intent(getActivity(), GetDataService.class);
 		intent.putExtra(GetDataService.CONTENT_REQUEST_BUILDER, builder);
 		getActivity().startService(intent);
+	}
+
+	protected void showAlertDialog(String message) {
+		AlertDialog builder = new AlertDialog.Builder(getActivity())
+				.setNegativeButton(
+						getResources().getString(R.string.btn_negative),
+						mClickListener)
+				.setPositiveButton(
+						getResources().getString(R.string.btn_positive),
+						mClickListener)
+				.setTitle(getResources().getString(R.string.dlg_msg_data_error))
+				.setMessage(message).create();
+		builder.show();
 	}
 
 }
