@@ -18,20 +18,22 @@ import by.deniotokiari.lastfmmusicplay.api.LastfmAuthHelper;
 import by.deniotokiari.lastfmmusicplay.api.VkAuthHelper;
 import by.deniotokiari.lastfmmusicplay.content.images.ImageLoader;
 import by.deniotokiari.lastfmmusicplay.db.DBHelper;
+import by.deniotokiari.lastfmmusicplay.fragment.ControlsFragment;
 import by.deniotokiari.lastfmmusicplay.fragment.main.MainPagerFragment;
 import by.deniotokiari.lastfmmusicplay.playlist.PlaylistManager;
 
 public class MainActivity extends FragmentActivity {
 
+	public static final String KEY_BUGSENSE = "4634f20e";
 	public static final String TYPE = "text/plain";
-	
+
 	private ProgressDialog mProgressDialog;
 	private Handler mHandler;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		BugSenseHandler.initAndStartSession(MainActivity.this, "4634f20e");
+		BugSenseHandler.initAndStartSession(MainActivity.this, KEY_BUGSENSE);
 		setContentView(R.layout.activity_main);
 		if (savedInstanceState != null) {
 			return;
@@ -41,6 +43,7 @@ public class MainActivity extends FragmentActivity {
 		FragmentTransaction transaction = getSupportFragmentManager()
 				.beginTransaction();
 		transaction.add(R.id.content, new MainPagerFragment());
+		transaction.add(R.id.controls, new ControlsFragment());
 		transaction.commit();
 	}
 
