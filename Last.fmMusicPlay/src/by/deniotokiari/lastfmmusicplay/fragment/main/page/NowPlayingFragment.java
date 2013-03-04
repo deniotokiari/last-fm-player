@@ -32,7 +32,7 @@ import by.deniotokiari.lastfmmusicplay.http.RequestManager;
 import by.deniotokiari.lastfmmusicplay.playlist.PlaylistManager;
 import by.deniotokiari.lastfmmusicplay.preferences.PreferencesHelper;
 import by.deniotokiari.lastfmmusicplay.service.MusicPlayService;
-
+// TODO imp service start to another way
 public class NowPlayingFragment extends Fragment implements OnClickListener,
 		OnSeekBarChangeListener {
 
