@@ -7,8 +7,8 @@ import by.deniotokiari.lastfmmusicplay.utilities.Md5;
 
 public class LastFmAPI {
 
-	private static final String API_KEY = "62c4546a7a6c00ff385eab426fc06805";
-	private static final String SECRET_KEY = "ed5e08b16d2c9d39bff2d5edd0b0d502";
+	private static final String API_KEY = API_KEY;
+	private static final String SECRET_KEY = SECRET_KEY;
 	private static final String URL_API = "http://ws.audioscrobbler.com/2.0/?method=";
 	private static final String RESULT_FORMAT = "&format=json";
 
